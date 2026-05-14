@@ -322,7 +322,7 @@ Adding a new secret:
 | [Overview Widget](https://github.com/HimDek/Overview-Widget-for-Plasma) | HimDek |
 | [Modern Clock Widget](https://github.com/prayag2/kde_modernclock) | prayag2 |
 | [Netspeed Widget](https://github.com/dfaust/plasma-applet-netspeed-widget) | dfaust |
-| [Audio Wave Widget](https://github.com/zayronxio/Audio-Wave-Widget) | zayronxio |
+| [Audio Wave Widget](https://github.com/zayronxio/Audio-Wave-Widget) | zayronxio as inspiration|
 | [Grub2 Themes](https://github.com/vinceliuice/grub2-themes) | vinceliuice |
 | [rEFInd Theme](https://github.com/evanpurkhiser/rEFInd-minimal) | evanpurkhiser |
 | [Sly-Harvey/NixOS](https://github.com/Sly-Harvey/NixOS) | Sly-Harvey |
