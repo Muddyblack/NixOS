@@ -229,8 +229,6 @@ gcnix         # garbage collect (keeps last 5 generations)
 
 </details>
 
-**Keybindings (KDE Plasma):** See [`KDE_Plasma_Cheatsheet.md`](KDE_Plasma_Cheatsheet.md)
-
 <details>
 <summary>Keybindings (Hyprland)</summary>
 
