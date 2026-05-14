@@ -24,13 +24,13 @@
       };
     }
     {
-      name = "Audio.Wave.Widget";
+      name = "org.muddyblack.plasmaAudioVisualizer";
       position = {
         horizontal = 826;
         vertical = 544;
       };
       size = {
-        width = 300;
+        width = 360;
         height = 84;
       };
     }
