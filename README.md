@@ -11,17 +11,17 @@
    <div align="center">
       <p></p>
       <div align="center">
-         <a href="https://github.com/muddyblack/nixos-config/stargazers">
-            <img src="https://img.shields.io/github/stars/muddyblack/nixos-config?style=for-the-badge&logo=starship&color=7c3aed&logoColor=white&labelColor=0d0d0d" alt="GitHub Stars">
+         <a href="https://github.com/muddyblack/NixOS/stargazers">
+            <img src="https://img.shields.io/github/stars/muddyblack/NixOS?style=for-the-badge&logo=starship&color=7c3aed&logoColor=white&labelColor=0d0d0d" alt="GitHub Stars">
          </a>
-         <a href="https://github.com/muddyblack/nixos-config/forks">
-            <img src="https://img.shields.io/github/forks/muddyblack/nixos-config?style=for-the-badge&logo=git&color=a855f7&logoColor=white&labelColor=0d0d0d" alt="GitHub Forks">
+         <a href="https://github.com/muddyblack/NixOS/forks">
+            <img src="https://img.shields.io/github/forks/muddyblack/NixOS?style=for-the-badge&logo=git&color=a855f7&logoColor=white&labelColor=0d0d0d" alt="GitHub Forks">
          </a>
          <a href="https://nixos.org">
-            <img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fmuddyblack%2Fnixos-config%2Fmain%2Fflake.lock&query=%24.nodes.nixpkgs.original.ref&style=for-the-badge&logo=nixos&label=NixOS&color=38bdf8&logoColor=white&labelColor=0d0d0d" alt="NixOS Version">
+            <img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2FMuddyblack%2FNixOS%2Fmaster%2Fflake.lock&query=%24.nodes.nixpkgs_2.original.ref&style=for-the-badge&logo=nixos&label=NixOS&color=38bdf8&logoColor=white&labelColor=0d0d0d" alt="NixOS Version">
          </a>
-         <a href="https://github.com/muddyblack/nixos-config/blob/main/LICENSE">
-            <img src="https://img.shields.io/github/license/muddyblack/nixos-config?style=for-the-badge&color=ec4899&logoColor=white&labelColor=0d0d0d" alt="MIT License"/>
+         <a href="https://github.com/muddyblack/NixOS/blob/master/LICENSE">
+            <img src="https://img.shields.io/github/license/muddyblack/NixOS?style=for-the-badge&color=ec4899&logoColor=white&labelColor=0d0d0d" alt="MIT License"/>
          </a>
       </div>
       <br>
@@ -30,11 +30,12 @@
 
 ## A Note From Me
 
-This is my personal NixOS setup — the machine I actually live in every day. It started as a rabbit hole and turned into something I'm genuinely proud of. Everything here is declarative, reproducible, and exactly the way I like it: two window managers (KDE Plasma for comfort, Hyprland when I want to feel like a wizard), a terminal stack full of modern rewrites of old tools, and a disk layout that survives me doing stupid things.
+As previous dual-boot cachyos user I wanted to switch to fully use linux in my daily life. Someone mentioned he started newly using nixos and well here we are. This rice is now built over a period of 5 months until I said it is good and bug free to use.
 
-I keep it public because I learned a lot from other people's configs, and maybe someone finds something useful here too. It's not meant to be a starter template — it's opinionated and personal. Fork it, steal from it, adapt it.
+In the first few weeks, I managed to like break the system three times a day and I was told nixos is not breakable ...  only via live usb the pc was fixable as I edited the hardware-configuration.nix file lol stupid beginner mistake right? 
 
-> *Feel free to reach out if something here helped you or broke you.*
+
+
 
 ---
 
@@ -102,7 +103,7 @@ I keep it public because I learned a lot from other people's configs, and maybe 
 ## Structure
 
 ```
-nixos-config/
+NixOS/
 ├── flake.nix
 ├── deploy.sh                    # Install & rebuild helper
 ├── hosts/
@@ -141,8 +142,8 @@ nix build .#nixosConfigurations.muddyblack-lite.config.system.build.vm
 
 ```bash
 sudo su
-git clone https://github.com/Muddyblack/nixos-config /mnt/nixos-config
-cd /mnt/nixos-config
+git clone https://github.com/Muddyblack/NixOS /mnt/NixOS
+cd /mnt/NixOS
 bash deploy.sh fresh                          # prompts for disk device
 # or: bash deploy.sh fresh --device /dev/nvme0n1 --no-dual-boot
 ```
@@ -153,8 +154,8 @@ bash deploy.sh fresh                          # prompts for disk device
 <summary>Remote install via nixos-anywhere</summary>
 
 ```bash
-git clone https://github.com/Muddyblack/nixos-config
-cd nixos-config
+git clone https://github.com/Muddyblack/NixOS
+cd NixOS
 bash deploy.sh fresh --remote root@<ip> --device /dev/sda
 ```
 

@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-lP2wenbrghMwrRl13trTidZDz+PllyQXQT3n9n3hzrg=";
   };
 
-  nativeBuildInputs = [ jq ];
+  nativeBuildInputs = [jq];
 
   dontBuild = true;
   dontConfigure = true;
