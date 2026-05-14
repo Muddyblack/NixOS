@@ -31,7 +31,7 @@
     netspeed-widget
     kde-modern-clock
     kde-overview-widget
-    audio-wave-widget
+    plasma-audio-visualizer
   ];
 
   qt = {
@@ -120,6 +120,6 @@
     "plasma/plasmoids/org.kde.netspeedWidget".source = "${pkgs.netspeed-widget}/share/plasma/plasmoids/org.kde.netspeedWidget";
     "plasma/plasmoids/com.github.prayag2.modernclock".source = "${pkgs.kde-modern-clock}/share/plasma/plasmoids/com.github.prayag2.modernclock";
     "plasma/plasmoids/com.himdek.kde.plasma.overview".source = "${pkgs.kde-overview-widget}/share/plasma/plasmoids/com.himdek.kde.plasma.overview";
-    "plasma/plasmoids/Audio.Wave.Widget".source = "${pkgs.audio-wave-widget}/share/plasma/plasmoids/Audio.Wave.Widget";
+    "plasma/plasmoids/org.muddyblack.plasmaAudioVisualizer".source = "${pkgs.plasma-audio-visualizer}/share/plasma/plasmoids/org.muddyblack.plasmaAudioVisualizer";
   };
 }

@@ -2,7 +2,7 @@ final: _prev: {
   # ═══════════════════════════════════════════════════════════════════════════
   # WIDGETS - KDE Plasma widgets
   # ═══════════════════════════════════════════════════════════════════════════
-  audio-wave-widget = final.callPackage ./widgets/audio-wave-widget {};
+  plasma-audio-visualizer = final.callPackage ./widgets/plasma-audio-visualizer.nix {};
   kde-modern-clock = final.callPackage ./widgets/modern-clock.nix {};
   netspeed-widget = final.callPackage ./widgets/netspeed-widget.nix {};
   kde-overview-widget = final.callPackage ./widgets/overview-widget.nix {};
