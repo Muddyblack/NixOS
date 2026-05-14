@@ -1,0 +1,14 @@
+{
+    "KPackageStructure": "Plasma/Applet",
+    "KPlugin": {
+        "Authors": [ { "Name": "muddyblack" } ],
+        "Category": "Multimedia",
+        "Description": "Audio visualizer with track info, backed by cava",
+        "Icon": "audio-volume-high",
+        "Id": "Audio.Wave.Widget",
+        "License": "MIT",
+        "Name": "Audio Wave Widget",
+        "Version": "1.0"
+    },
+    "X-Plasma-API-Minimum-Version": "6.0"
+}
