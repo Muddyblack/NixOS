@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="8">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%">
+        <animate attributeName="stop-color"
+          values="#7c3aed;#ec4899;#38bdf8;#a855f7;#7c3aed"
+          dur="4s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="25%">
+        <animate attributeName="stop-color"
+          values="#a855f7;#7c3aed;#ec4899;#38bdf8;#a855f7"
+          dur="4s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="50%">
+        <animate attributeName="stop-color"
+          values="#ec4899;#38bdf8;#7c3aed;#a855f7;#ec4899"
+          dur="4s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="75%">
+        <animate attributeName="stop-color"
+          values="#38bdf8;#a855f7;#ec4899;#7c3aed;#38bdf8"
+          dur="4s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="100%">
+        <animate attributeName="stop-color"
+          values="#7c3aed;#ec4899;#38bdf8;#a855f7;#7c3aed"
+          dur="4s" repeatCount="indefinite"/>
+      </stop>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="8" rx="4" fill="url(#g)"/>
+</svg>

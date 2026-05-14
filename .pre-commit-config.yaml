@@ -1,0 +1,13 @@
+repos:
+  - repo: local
+    hooks:
+      - id: alejandra
+        name: alejandra
+        entry: alejandra
+        language: system
+        files: '\.nix$'
+      - id: deadnix
+        name: deadnix
+        entry: deadnix --fail
+        language: system
+        files: '\.nix$'
