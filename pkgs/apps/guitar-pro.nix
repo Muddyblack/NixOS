@@ -2,7 +2,6 @@
 {
   lib,
   stdenvNoCC,
-  makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
   fd,

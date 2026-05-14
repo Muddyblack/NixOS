@@ -1,17 +1,4 @@
-{pkgs, ...}: let
-  caelestiaCSS = ''
-    .widget, .notification, .drawer, .window-content, .box, .container {
-      background-color: rgba(15, 17, 26, 0.45) !important;
-      border: 1px solid rgba(137, 180, 250, 0.3) !important;
-      border-radius: 20px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-    }
-
-    label {
-      text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
-    }
-  '';
-in {
+{pkgs, ...}: {
   home.packages = with pkgs; [
     # KDE Plasma addons
     kdePackages.plasma-pa
@@ -47,15 +34,11 @@ in {
     audio-wave-widget
   ];
 
-
-
-
   qt = {
     enable = true;
     platformTheme.name = "kvantum";
     style.name = "kvantum";
   };
-
 
   xdg.configFile."xdg-desktop-portal/portals.conf".text = ''
     [preferred]
@@ -67,14 +50,14 @@ in {
     name = "VMware Workstation";
     exec = "env GTK_THEME=Sweet:dark GTK2_RC_FILES=/dev/null vmware %u";
     icon = "vmware-workstation";
-    categories = [ "System" ];
+    categories = ["System"];
   };
 
   xdg.desktopEntries."vmware-workstation" = {
     name = "VMware Workstation";
     exec = "env GTK_THEME=Sweet:dark GTK2_RC_FILES=/dev/null vmware %u";
     icon = "vmware-workstation";
-    categories = [ "System" ];
+    categories = ["System"];
     noDisplay = true;
   };
 
@@ -82,7 +65,7 @@ in {
     name = "VMware Player";
     exec = "vmware-player";
     icon = "vmware-player";
-    categories = [ "System" ];
+    categories = ["System"];
     noDisplay = true;
   };
 
@@ -92,7 +75,7 @@ in {
     comment = "Create and mount VeraCrypt encrypted volumes";
     exec = "env GTK_THEME=Sweet:dark GTK2_RC_FILES=/dev/null veracrypt %f";
     icon = "veracrypt";
-    categories = [ "Security" "Utility" "Filesystem" ];
+    categories = ["Security" "Utility" "Filesystem"];
   };
 
   home.sessionVariables.GTK_THEME = "Sweet:dark";

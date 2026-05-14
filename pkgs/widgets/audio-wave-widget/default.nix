@@ -1,5 +1,11 @@
-{ stdenvNoCC, lib, cava, util-linux, procps, runtimeShell }:
-
+{
+  stdenvNoCC,
+  lib,
+  cava,
+  util-linux,
+  procps,
+  runtimeShell,
+}:
 stdenvNoCC.mkDerivation {
   pname = "plasma-audio-wave-widget";
   version = "1.0";

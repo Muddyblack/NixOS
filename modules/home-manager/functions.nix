@@ -61,7 +61,7 @@
     upnix() {
       local flake_path="."
       [[ -f "flake.nix" ]] || flake_path="''${FLAKE_DIR:-.}"
-      
+
       if [[ -f "$flake_path/deploy.sh" ]]; then
         echo "Running deployment script (switch) from $flake_path..."
         # Pass all arguments to deploy.sh
@@ -85,24 +85,24 @@
     upall() {
       local flake_path="."
       [[ -f "flake.nix" ]] || flake_path="''${FLAKE_DIR:-.}"
-      
+
       echo "Updating flake inputs..."
       (cd "$flake_path" && nix flake update)
-      
+
       local old_gen
       old_gen=$(readlink -f /nix/var/nix/profiles/system)
-      
+
       if upnix "''$@"; then
         local new_gen
         new_gen=$(readlink -f /nix/var/nix/profiles/system)
-        
+
         if [[ "$old_gen" != "$new_gen" ]]; then
           echo "System updated. Diffing generations..."
           nvd diff "$old_gen" "$new_gen"
         else
           echo "No system changes detected."
         fi
-        
+
         (cd "$flake_path" && git add . && git commit -m "feat: update system $(date '+%Y-%m-%d %H:%M:%S')")
       else
         echo "Update failed, skipping commit."

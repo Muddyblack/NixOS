@@ -290,8 +290,7 @@ in {
             };
           }
         )) (lib.range 0 3))
-      ++
-      (map (s: makeBottomPanel s) (lib.range 0 3));
+      ++ (map (s: makeBottomPanel s) (lib.range 0 3));
 
     shortcuts = {
       ksmserver."Lock Session" = ["Meta+L" "Screensaver"];

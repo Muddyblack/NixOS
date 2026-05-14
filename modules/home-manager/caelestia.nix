@@ -1,4 +1,8 @@
-{pkgs, lib, ...}: {
+{
+  pkgs,
+  lib,
+  ...
+}: {
   programs.caelestia = {
     enable = true;
     systemd.enable = true;
@@ -47,10 +51,10 @@
 
   systemd.user.services.caelestia = {
     Unit = {
-      After = lib.mkForce [ "hyprland-session.target" ];
-      PartOf = lib.mkForce [ "hyprland-session.target" ];
+      After = lib.mkForce ["hyprland-session.target"];
+      PartOf = lib.mkForce ["hyprland-session.target"];
     };
-    Install.WantedBy = lib.mkForce [ "hyprland-session.target" ];
+    Install.WantedBy = lib.mkForce ["hyprland-session.target"];
   };
 
   home.packages = with pkgs; [

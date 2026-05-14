@@ -85,5 +85,4 @@
   systemd.tmpfiles.rules = [
     "L+ /var/lib/dbus/machine-id - - - - /etc/machine-id"
   ];
-
 }
