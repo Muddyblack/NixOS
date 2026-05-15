@@ -161,11 +161,58 @@
     }
 
     cc-ollama() {
-      local model="''${1:-gemma3:4b}"
-      ANTHROPIC_BASE_URL="http://localhost:11434/v1" \
+      local model="''${1:-gemma4:e4b}"
+      if ! systemctl is-active --quiet ollama; then
+        echo "Starting Ollama..."
+        sudo systemctl start ollama
+        sleep 1
+      fi
+      ANTHROPIC_BASE_URL="http://localhost:11434" \
       ANTHROPIC_API_KEY="ollama" \
-      CLAUDE_MODEL="$model" \
-      claude "''${@:2}"
+      claude --model "$model" "''${@:2}"
+    }
+
+    ai-pull() {
+      local model="''${1:-gemma4:e4b}"
+      if ! systemctl is-active --quiet ollama; then
+        echo "Starting Ollama..."
+        sudo systemctl start ollama
+        sleep 2
+      fi
+      echo "Pulling $model..."
+      if ollama pull "$model"; then
+        echo "Done. Run 'cc-ollama' or 'oc' to use it."
+      else
+        echo "Failed to pull '$model'. Run 'ai-models' to see what's available locally, or check https://ollama.com/library for valid model names."
+        return 1
+      fi
+    }
+
+    ai-models() {
+      ollama list
+    }
+
+    ai-webui() {
+      if ! systemctl is-active --quiet ollama; then
+        echo "Starting Ollama..."
+        sudo systemctl start ollama
+      fi
+      if ! systemctl is-active --quiet open-webui; then
+        echo "Starting Open WebUI (first start can take a minute)..."
+        sudo systemctl start open-webui
+      fi
+      for i in $(seq 1 60); do
+        if command curl -s http://localhost:8765 &>/dev/null; then
+          break
+        fi
+        sleep 1
+      done
+      xdg-open http://localhost:8765
+    }
+
+    ai-webui-stop() {
+      sudo systemctl stop open-webui
+      echo "Open WebUI stopped."
     }
 
     cc-models() {

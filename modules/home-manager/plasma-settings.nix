@@ -90,7 +90,7 @@
         vertical = 512;
       };
       size = {
-        width = 288;
+        width = 240;
         height = 192;
       };
     }

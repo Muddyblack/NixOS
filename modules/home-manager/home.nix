@@ -144,6 +144,7 @@
     ./packages.nix
     ./theme.nix
     ./shell.nix
+    ./ai.nix
     ./plasma-settings.nix
     ./hyprland.nix
     ./caelestia.nix
