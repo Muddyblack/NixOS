@@ -161,11 +161,58 @@
     }
 
     cc-ollama() {
-      local model="''${1:-gemma3:4b}"
-      ANTHROPIC_BASE_URL="http://localhost:11434/v1" \
+      local model="''${1:-gemma4:e4b}"
+      if ! systemctl is-active --quiet ollama; then
+        echo "Starting Ollama..."
+        sudo systemctl start ollama
+        sleep 1
+      fi
+      ANTHROPIC_BASE_URL="http://localhost:11434" \
       ANTHROPIC_API_KEY="ollama" \
-      CLAUDE_MODEL="$model" \
-      claude "''${@:2}"
+      claude --model "$model" "''${@:2}"
+    }
+
+    ai-pull() {
+      local model="''${1:-gemma4:e4b}"
+      if ! systemctl is-active --quiet ollama; then
+        echo "Starting Ollama..."
+        sudo systemctl start ollama
+        sleep 2
+      fi
+      echo "Pulling $model..."
+      if ollama pull "$model"; then
+        echo "Done. Run 'cc-ollama' or 'oc' to use it."
+      else
+        echo "Failed to pull '$model'. Run 'ai-models' to see what's available locally, or check https://ollama.com/library for valid model names."
+        return 1
+      fi
+    }
+
+    ai-models() {
+      ollama list
+    }
+
+    ai-webui() {
+      if ! systemctl is-active --quiet ollama; then
+        echo "Starting Ollama..."
+        sudo systemctl start ollama
+      fi
+      if ! systemctl is-active --quiet open-webui; then
+        echo "Starting Open WebUI (first start can take a minute)..."
+        sudo systemctl start open-webui
+      fi
+      for i in $(seq 1 60); do
+        if command curl -s http://localhost:8765 &>/dev/null; then
+          break
+        fi
+        sleep 1
+      done
+      xdg-open http://localhost:8765
+    }
+
+    ai-webui-stop() {
+      sudo systemctl stop open-webui
+      echo "Open WebUI stopped."
     }
 
     cc-models() {
@@ -180,18 +227,20 @@
         echo "Example: devnew python"
         return 1
       fi
-      if [ -z "$FLAKE_DIR" ]; then
-        echo "Warning: FLAKE_DIR not set. Run 'upnix' once to set it, or export FLAKE_DIR=/path/to/config"
+      local _flake_path _src
+      _flake_path="$(readlink -f "''${FLAKE_DIR:-/etc/nixos}" 2>/dev/null || echo "''${FLAKE_DIR:-/etc/nixos}")"
+      _src="''${_flake_path}/dev-shells/$1"
+      if [[ ! -d "$_src" ]]; then
+        echo "Template not found: $_src"
         return 1
       fi
-      nix flake init -t "path:$FLAKE_DIR#$1"
+      cp -rn "$_src"/. .
       command -v direnv &> /dev/null && direnv allow
     }
 
     _devnew() {
-      [ -z "$FLAKE_DIR" ] && return 1
       local -a templates
-      templates=($(find "$FLAKE_DIR/dev-shells" -maxdepth 1 -mindepth 1 -type d -printf '%f\n' 2>/dev/null))
+      templates=($(find "''${FLAKE_DIR:-/etc/nixos}/dev-shells" -maxdepth 1 -mindepth 1 -type d -printf '%f\n' 2>/dev/null))
       compadd -a templates
     }
     compdef _devnew devnew
