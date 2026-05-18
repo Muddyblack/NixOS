@@ -41,9 +41,11 @@ In the first few weeks, I managed to like break the system three times a day and
 
 ## Screenshots
 
+**KDE**
 <img src="assets/readme/kde-desktop.png" width="100%" alt="KDE Plasma 6 Desktop Screenshot" />
 
-  <img src="assets/readme/hyprland-desktop.png" width="100%" alt="Hyprland Desktop Screenshot" />
+**Hyprland**
+<img src="assets/readme/hyprland-desktop.png" width="100%" alt="Hyprland Desktop Screenshot" />
 
 
 ---

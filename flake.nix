@@ -58,7 +58,6 @@
     ...
   } @ inputs: let
     username = "muddyblack";
-    flakeDir = "/home/${username}/Downloads/nixos-config";
 
     unstablePkgs = import nixpkgs-unstable {
       system = "x86_64-linux";
@@ -68,7 +67,7 @@
     # Desktop host: full home-manager + plasma-manager
     mkHost = hostModule:
       nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs username flakeDir;};
+        specialArgs = {inherit inputs username;};
         modules = [
           {nixpkgs.hostPlatform = "x86_64-linux";}
           disko.nixosModules.disko
@@ -99,7 +98,7 @@
               useUserPackages = true;
               backupCommand = "${pkgs.coreutils}/bin/rm -f";
               users.${username} = import ./modules/home-manager/home.nix;
-              extraSpecialArgs = {inherit inputs username flakeDir;};
+              extraSpecialArgs = {inherit inputs username;};
 
               sharedModules = [
                 plasma-manager.homeModules.plasma-manager

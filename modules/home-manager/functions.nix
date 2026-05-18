@@ -227,18 +227,20 @@
         echo "Example: devnew python"
         return 1
       fi
-      if [ -z "$FLAKE_DIR" ]; then
-        echo "Warning: FLAKE_DIR not set. Run 'upnix' once to set it, or export FLAKE_DIR=/path/to/config"
+      local _flake_path _src
+      _flake_path="$(readlink -f "''${FLAKE_DIR:-/etc/nixos}" 2>/dev/null || echo "''${FLAKE_DIR:-/etc/nixos}")"
+      _src="''${_flake_path}/dev-shells/$1"
+      if [[ ! -d "$_src" ]]; then
+        echo "Template not found: $_src"
         return 1
       fi
-      nix flake init -t "path:$FLAKE_DIR#$1"
+      cp -rn "$_src"/. .
       command -v direnv &> /dev/null && direnv allow
     }
 
     _devnew() {
-      [ -z "$FLAKE_DIR" ] && return 1
       local -a templates
-      templates=($(find "$FLAKE_DIR/dev-shells" -maxdepth 1 -mindepth 1 -type d -printf '%f\n' 2>/dev/null))
+      templates=($(find "''${FLAKE_DIR:-/etc/nixos}/dev-shells" -maxdepth 1 -mindepth 1 -type d -printf '%f\n' 2>/dev/null))
       compadd -a templates
     }
     compdef _devnew devnew
