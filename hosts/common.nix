@@ -2,7 +2,6 @@
   pkgs,
   lib,
   username,
-  flakeDir,
   ...
 }: {
   imports =
@@ -97,7 +96,6 @@
 
   environment.sessionVariables = {
     NIX_CONFIG = "experimental-features = nix-command flakes";
-    FLAKE_DIR = flakeDir;
   };
 
   users.users.${username} = {

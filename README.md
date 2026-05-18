@@ -1,5 +1,5 @@
 <h1 align="center">
-   <img src="assets/nix_icon.png" width="100px" alt="NixOS Logo" /> 
+   <img src="assets/nix_icon_animated.svg" width="100px" alt="NixOS Logo" /> 
    <br>
       <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=18&pause=3000&color=A855F7&center=true&vCenter=true&width=500&lines=muddyblack%27s+NixOS+configuration;Hyprland+%2B+KDE+Plasma+6;Btrfs+%2B+LUKS+%2B+Impermanence;Flakes+%2B+Home+Manager+%2B+Disko;Zsh+%2B+Powerlevel10k" alt="Muddyblack's NixOS configuration features: Hyprland, KDE Plasma 6, Btrfs, LUKS, Impermanence, Flakes, Home Manager, Disko, Zsh, and Powerlevel10k" />
    <br>
@@ -41,9 +41,11 @@ In the first few weeks, I managed to like break the system three times a day and
 
 ## Screenshots
 
+**KDE**
 <img src="assets/readme/kde-desktop.png" width="100%" alt="KDE Plasma 6 Desktop Screenshot" />
 
-  <img src="assets/readme/hyprland-desktop.png" width="100%" alt="Hyprland Desktop Screenshot" />
+**Hyprland**
+<img src="assets/readme/hyprland-desktop.png" width="100%" alt="Hyprland Desktop Screenshot" />
 
 
 ---
@@ -254,6 +256,51 @@ systemctl --user start plasma-layout-rebuild
 ```
 
 > This backs up your current layout, wipes Plasma's cache, and re-applies everything from config. Use it whenever widgets drift or don't appear after a rebuild.
+
+---
+
+## AI Integration
+
+Local and cloud AI coding assistants are pre-configured and ready after a rebuild.
+
+### Cloud (fast, recommended for daily use)
+
+```bash
+cc-gemini          # Claude Code → Gemini 2.5 Pro (requires GEMINI_API_KEY)
+cc-openrouter      # Claude Code → OpenRouter (requires OPENROUTER_API_KEY)
+oc                 # OpenCode (auto-configured to local Ollama)
+```
+
+### Local (offline / private)
+
+[Ollama](https://ollama.com) runs as a system service. Models are **not** downloaded automatically — pull once on first use:
+
+```bash
+ai-pull            # download default model (gemma4:4b, ~3-4 GB)
+ai-pull <model>    # download any other Ollama model
+ai-models          # list locally installed models
+```
+
+Then launch:
+
+```bash
+cc-ollama                    # Claude Code → local Gemma 4 4B
+cc-ollama qwen2.5-coder:7b   # Claude Code → a different local model
+oc                           # OpenCode → same local model
+ai-webui                     # Open WebUI (ChatGPT-style browser frontend)
+ai-webui-stop                # Stop the WebUI to free its ~300 MB RAM
+```
+
+> **Performance note:** CPU-only (no dedicated GPU) runs at ~4-15 tok/s depending on model size and CPU generation. The 4B model is the sweet spot for usability. Use cloud backends for latency-sensitive work.
+
+### Model recommendations for CPU-only
+
+| Model | Size | Speed (i5-13420H) | Best for |
+|:--|:--|:--|:--|
+| `gemma4:e4b` | ~9 GB | ~10-15 tok/s | Default, general use (MoE) |
+| `gemma4:e2b` | ~5 GB | ~20+ tok/s | Fast replies, weaker reasoning |
+| `qwen2.5-coder:7b` | ~5 GB | ~6-10 tok/s | Coding-focused tasks |
+| `gemma4:26b` | ~17 GB | ~2-4 tok/s | Higher quality, slow |
 
 ---
 

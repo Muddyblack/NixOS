@@ -13,10 +13,12 @@
     ../../modules/nixos/features/stirling-pdf.nix
     ../../modules/nixos/features/tailscale.nix
     ../../modules/nixos/features/keyring.nix
+    ../../modules/nixos/features/ai.nix
   ];
 
   networking.hostName = "muddyblack";
 
+  features.ai.enable = true;
   features.gaming.enable = true;
   features.virt.enable = true;
   features.homepage.enable = true;

@@ -26,6 +26,8 @@
         "/var/lib/sops-nix"
         "/var/lib/sddm"
         "/var/lib/AccountsService"
+        "/var/lib/private/ollama"
+        "/var/lib/open-webui"
         {
           directory = "/var/lib/colord";
           user = "colord";

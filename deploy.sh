@@ -35,6 +35,19 @@ save_profile() {
 load_saved_profile
 FLAKE_TARGET="${FLAKE_TARGET:-muddyblack}"
 
+ensure_symlink() {
+  local target="$1"
+  if [[ "$(readlink /etc/nixos 2>/dev/null)" == "$target" ]]; then
+    return 0
+  fi
+  if [[ -e /etc/nixos && ! -L /etc/nixos ]]; then
+    echo "/etc/nixos exists as a directory — removing to replace with symlink"
+    sudo rm -rf /etc/nixos
+  fi
+  sudo ln -sfn "$target" /etc/nixos
+  echo "Symlink updated: /etc/nixos -> $target"
+}
+
 usage() {
   cat <<EOF
 NixOS deployment helper
@@ -394,9 +407,10 @@ cmd_install() {
   if ! mountpoint -q /mnt/home; then
     sudo mount -o subvol=@home /dev/mapper/crypted /mnt/home
   fi
-  sudo mkdir -p "/mnt/home/${NIXOS_USER}/Downloads"
-  sudo cp -r "${FLAKE_DIR}" "/mnt/home/${NIXOS_USER}/Downloads/nixos-config"
-  sudo chown -R 1000:100 "/mnt/home/${NIXOS_USER}/Downloads/nixos-config"
+  sudo mkdir -p "/mnt/home/${NIXOS_USER}"
+  sudo cp -r "${FLAKE_DIR}" "/mnt/home/${NIXOS_USER}/nixos-config"
+  sudo chown -R 1000:100 "/mnt/home/${NIXOS_USER}/nixos-config"
+  sudo ln -sfn "/home/${NIXOS_USER}/nixos-config" /mnt/etc/nixos
 
   echo "Done! You can now reboot."
 }
@@ -441,6 +455,7 @@ cmd_switch() {
   [[ -n "$profile_explicit" ]] && save_profile "$FLAKE_TARGET"
 
   if [[ -z "$host" ]]; then
+    ensure_symlink "$FLAKE_DIR"
     echo "Rebuilding & switching local config (profile: ${FLAKE_TARGET})..."
     sudo systemctl stop nixos-rebuild-switch-to-configuration.service 2>/dev/null || true
     local success=false

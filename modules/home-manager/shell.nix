@@ -139,6 +139,8 @@
     ];
 
     initContent = ''
+      export FLAKE_DIR="/etc/nixos"
+
       [[ ! -f ${./p10k.zsh} ]] || source ${./p10k.zsh}
 
       bindkey "^[[1;5C" forward-word
