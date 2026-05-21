@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  pkgs,
   ...
 }: let
   wallpaper = "${../../assets/wallpapers/desktop.png}";
@@ -176,6 +177,72 @@
       }
       "org.kde.plasma.panelspacer"
       {
+        name = "org.kde.plasma.advanced-weather-widget";
+        config.General = {
+          # European metric units
+          unitsMode = "metric";
+          temperatureUnit = "C";
+          pressureUnit = "hPa";
+          windSpeedUnit = "kmh";
+          precipitationUnit = "mm";
+          altitudeUnit = "m";
+          # Panel: show just weather icon — click opens full detail popup
+          panelInfoMode = "simple";
+          panelShowWeatherIcon = "true";
+          panelShowTemperature = "false";
+          panelShowLocation = "false";
+          # Full popup: open details tab with advanced card layout
+          widgetLayoutMode = "advanced";
+          widgetDefaultTab = "details";
+          widgetVisibleTabs = "both";
+          radarEnabled = "true";
+          # Refresh every 15 minutes
+          refreshIntervalMinutes = "15";
+          autoRefresh = "true";
+          autoDetectLocation = "false";
+        };
+      }
+      {
+        name = "org.muddyblack.nixosGenerationExplorer";
+        config.General = {
+          # /etc/nixos is symlinked to the flake dir by deploy.sh —
+          # works for any user without hardcoding the path.
+          flakePath = "/etc/nixos";
+          maxGenerations = "30";
+          commandTerminal = "ghostty";
+          customCommands = builtins.toJSON [
+            {
+              label = "upnix";
+              cmd = "upnix";
+              color = "accent";
+            }
+            {
+              label = "update";
+              cmd = "update";
+              color = "default";
+            }
+          ];
+          secretsPath = "/run/secrets";
+          secretsSourcePath = "/etc/nixos/secrets/secrets.yaml";
+          # Multi-color (original) icons
+          iconStyle = "colored";
+          # Translucent dark background matching the panel look
+          showBg = "true";
+          bgColor = "#990a0c14";
+        };
+      }
+      {
+        name = "org.muddyblack.claudeusage";
+        config.General = {
+          panelStyle = "bar";
+          panelLayout = "horizontal";
+          showIcon = "false";
+          showSession = "true";
+          showWeekly = "true";
+          showSonnet = "false";
+        };
+      }
+      {
         name = "org.kde.netspeedWidget";
         config.General = {
           showIcons = "true";
@@ -192,16 +259,19 @@
           items = {
             shown = [
               "org.kde.plasma.notifications"
-              "org.kde.plasma.clipboard"
-              "org.kde.plasma.mediacontroller"
               "org.kde.plasma.volume"
               "org.kde.plasma.bluetooth"
               "org.kde.plasma.brightness"
               "org.kde.plasma.networkmanagement"
-              "org.kde.plasma.devicenotifier"
-              "org.kde.plasma.battery"
+              "org.kde.plasma.batterymonitor-boero"
             ];
-            hidden = [];
+            hidden = [
+              "org.kde.plasma.battery"
+              "org.kde.plasma.weather"
+              "org.kde.plasma.clipboard"
+              "org.kde.plasma.mediacontroller"
+              "org.kde.plasma.devicenotifier"
+            ];
           };
         };
       }
@@ -465,4 +535,34 @@ in {
     Icon=antigravity
     Exec=antigravity %f
   '';
+
+  systemd.user.services.powerchart-rapl-config = {
+    Unit = {
+      Description = "Set RAPL system power source for batterymonitor-boero widget";
+      After = ["graphical-session.target"];
+      PartOf = ["graphical-session.target"];
+    };
+    Service = {
+      Type = "oneshot";
+      ExecStart = toString (pkgs.writeShellScript "powerchart-rapl-config" ''
+        CFG="$HOME/.config/plasma-org.kde.plasma.desktop-appletsrc"
+        [ -f "$CFG" ] || exit 0
+        # Set raplSource=package for every batterymonitor-boero applet section
+        ${pkgs.gnused}/bin/sed -i \
+          '/^\[.*batterymonitor-boero.*\]/,/^\[/{
+            s/^raplSource=.*/raplSource=package/
+          }' "$CFG" || true
+        # If the key doesn't exist yet, append it after the [General] section of the widget
+        if ! grep -q "^raplSource=" "$CFG"; then
+          ${pkgs.gnused}/bin/sed -i \
+            '/^\[.*batterymonitor-boero.*General\]/{
+              n
+              /^raplSource=/!i raplSource=package
+            }' "$CFG" || true
+        fi
+        echo "powerchart-rapl-config: raplSource=package applied"
+      '');
+    };
+    Install.WantedBy = ["graphical-session.target"];
+  };
 }

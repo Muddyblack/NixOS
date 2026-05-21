@@ -158,6 +158,7 @@
     ./obsidian.nix
     ./espanso.nix
     ./steam.nix
+    ./weather-patch.nix
   ];
 
   home.sessionVariables = {

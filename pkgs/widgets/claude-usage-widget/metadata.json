@@ -1,0 +1,16 @@
+{
+  "KPackageStructure": "Plasma/Applet",
+  "KPlugin": {
+    "Id": "org.muddyblack.claudeusage",
+    "Name": "Claude Usage",
+    "Description": "Claude Code session & weekly token usage bars",
+    "Icon": "org.muddyblack.claudeusage",
+    "Category": "Utilities",
+    "Version": "1.0.0",
+    "Website": "",
+    "Authors": [{ "Name": "muddyblack" }],
+    "License": "MIT",
+    "EnabledByDefault": true
+  },
+  "X-Plasma-API-Minimum-Version": "6.0"
+}
