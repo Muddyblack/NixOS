@@ -64,8 +64,8 @@ in {
     Install.WantedBy = ["graphical-session.target"];
   };
 
-  # Re-run when the user adds the widget. Use PathExists so it only fires once
-  # when the file appears, not on every write (avoids feedback loop).
+  # Re-run on plasmashell restart or widget re-add. Safe to use PathChanged
+  # because the script only writes via DBus, never touches appletsrc directly.
   systemd.user.paths.weather-location-patch = {
     Unit = {
       Description = "Watch appletsrc and re-apply weather location";
@@ -73,7 +73,7 @@ in {
       PartOf = ["graphical-session.target"];
     };
     Path = {
-      PathExists = "%h/.config/plasma-org.kde.plasma.desktop-appletsrc";
+      PathChanged = "%h/.config/plasma-org.kde.plasma.desktop-appletsrc";
       Unit = "weather-location-patch.service";
     };
     Install.WantedBy = ["graphical-session.target"];

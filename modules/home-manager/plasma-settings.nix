@@ -584,7 +584,7 @@ in {
       PartOf = ["graphical-session.target"];
     };
     Path = {
-      PathExists = "%h/.config/plasma-org.kde.plasma.desktop-appletsrc";
+      PathChanged = "%h/.config/plasma-org.kde.plasma.desktop-appletsrc";
       Unit = "powerchart-rapl-config.service";
     };
     Install.WantedBy = ["graphical-session.target"];
