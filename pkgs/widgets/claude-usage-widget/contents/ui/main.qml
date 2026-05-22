@@ -11,10 +11,10 @@ PlasmoidItem {
     toolTipMainText: "Claude API Usage"
     toolTipSubText: {
         var lines = []
-        var fReset = root.sessionResetTime ? " · resets " + root.sessionResetTime : ""
-        var sReset = root.weeklyResetTime  ? " · resets " + root.weeklyResetTime  : ""
-        lines.push("5 Hours: " + Math.round(root.sessionPct) + "%" + fReset)
-        lines.push("7 Days:  " + Math.round(root.weeklyPct)  + "%" + sReset)
+        var fResetStr = root.sessionCountdown === "resetting..." ? " · resetting..." : (root.sessionResetTime ? " · resets " + root.sessionResetTime + (root.sessionCountdown ? " (" + root.sessionCountdown + ")" : "") : "")
+        var sResetStr = root.weeklyCountdown === "resetting..." ? " · resetting..." : (root.weeklyResetTime ? " · resets " + root.weeklyResetTime + (root.weeklyCountdown ? " (" + root.weeklyCountdown + ")" : "") : "")
+        lines.push("5 Hours: " + Math.round(root.sessionPct) + "%" + fResetStr)
+        lines.push("7 Days:  " + Math.round(root.weeklyPct)  + "%" + sResetStr)
         if (root.errorMsg !== "")
             lines.push("⚠ " + root.errorMsg)
         else if (root.lastUpdate !== "")
@@ -25,8 +25,12 @@ PlasmoidItem {
     // ── Data ─────────────────────────────────────────────────────────────────
     property real   sessionPct:       0
     property string sessionResetTime: ""
+    property var    sessionResetDate: null
+    property string sessionCountdown: ""
     property real   weeklyPct:        0
     property string weeklyResetTime:  ""
+    property var    weeklyResetDate:  null
+    property string weeklyCountdown:  ""
     property string errorMsg:         ""
     property bool   stale:            false
     property string lastUpdate:       ""
@@ -79,9 +83,12 @@ PlasmoidItem {
                     root.sessionPct  = f.utilization || 0
                     root.weeklyPct   = s.utilization || 0
                     var fReset = new Date(f.resets_at || "")
+                    root.sessionResetDate = !isNaN(fReset) ? fReset : null
                     root.sessionResetTime = !isNaN(fReset) ? Qt.formatTime(fReset, "hh:mm") : ""
                     var sReset = new Date(s.resets_at || "")
+                    root.weeklyResetDate  = !isNaN(sReset) ? sReset : null
                     root.weeklyResetTime  = !isNaN(sReset) ? Qt.formatDateTime(sReset, "MMM d, hh:mm") : ""
+                    root.updateCountdowns()
                     root.errorMsg   = ""
                     root.stale      = false
                     root.lastUpdate = Qt.formatTime(new Date(), "hh:mm")
@@ -100,12 +107,46 @@ PlasmoidItem {
         xhr.send()
     }
 
+    function formatCountdown(targetDate) {
+        if (!targetDate) return "";
+        var now = new Date();
+        var diffMs = targetDate.getTime() - now.getTime();
+        if (diffMs <= 0) return "resetting...";
+        var totalMins = Math.floor(diffMs / 60000);
+        var d = Math.floor(totalMins / 1440);
+        var h = Math.floor((totalMins % 1440) / 60);
+        var m = totalMins % 60;
+        
+        var parts = [];
+        if (d > 0) parts.push(d + "d");
+        if (h > 0 || d > 0) parts.push(h + "h");
+        parts.push(m + "m");
+        return parts.join(" ");
+    }
+
+    function updateCountdowns() {
+        if (root.sessionResetDate) {
+            root.sessionCountdown = root.formatCountdown(root.sessionResetDate);
+        } else {
+            root.sessionCountdown = "";
+        }
+        if (root.weeklyResetDate) {
+            root.weeklyCountdown = root.formatCountdown(root.weeklyResetDate);
+        } else {
+            root.weeklyCountdown = "";
+        }
+    }
+
     function refresh() { loadCreds() }
 
     // ── Timers ───────────────────────────────────────────────────────────────
     Timer {
         interval: 300000; running: true; repeat: true; triggeredOnStart: true
         onTriggered: root.refresh()
+    }
+    Timer {
+        interval: 30000; running: true; repeat: true; triggeredOnStart: true
+        onTriggered: root.updateCountdowns()
     }
     Timer {
         id: backoffTimer
@@ -257,16 +298,18 @@ PlasmoidItem {
                 spacing: 14
 
                 PopupRow {
-                    label:    "5 Hours"
-                    subtitle: root.sessionResetTime ? "resets " + root.sessionResetTime : ""
-                    value:    root.sessionPct
-                    barColor: root.sessionColor
+                    label:         "5 Hours"
+                    resetText:     root.sessionResetTime ? "resets " + root.sessionResetTime : ""
+                    countdownText: root.sessionCountdown === "resetting..." ? "resetting..." : (root.sessionCountdown ? "in " + root.sessionCountdown : "")
+                    value:         root.sessionPct
+                    barColor:      root.sessionColor
                 }
                 PopupRow {
-                    label:    "7 Days"
-                    subtitle: root.weeklyResetTime ? "resets " + root.weeklyResetTime : ""
-                    value:    root.weeklyPct
-                    barColor: root.weeklyColor
+                    label:         "7 Days"
+                    resetText:     root.weeklyResetTime ? "resets " + root.weeklyResetTime : ""
+                    countdownText: root.weeklyCountdown === "resetting..." ? "resetting..." : (root.weeklyCountdown ? "in " + root.weeklyCountdown : "")
+                    value:         root.weeklyPct
+                    barColor:      root.weeklyColor
                 }
             }
 
@@ -352,17 +395,18 @@ PlasmoidItem {
     // ── Popup row (segmented bar) ────────────────────────────────────────────
     component PopupRow: ColumnLayout {
         id: row
-        property string label:    ""
-        property string subtitle: ""
-        property real   value:    0
-        property color  barColor: Kirigami.Theme.positiveTextColor
+        property string label:         ""
+        property string resetText:     ""
+        property string countdownText: ""
+        property real   value:         0
+        property color  barColor:      Kirigami.Theme.positiveTextColor
 
         readonly property int segmentCount: 20
 
         Layout.fillWidth: true
         spacing: 6
 
-        // Top row: label + percentage
+        // Top row: label + reset time + countdown badge + percentage
         RowLayout {
             Layout.fillWidth: true
             spacing: 6
@@ -375,14 +419,36 @@ PlasmoidItem {
             }
 
             PlasmaComponents.Label {
-                visible: row.subtitle !== ""
-                text: "· " + row.subtitle
+                visible: row.resetText !== ""
+                text: "· " + row.resetText
                 font.pixelSize: 11
                 opacity: 0.5
                 color: Kirigami.Theme.textColor
             }
 
             Item { Layout.fillWidth: true }
+
+            Rectangle {
+                visible: row.countdownText !== ""
+                height: 20
+                width: cdLabel.implicitWidth + 14
+                radius: 4
+                color: Qt.rgba(1, 1, 1, 0.06)
+                border.width: 1
+                border.color: Qt.rgba(1, 1, 1, 0.12)
+                Layout.alignment: Qt.AlignVCenter
+                
+                PlasmaComponents.Label {
+                    id: cdLabel
+                    anchors.centerIn: parent
+                    text: row.countdownText
+                    font.pixelSize: 11
+                    color: Kirigami.Theme.textColor
+                    opacity: 0.8
+                }
+            }
+
+            Item { width: 2 }
 
             PlasmaComponents.Label {
                 text: Math.round(row.value) + "%"
@@ -393,6 +459,7 @@ PlasmoidItem {
                     if (row.value >= 70) return root.warningColor
                     return row.barColor
                 }
+                Layout.alignment: Qt.AlignVCenter
             }
         }
 
