@@ -76,6 +76,14 @@
           </metadata>
         </info>
       </bookmark>
+      <bookmark href="file:///etc/nixos">
+        <title>NixOS Config</title>
+        <info>
+          <metadata owner="http://freedesktop.org">
+            <bookmark:icon name="nix-snowflake-white"/>
+          </metadata>
+        </info>
+      </bookmark>
       <bookmark href="file:///mnt/data">
         <title>Data</title>
         <info>
