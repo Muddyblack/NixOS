@@ -28,7 +28,7 @@
     utterly-round-plasma-style
 
     # Plasma widgets
-    netspeed-widget
+    glassy-system-monitor
     kde-modern-clock
     kde-overview-widget
     plasma-audio-visualizer
@@ -117,7 +117,7 @@
     "themes/Sweet".source = "${pkgs.sweet-theme}/share/themes/Sweet";
 
     # Plasma widgets
-    "plasma/plasmoids/org.kde.netspeedWidget".source = "${pkgs.netspeed-widget}/share/plasma/plasmoids/org.kde.netspeedWidget";
+    "plasma/plasmoids/org.muddyblack.glassySystemMonitor".source = "${pkgs.glassy-system-monitor}/share/plasma/plasmoids/org.muddyblack.glassySystemMonitor";
     "plasma/plasmoids/com.github.prayag2.modernclock".source = "${pkgs.kde-modern-clock}/share/plasma/plasmoids/com.github.prayag2.modernclock";
     "plasma/plasmoids/com.himdek.kde.plasma.overview".source = "${pkgs.kde-overview-widget}/share/plasma/plasmoids/com.himdek.kde.plasma.overview";
     "plasma/plasmoids/org.muddyblack.plasmaAudioVisualizer".source = "${pkgs.plasma-audio-visualizer}/share/plasma/plasmoids/org.muddyblack.plasmaAudioVisualizer";

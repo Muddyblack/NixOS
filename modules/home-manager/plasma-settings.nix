@@ -36,13 +36,13 @@
       };
     }
     {
-      name = "org.kde.plasma.systemmonitor";
-      config = {
-        Appearance = {
-          chartFace = "org.kde.ksysguard.linechart";
-          title = "CPU Cores";
-        };
-        Sensors.highPrioritySensorIds = "[\"cpu/cpu.*/usage\"]";
+      name = "org.muddyblack.glassySystemMonitor";
+      config.General = {
+        activeSection = "2";
+        showCpuCores = "true";
+        cpuTitle = "CPU Cores";
+        showBg = "true";
+        bgColor = "#800d0f1a";
       };
       position = {
         horizontal = 16;
@@ -54,16 +54,13 @@
       };
     }
     {
-      name = "org.kde.plasma.systemmonitor";
-      config = {
-        Appearance = {
-          chartFace = "org.kde.ksysguard.linechart";
-          title = "CPU Total";
-        };
-        Sensors = {
-          highPrioritySensorIds = "[\"cpu/all/usage\"]";
-          totalSensors = "[\"cpu/all/usage\"]";
-        };
+      name = "org.muddyblack.glassySystemMonitor";
+      config.General = {
+        activeSection = "2";
+        showCpuCores = "false";
+        cpuTitle = "CPU Total";
+        showBg = "true";
+        bgColor = "#800d0f1a";
       };
       position = {
         horizontal = 16;
@@ -75,34 +72,30 @@
       };
     }
     {
-      name = "org.kde.plasma.systemmonitor";
-      config = {
-        Appearance = {
-          chartFace = "org.kde.ksysguard.linechart";
-          title = "Memory";
-        };
-        Sensors = {
-          highPrioritySensorIds = "[\"memory/physical/usedPercent\"]";
-          totalSensors = "[\"memory/physical/usedPercent\"]";
-        };
+      name = "org.muddyblack.glassySystemMonitor";
+      config.General = {
+        activeSection = "3";
+        memoryTitle = "Memory";
+        showBg = "true";
+        bgColor = "#800d0f1a";
       };
       position = {
         horizontal = 256;
         vertical = 512;
       };
       size = {
-        width = 288;
+        width = 240;
         height = 192;
       };
     }
     {
-      name = "org.kde.plasma.systemmonitor";
-      config = {
-        Appearance = {
-          chartFace = "org.kde.ksysguard.linechart";
-          title = "Network Speed";
-        };
-        Sensors.highPrioritySensorIds = "[\"network/all/download\",\"network/all/upload\"]";
+      name = "org.muddyblack.glassySystemMonitor";
+      config.General = {
+        activeSection = "1";
+        networkTitle = "Network Speed";
+        networkInterface = "auto";
+        showBg = "true";
+        bgColor = "#800d0f1a";
       };
       position = {
         horizontal = 16;
@@ -214,11 +207,13 @@
         };
       }
       {
-        name = "org.kde.netspeedWidget";
+        name = "org.muddyblack.glassySystemMonitor";
         config.General = {
-          showIcons = "true";
-          speedUnits = "auto";
-          updateInterval = "2";
+          activeSection = "1";
+          panelMode = "true";
+          networkInterface = "auto";
+          showBg = "true";
+          bgColor = "#990a0c14";
         };
       }
       {
