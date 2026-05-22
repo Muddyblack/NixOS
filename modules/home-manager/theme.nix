@@ -117,12 +117,33 @@
     "themes/Sweet".source = "${pkgs.sweet-theme}/share/themes/Sweet";
 
     # Plasma widgets
-    "plasma/plasmoids/org.muddyblack.glassySystemMonitor".source = "${pkgs.glassy-system-monitor}/share/plasma/plasmoids/org.muddyblack.glassySystemMonitor";
-    "plasma/plasmoids/com.github.prayag2.modernclock".source = "${pkgs.kde-modern-clock}/share/plasma/plasmoids/com.github.prayag2.modernclock";
-    "plasma/plasmoids/com.himdek.kde.plasma.overview".source = "${pkgs.kde-overview-widget}/share/plasma/plasmoids/com.himdek.kde.plasma.overview";
-    "plasma/plasmoids/org.muddyblack.plasmaAudioVisualizer".source = "${pkgs.plasma-audio-visualizer}/share/plasma/plasmoids/org.muddyblack.plasmaAudioVisualizer";
-    "plasma/plasmoids/org.muddyblack.claudeusage".source = "${pkgs.claude-usage-widget}/share/plasma/plasmoids/org.muddyblack.claudeusage";
-    "plasma/plasmoids/org.kde.plasma.advanced-weather-widget".source = "${pkgs.advanced-weather-widget}/share/plasma/plasmoids/org.kde.plasma.advanced-weather-widget";
-    "plasma/plasmoids/org.kde.plasma.batterymonitor-boero".source = "${pkgs.kde-powerchart}/share/plasma/plasmoids/org.kde.plasma.batterymonitor-boero";
+    "plasma/plasmoids/org.muddyblack.glassySystemMonitor" = {
+      source = "${pkgs.glassy-system-monitor}/share/plasma/plasmoids/org.muddyblack.glassySystemMonitor";
+      force = true;
+    };
+    "plasma/plasmoids/com.github.prayag2.modernclock" = {
+      source = "${pkgs.kde-modern-clock}/share/plasma/plasmoids/com.github.prayag2.modernclock";
+      force = true;
+    };
+    "plasma/plasmoids/com.himdek.kde.plasma.overview" = {
+      source = "${pkgs.kde-overview-widget}/share/plasma/plasmoids/com.himdek.kde.plasma.overview";
+      force = true;
+    };
+    "plasma/plasmoids/org.muddyblack.plasmaAudioVisualizer" = {
+      source = "${pkgs.plasma-audio-visualizer}/share/plasma/plasmoids/org.muddyblack.plasmaAudioVisualizer";
+      force = true;
+    };
+    "plasma/plasmoids/org.muddyblack.claudeusage" = {
+      source = "${pkgs.claude-usage-widget}/share/plasma/plasmoids/org.muddyblack.claudeusage";
+      force = true;
+    };
+    "plasma/plasmoids/org.kde.plasma.advanced-weather-widget" = {
+      source = "${pkgs.advanced-weather-widget}/share/plasma/plasmoids/org.kde.plasma.advanced-weather-widget";
+      force = true;
+    };
+    "plasma/plasmoids/org.kde.plasma.batterymonitor-boero" = {
+      source = "${pkgs.kde-powerchart}/share/plasma/plasmoids/org.kde.plasma.batterymonitor-boero";
+      force = true;
+    };
   };
 }

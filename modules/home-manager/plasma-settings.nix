@@ -541,23 +541,51 @@ in {
     Service = {
       Type = "oneshot";
       ExecStart = toString (pkgs.writeShellScript "powerchart-rapl-config" ''
-        CFG="$HOME/.config/plasma-org.kde.plasma.desktop-appletsrc"
-        [ -f "$CFG" ] || exit 0
-        # Set raplSource=package for every batterymonitor-boero applet section
-        ${pkgs.gnused}/bin/sed -i \
-          '/^\[.*batterymonitor-boero.*\]/,/^\[/{
-            s/^raplSource=.*/raplSource=package/
-          }' "$CFG" || true
-        # If the key doesn't exist yet, append it after the [General] section of the widget
-        if ! grep -q "^raplSource=" "$CFG"; then
-          ${pkgs.gnused}/bin/sed -i \
-            '/^\[.*batterymonitor-boero.*General\]/{
-              n
-              /^raplSource=/!i raplSource=package
-            }' "$CFG" || true
-        fi
-        echo "powerchart-rapl-config: raplSource=package applied"
+        qdbus=${pkgs.kdePackages.qttools}/bin/qdbus
+        script="
+          var found = 0;
+          panels().concat(desktops()).forEach(function(c) {
+            c.widgets().forEach(function(w) {
+              if (w.type && w.type.indexOf('batterymonitor-boero') !== -1) {
+                w.currentConfigGroup = ['General'];
+                w.writeConfig('raplSource', 'package');
+                w.reloadConfig();
+                found += 1;
+              }
+            });
+          });
+          print(found);
+        "
+        (
+          for i in $(seq 1 120); do
+            "$qdbus" org.kde.plasmashell /PlasmaShell >/dev/null 2>&1 && break
+            sleep 0.5
+          done
+          for i in $(seq 1 30); do
+            out=$("$qdbus" org.kde.plasmashell /PlasmaShell \
+              org.kde.PlasmaShell.evaluateScript "$script" 2>/dev/null || true)
+            case "$out" in
+              [1-9]*) echo "powerchart-rapl-config: applied to $out widget(s)"; exit 0 ;;
+            esac
+            sleep 2
+          done
+          echo "powerchart-rapl-config: widget not found after 60s" >&2
+        ) &
+        disown
       '');
+    };
+    Install.WantedBy = ["graphical-session.target"];
+  };
+
+  systemd.user.paths.powerchart-rapl-config = {
+    Unit = {
+      Description = "Watch appletsrc and re-apply RAPL source for powerchart";
+      After = ["graphical-session.target"];
+      PartOf = ["graphical-session.target"];
+    };
+    Path = {
+      PathExists = "%h/.config/plasma-org.kde.plasma.desktop-appletsrc";
+      Unit = "powerchart-rapl-config.service";
     };
     Install.WantedBy = ["graphical-session.target"];
   };
