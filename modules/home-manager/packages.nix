@@ -1,7 +1,7 @@
 {pkgs, ...}: {
   home.packages = with pkgs; [
     # Plasma widgets
-    claude-usage-widget
+    ai-usage-widget
     kde-powerchart
     advanced-weather-widget
     kde-nixdatifier

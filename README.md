@@ -51,7 +51,12 @@ In the first few weeks, I managed to like break the system three times a day and
 <summary><b>📷 View Widget Screenshots</b></summary>
 <br>
 
-**Claude Code & AI Token Usage**
+**AI API Usage (Claude Code)**
+<p align="center">
+  <img src="assets/readme/ai_usage_panel.svg" alt="AI Usage Panel View" width="128" valign="middle"/>
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="assets/readme/ai_usage.svg" alt="AI Usage Popup View" width="312" valign="middle"/>
+</p>
 <img src="assets/readme/ai_usage_widget.png" width="100%" alt="AI Usage Widget Screenshot" />
 
 **Battery & Power Consumption Graph**
@@ -99,7 +104,7 @@ In the first few weeks, I managed to like break the system three times a day and
 | **Shell** | Zsh · Powerlevel10k |
 | **Terminal** | Ghostty |
 | **Bar** | Caelestia Shell |
-| **Widgets** | Glassy System Monitor · Claude Usage · Nixdatifier · Plasma Audio Visualizer · Advanced Weather · Powerchart |
+| **Widgets** | Glassy System Monitor · AI Usage · Nixdatifier · Plasma Audio Visualizer · Advanced Weather · Powerchart |
 | **Browser** | Zen Browser |
 | **Editor** | Neovim (LazyVim) · Antigravity · Zed |
 | **File Manager** | Yazi · Dolphin |
@@ -274,7 +279,7 @@ systemctl --user start plasma-layout-rebuild
 Our environment features a suite of highly-polished custom and third-party widgets integrated into the panel and desktop:
 
 - **[Glassy System Monitor](https://github.com/Muddyblack/kde-glassy-system-monitor)** — Real-time CPU, RAM, and network traffic monitor with clean glass visual aesthetics and an interface selector popup.
-- **[Claude Usage Widget](https://github.com/Muddyblack/claude-usage-widget)** — Track your Claude Code session and weekly API token usage directly on the panel.
+- **[AI Usage Widget](https://github.com/Muddyblack/kde-ai-usage)** — Track your Claude Code session and weekly API token usage directly on the panel.
 - **[Nixdatifier](https://github.com/Muddyblack/kde-nixdatifier)** — Interactive widget for managing NixOS generations, displaying package diffs, performing updates, and configuring secrets.
 - **[Plasma Audio Visualizer](https://github.com/Muddyblack/plasma-audio-visualizer)** — Smooth, GPU-friendly visualizer powered by `cava` to show audio waveform feedback.
 - **[Advanced Weather Widget](https://github.com/pnedyalkov91/advanced-weather-widget)** — Advanced weather forecast widget with radar and detailed popup tracking.
@@ -392,7 +397,7 @@ Adding a new secret:
 | [Overview Widget](https://github.com/HimDek/Overview-Widget-for-Plasma) | HimDek |
 | [Modern Clock Widget](https://github.com/prayag2/kde_modernclock) | prayag2 |
 | [Glassy System Monitor](https://github.com/Muddyblack/kde-glassy-system-monitor) | muddyblack |
-| [Claude Usage Widget](https://github.com/Muddyblack/claude-usage-widget) | muddyblack |
+| [AI Usage Widget](https://github.com/Muddyblack/kde-ai-usage) | muddyblack |
 | [Nixdatifier](https://github.com/Muddyblack/kde-nixdatifier) | muddyblack |
 | [Advanced Weather Widget](https://github.com/pnedyalkov91/advanced-weather-widget) | pnedyalkov91 |
 | [Powerchart Widget](https://github.com/jboero/kde-plasmoid-powerchart) | jboero |

@@ -196,15 +196,7 @@
         };
       }
       {
-        name = "org.muddyblack.claudeusage";
-        config.General = {
-          panelStyle = "bar";
-          panelLayout = "horizontal";
-          showIcon = "false";
-          showSession = "true";
-          showWeekly = "true";
-          showSonnet = "false";
-        };
+        name = "org.muddyblack.aiUsageWidget";
       }
       {
         name = "org.muddyblack.glassySystemMonitor";

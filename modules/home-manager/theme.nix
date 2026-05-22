@@ -133,8 +133,8 @@
       source = "${pkgs.plasma-audio-visualizer}/share/plasma/plasmoids/org.muddyblack.plasmaAudioVisualizer";
       force = true;
     };
-    "plasma/plasmoids/org.muddyblack.claudeusage" = {
-      source = "${pkgs.claude-usage-widget}/share/plasma/plasmoids/org.muddyblack.claudeusage";
+    "plasma/plasmoids/org.muddyblack.aiUsageWidget" = {
+      source = "${pkgs.ai-usage-widget}/share/plasma/plasmoids/org.muddyblack.aiUsageWidget";
       force = true;
     };
     "plasma/plasmoids/org.kde.plasma.advanced-weather-widget" = {

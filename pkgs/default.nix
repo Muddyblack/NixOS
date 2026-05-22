@@ -5,7 +5,7 @@ final: _prev: {
   plasma-audio-visualizer = final.callPackage ./widgets/plasma-audio-visualizer.nix {};
   kde-modern-clock = final.callPackage ./widgets/modern-clock.nix {};
   kde-overview-widget = final.callPackage ./widgets/overview-widget.nix {};
-  claude-usage-widget = final.callPackage ./widgets/claude-usage-widget.nix {};
+  ai-usage-widget = final.callPackage ./widgets/ai-usage-widget.nix {};
   kde-powerchart = final.callPackage ./widgets/powerchart-widget.nix {};
   advanced-weather-widget = final.callPackage ./widgets/advanced-weather-widget.nix {};
   kde-nixdatifier = final.callPackage ./widgets/nixdatifier.nix {};
