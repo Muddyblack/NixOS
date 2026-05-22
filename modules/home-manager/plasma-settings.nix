@@ -203,6 +203,25 @@
         };
       }
       {
+        name = "org.muddyblack.claudeusage";
+        config.General = {
+          panelStyle = "bar";
+          panelLayout = "horizontal";
+          showIcon = "false";
+          showSession = "true";
+          showWeekly = "true";
+          showSonnet = "false";
+        };
+      }
+      {
+        name = "org.kde.netspeedWidget";
+        config.General = {
+          showIcons = "true";
+          speedUnits = "auto";
+          updateInterval = "2";
+        };
+      }
+      {
         name = "org.muddyblack.nixosGenerationExplorer";
         config.General = {
           # /etc/nixos is symlinked to the flake dir by deploy.sh —
@@ -224,30 +243,12 @@
           ];
           secretsPath = "/run/secrets";
           secretsSourcePath = "/etc/nixos/secrets/secrets.yaml";
-          # Multi-color (original) icons
+          # Use original colored SVG — isMask:false path, no accent-color tinting
           iconStyle = "colored";
+          compactStyle = "icon";
           # Translucent dark background matching the panel look
           showBg = "true";
           bgColor = "#990a0c14";
-        };
-      }
-      {
-        name = "org.muddyblack.claudeusage";
-        config.General = {
-          panelStyle = "bar";
-          panelLayout = "horizontal";
-          showIcon = "false";
-          showSession = "true";
-          showWeekly = "true";
-          showSonnet = "false";
-        };
-      }
-      {
-        name = "org.kde.netspeedWidget";
-        config.General = {
-          showIcons = "true";
-          speedUnits = "auto";
-          updateInterval = "2";
         };
       }
       {

@@ -103,6 +103,12 @@
     </xbel>
   '';
 
+  home.activation.fixNixosBookmark = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    real=$(${pkgs.coreutils}/bin/readlink -f /etc/nixos 2>/dev/null || echo /etc/nixos)
+    ${pkgs.gnused}/bin/sed -i "s|file:///etc/nixos|file://$real|g" \
+      "$HOME/.local/share/user-places.xbel"
+  '';
+
   # Styling for nwg-dock-hyprland to match the translucent KDE look
   home.file.".config/nwg-dock-hyprland/style.css".text = ''
     window {
