@@ -32,6 +32,7 @@
     kde-modern-clock
     kde-overview-widget
     plasma-audio-visualizer
+    tagesschau-widget
   ];
 
   qt = {
@@ -135,6 +136,10 @@
     };
     "plasma/plasmoids/org.muddyblack.aiUsageWidget" = {
       source = "${pkgs.ai-usage-widget}/share/plasma/plasmoids/org.muddyblack.aiUsageWidget";
+      force = true;
+    };
+    "plasma/plasmoids/org.muddyblack.tagesschauWidget" = {
+      source = "${pkgs.tagesschau-widget}/share/plasma/plasmoids/org.muddyblack.tagesschauWidget";
       force = true;
     };
     "plasma/plasmoids/org.kde.plasma.advanced-weather-widget" = {

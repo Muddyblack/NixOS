@@ -10,6 +10,7 @@ final: _prev: {
   advanced-weather-widget = final.callPackage ./widgets/advanced-weather-widget.nix {};
   kde-nixdatifier = final.callPackage ./widgets/nixdatifier.nix {};
   glassy-system-monitor = final.callPackage ./widgets/glassy-system-monitor.nix {};
+  tagesschau-widget = final.callPackage ./widgets/tagesschau-widget.nix {};
 
   # ═══════════════════════════════════════════════════════════════════════════
   # THEMES - Plasma themes, look-and-feel, kvantum

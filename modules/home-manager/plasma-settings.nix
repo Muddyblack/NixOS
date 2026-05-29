@@ -199,13 +199,17 @@
         name = "org.muddyblack.aiUsageWidget";
       }
       {
+        name = "org.muddyblack.tagesschauWidget";
+      }
+      {
         name = "org.muddyblack.glassySystemMonitor";
         config.General = {
           activeSection = "1";
           panelMode = "true";
           networkInterface = "auto";
-          showBg = "true";
-          bgColor = "#990a0c14";
+          panelPlainText = "true";
+          panelShowBg = "false";
+          showBg = "false";
         };
       }
       {
