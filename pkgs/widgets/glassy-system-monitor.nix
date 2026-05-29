@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "Muddyblack";
     repo = "kde-glassy-system-monitor";
     rev = "refs/tags/v${version}";
-    hash = "sha256-V/mbbghIxGdqZHvs6TVqlIvwWuPtB/zyGOJ72uo95C0=";
+    hash = "sha256-eLuNG3gvl1XEXaSKhLVRdSjym63jH0xpxmSeGWxajtE=";
   };
 
   dontConfigure = true;
