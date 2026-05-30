@@ -122,6 +122,7 @@
     antigravity
     zed-editor
     claude-code
+    codex
 
     # Recording & streaming
     obs-studio

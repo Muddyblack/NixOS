@@ -1,4 +1,4 @@
-const { app, BrowserWindow, shell } = require("electron");
+const { app, BrowserWindow, shell, ipcMain } = require("electron");
 const http = require("http");
 const path = require("path");
 const { spawn, spawnSync } = require("child_process");
@@ -112,7 +112,7 @@ function createWindow() {
 
   mainWindow.loadFile(path.join(__dirname, "index.html"));
 
-  mainWindow.webContents.once("did-finish-load", () => {
+  ipcMain.once("renderer-ready", () => {
     const proceed = () => {
       startContainer(() => {
         send("done");

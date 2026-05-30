@@ -26,6 +26,7 @@
     }
     {
       name = "org.muddyblack.plasmaAudioVisualizer";
+      config.General.framerate = "24";
       position = {
         horizontal = 826;
         vertical = 544;
@@ -41,6 +42,12 @@
         activeSection = "2";
         showCpuCores = "true";
         cpuTitle = "CPU Cores";
+        # Perf: drop the neon glow (Canvas shadow-blur is the costliest
+        # per-frame op) and cap the scroll at 24fps. smoothScroll stays ON —
+        # this keeps the look while 4 glassy monitors + the audio visualizer
+        # stop saturating the shared plasmashell render thread.
+        glowLine = "true";
+        targetFps = "24";
         showBg = "true";
         bgColor = "#800d0f1a";
       };
@@ -59,6 +66,8 @@
         activeSection = "2";
         showCpuCores = "false";
         cpuTitle = "CPU Total";
+        glowLine = "true";
+        targetFps = "24";
         showBg = "true";
         bgColor = "#800d0f1a";
       };
@@ -76,6 +85,8 @@
       config.General = {
         activeSection = "3";
         memoryTitle = "Memory";
+        glowLine = "true";
+        targetFps = "24";
         showBg = "true";
         bgColor = "#800d0f1a";
       };
@@ -94,6 +105,8 @@
         activeSection = "1";
         networkTitle = "Network Speed";
         networkInterface = "auto";
+        glowLine = "true";
+        targetFps = "24";
         showBg = "true";
         bgColor = "#800d0f1a";
       };
@@ -210,6 +223,8 @@
           panelPlainText = "true";
           panelShowBg = "false";
           showBg = "false";
+          glowLine = "true";
+          targetFps = "24";
         };
       }
       {

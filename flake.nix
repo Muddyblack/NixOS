@@ -84,6 +84,7 @@
                   gemini-cli
                   antigravity
                   claude-code
+                  codex
                   typst
                   typstyle
                   tinymist
