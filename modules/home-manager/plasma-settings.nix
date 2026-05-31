@@ -47,7 +47,7 @@
         # this keeps the look while 4 glassy monitors + the audio visualizer
         # stop saturating the shared plasmashell render thread.
         glowLine = "true";
-        targetFps = "24";
+        targetFps = "15";
         showBg = "true";
         bgColor = "#800d0f1a";
       };
@@ -67,7 +67,7 @@
         showCpuCores = "false";
         cpuTitle = "CPU Total";
         glowLine = "true";
-        targetFps = "24";
+        targetFps = "15";
         showBg = "true";
         bgColor = "#800d0f1a";
       };
@@ -86,7 +86,7 @@
         activeSection = "3";
         memoryTitle = "Memory";
         glowLine = "true";
-        targetFps = "24";
+        targetFps = "15";
         showBg = "true";
         bgColor = "#800d0f1a";
       };
@@ -106,7 +106,7 @@
         networkTitle = "Network Speed";
         networkInterface = "auto";
         glowLine = "true";
-        targetFps = "24";
+        targetFps = "15";
         showBg = "true";
         bgColor = "#800d0f1a";
       };
@@ -210,6 +210,11 @@
       }
       {
         name = "org.muddyblack.aiUsageWidget";
+        config.General = {
+          claudeEnabled = "true";
+          antigravityEnabled = "true";
+          openaiEnabled = "true";
+        };
       }
       {
         name = "org.muddyblack.tagesschauWidget";
@@ -224,7 +229,7 @@
           panelShowBg = "false";
           showBg = "false";
           glowLine = "true";
-          targetFps = "24";
+          targetFps = "15";
         };
       }
       {
