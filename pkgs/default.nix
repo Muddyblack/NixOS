@@ -45,6 +45,7 @@ final: _prev: {
   # ═══════════════════════════════════════════════════════════════════════════
   # APPS - Custom applications
   # ═══════════════════════════════════════════════════════════════════════════
+  portmaster = final.callPackage ./apps/portmaster.nix {};
   guitar-pro = final.callPackage ./apps/guitar-pro.nix {};
   photopea = final.callPackage ./apps/photopea.nix {};
   recraft = final.callPackage ./apps/recraft.nix {};

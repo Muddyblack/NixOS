@@ -170,6 +170,7 @@
 
   imports = [
     ./packages.nix
+    ./widgets.nix
     ./theme.nix
     ./shell.nix
     ./ai.nix

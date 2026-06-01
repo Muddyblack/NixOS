@@ -4,11 +4,11 @@
   pkgs,
   ...
 }: let
+  cfg = config.desktop.widgets;
   wallpaper = "${../../assets/wallpapers/desktop.png}";
 
-  desktopWidgets = [
-    # Center: large date/clock banner
-    {
+  desktopWidgets =
+    (lib.optional cfg.modernClock.enable {
       name = "com.github.prayag2.modernclock";
       config.Appearance = {
         showDate = "true";
@@ -23,8 +23,8 @@
         width = 640;
         height = 256;
       };
-    }
-    {
+    })
+    ++ (lib.optional cfg.plasmaAudioVisualizer.enable {
       name = "org.muddyblack.plasmaAudioVisualizer";
       config.General.framerate = "24";
       position = {
@@ -35,91 +35,89 @@
         width = 360;
         height = 84;
       };
-    }
-    {
-      name = "org.muddyblack.glassySystemMonitor";
-      config.General = {
-        activeSection = "2";
-        showCpuCores = "true";
-        cpuTitle = "CPU Cores";
-        # Perf: drop the neon glow (Canvas shadow-blur is the costliest
-        # per-frame op) and cap the scroll at 24fps. smoothScroll stays ON —
-        # this keeps the look while 4 glassy monitors + the audio visualizer
-        # stop saturating the shared plasmashell render thread.
-        glowLine = "true";
-        targetFps = "15";
-        showBg = "true";
-        bgColor = "#800d0f1a";
-      };
-      position = {
-        horizontal = 16;
-        vertical = 64;
-      };
-      size = {
-        width = 480;
-        height = 448;
-      };
-    }
-    {
-      name = "org.muddyblack.glassySystemMonitor";
-      config.General = {
-        activeSection = "2";
-        showCpuCores = "false";
-        cpuTitle = "CPU Total";
-        glowLine = "true";
-        targetFps = "15";
-        showBg = "true";
-        bgColor = "#800d0f1a";
-      };
-      position = {
-        horizontal = 16;
-        vertical = 512;
-      };
-      size = {
-        width = 240;
-        height = 192;
-      };
-    }
-    {
-      name = "org.muddyblack.glassySystemMonitor";
-      config.General = {
-        activeSection = "3";
-        memoryTitle = "Memory";
-        glowLine = "true";
-        targetFps = "15";
-        showBg = "true";
-        bgColor = "#800d0f1a";
-      };
-      position = {
-        horizontal = 256;
-        vertical = 512;
-      };
-      size = {
-        width = 240;
-        height = 192;
-      };
-    }
-    {
-      name = "org.muddyblack.glassySystemMonitor";
-      config.General = {
-        activeSection = "1";
-        networkTitle = "Network Speed";
-        networkInterface = "auto";
-        glowLine = "true";
-        targetFps = "15";
-        showBg = "true";
-        bgColor = "#800d0f1a";
-      };
-      position = {
-        horizontal = 16;
-        vertical = 704;
-      };
-      size = {
-        width = 480;
-        height = 192;
-      };
-    }
-    {
+    })
+    ++ (lib.optionals cfg.glassySystemMonitor.enable [
+      {
+        name = "org.muddyblack.glassySystemMonitor";
+        config.General = {
+          activeSection = "2";
+          showCpuCores = "true";
+          cpuTitle = "CPU Cores";
+          glowLine = "true";
+          targetFps = "15";
+          showBg = "true";
+          bgColor = "#800d0f1a";
+        };
+        position = {
+          horizontal = 16;
+          vertical = 64;
+        };
+        size = {
+          width = 480;
+          height = 448;
+        };
+      }
+      {
+        name = "org.muddyblack.glassySystemMonitor";
+        config.General = {
+          activeSection = "2";
+          showCpuCores = "false";
+          cpuTitle = "CPU Total";
+          glowLine = "true";
+          targetFps = "15";
+          showBg = "true";
+          bgColor = "#800d0f1a";
+        };
+        position = {
+          horizontal = 16;
+          vertical = 512;
+        };
+        size = {
+          width = 240;
+          height = 192;
+        };
+      }
+      {
+        name = "org.muddyblack.glassySystemMonitor";
+        config.General = {
+          activeSection = "3";
+          memoryTitle = "Memory";
+          glowLine = "true";
+          targetFps = "15";
+          showBg = "true";
+          bgColor = "#800d0f1a";
+        };
+        position = {
+          horizontal = 256;
+          vertical = 512;
+        };
+        size = {
+          width = 240;
+          height = 192;
+        };
+      }
+      {
+        name = "org.muddyblack.glassySystemMonitor";
+        config.General = {
+          activeSection = "1";
+          networkTitle = "Network Speed";
+          networkInterface = "auto";
+          glowLine = "true";
+          targetFps = "15";
+          showBg = "true";
+          bgColor = "#800d0f1a";
+        };
+        position = {
+          horizontal = 16;
+          vertical = 704;
+        };
+        size = {
+          width = 480;
+          height = 192;
+        };
+      }
+    ])
+    ++ (lib.optional cfg.kscreen.enable {
       name = "org.kde.kscreen";
       position = {
         horizontal = 1472;
@@ -129,8 +127,7 @@
         width = 448;
         height = 256;
       };
-    }
-  ];
+    });
 
   # Helper to create top panel with specific launcher
   makeTopPanel = screen: launcher: {
@@ -140,49 +137,51 @@
     floating = true;
     hiding = "none";
     opacity = "translucent";
-    widgets = [
-      launcher
-      {
-        iconTasks = {
-          launchers = [
-            "applications:systemsettings.desktop"
-            "applications:org.kde.dolphin.desktop"
-            "applications:com.mitchellh.ghostty.desktop"
-          ];
-          appearance = {
-            showTooltips = true;
-            highlightWindows = true;
-            indicateAudioStreams = true;
-            fill = true;
-          };
-          behavior = {
-            grouping = {
-              method = "byProgramName";
-              clickAction = "showPresentWindowsEffect";
+    widgets =
+      [
+        launcher
+        {
+          iconTasks = {
+            launchers = [
+              "applications:systemsettings.desktop"
+              "applications:org.kde.dolphin.desktop"
+              "applications:com.mitchellh.ghostty.desktop"
+            ];
+            appearance = {
+              showTooltips = true;
+              highlightWindows = true;
+              indicateAudioStreams = true;
+              fill = true;
             };
-            minimizeActiveTaskOnClick = true;
-            middleClickAction = "newInstance";
-            wheel = {
-              switchBetweenTasks = true;
-              ignoreMinimizedTasks = true;
+            behavior = {
+              grouping = {
+                method = "byProgramName";
+                clickAction = "showPresentWindowsEffect";
+              };
+              minimizeActiveTaskOnClick = true;
+              middleClickAction = "newInstance";
+              wheel = {
+                switchBetweenTasks = true;
+                ignoreMinimizedTasks = true;
+              };
             };
           };
-        };
-      }
-      "org.kde.plasma.panelspacer"
-      {
-        name = "org.kde.plasma.digitalclock";
-        config.Appearance = {
-          dateFormat = "custom";
-          customDateFormat = "ddd d MMM";
-          showDate = "true";
-          showSeconds = "never";
-          use24hFormat = "2";
-          selectedTimeZone = "Local";
-        };
-      }
-      "org.kde.plasma.panelspacer"
-      {
+        }
+        "org.kde.plasma.panelspacer"
+        {
+          name = "org.kde.plasma.digitalclock";
+          config.Appearance = {
+            dateFormat = "custom";
+            customDateFormat = "ddd d MMM";
+            showDate = "true";
+            showSeconds = "never";
+            use24hFormat = "2";
+            selectedTimeZone = "Local";
+          };
+        }
+        "org.kde.plasma.panelspacer"
+      ]
+      ++ (lib.optional cfg.weather.enable {
         name = "org.kde.plasma.advanced-weather-widget";
         config.General = {
           # European metric units
@@ -207,19 +206,19 @@
           autoRefresh = "true";
           autoDetectLocation = "false";
         };
-      }
-      {
+      })
+      ++ (lib.optional cfg.aiUsage.enable {
         name = "org.muddyblack.aiUsageWidget";
         config.General = {
           claudeEnabled = "true";
           antigravityEnabled = "true";
           openaiEnabled = "true";
         };
-      }
-      {
+      })
+      ++ (lib.optional cfg.tagesschau.enable {
         name = "org.muddyblack.tagesschauWidget";
-      }
-      {
+      })
+      ++ (lib.optional cfg.glassySystemMonitor.enable {
         name = "org.muddyblack.glassySystemMonitor";
         config.General = {
           activeSection = "1";
@@ -231,8 +230,8 @@
           glowLine = "true";
           targetFps = "15";
         };
-      }
-      {
+      })
+      ++ (lib.optional cfg.nixosGenerationExplorer.enable {
         name = "org.muddyblack.nixosGenerationExplorer";
         config.General = {
           # /etc/nixos is symlinked to the flake dir by deploy.sh —
@@ -261,33 +260,34 @@
           showBg = "true";
           bgColor = "#990a0c14";
         };
-      }
-      {
-        systemTray = {
-          icons = {
-            spacing = "small";
-            scaleToFit = false;
+      })
+      ++ [
+        {
+          systemTray = {
+            icons = {
+              spacing = "small";
+              scaleToFit = false;
+            };
+            items = {
+              shown = [
+                "org.kde.plasma.notifications"
+                "org.kde.plasma.volume"
+                "org.kde.plasma.bluetooth"
+                "org.kde.plasma.brightness"
+                "org.kde.plasma.networkmanagement"
+                "org.kde.plasma.batterymonitor-boero"
+              ];
+              hidden = [
+                "org.kde.plasma.battery"
+                "org.kde.plasma.weather"
+                "org.kde.plasma.clipboard"
+                "org.kde.plasma.mediacontroller"
+                "org.kde.plasma.devicenotifier"
+              ];
+            };
           };
-          items = {
-            shown = [
-              "org.kde.plasma.notifications"
-              "org.kde.plasma.volume"
-              "org.kde.plasma.bluetooth"
-              "org.kde.plasma.brightness"
-              "org.kde.plasma.networkmanagement"
-              "org.kde.plasma.batterymonitor-boero"
-            ];
-            hidden = [
-              "org.kde.plasma.battery"
-              "org.kde.plasma.weather"
-              "org.kde.plasma.clipboard"
-              "org.kde.plasma.mediacontroller"
-              "org.kde.plasma.devicenotifier"
-            ];
-          };
-        };
-      }
-    ];
+        }
+      ];
   };
 
   # Helper to create bottom panel (dock)
@@ -300,41 +300,42 @@
     hiding = "dodgewindows";
     alignment = "center";
     opacity = "translucent";
-    widgets = [
-      "com.himdek.kde.plasma.overview"
-      {
-        iconTasks = {
-          launchers = [
-            "applications:antigravity.desktop"
-            "applications:code.desktop"
-            "applications:zen.desktop"
-          ];
-          appearance = {
-            showTooltips = true;
-            highlightWindows = true;
-            indicateAudioStreams = true;
-            fill = false;
-          };
-          behavior = {
-            grouping = {
-              method = "byProgramName";
-              clickAction = "showPresentWindowsEffect";
+    widgets =
+      (lib.optional cfg.overview.enable "com.himdek.kde.plasma.overview")
+      ++ [
+        {
+          iconTasks = {
+            launchers = [
+              "applications:antigravity.desktop"
+              "applications:code.desktop"
+              "applications:zen.desktop"
+            ];
+            appearance = {
+              showTooltips = true;
+              highlightWindows = true;
+              indicateAudioStreams = true;
+              fill = false;
             };
-            minimizeActiveTaskOnClick = true;
-            middleClickAction = "newInstance";
-            wheel = {
-              switchBetweenTasks = true;
-              ignoreMinimizedTasks = true;
+            behavior = {
+              grouping = {
+                method = "byProgramName";
+                clickAction = "showPresentWindowsEffect";
+              };
+              minimizeActiveTaskOnClick = true;
+              middleClickAction = "newInstance";
+              wheel = {
+                switchBetweenTasks = true;
+                ignoreMinimizedTasks = true;
+              };
             };
           };
-        };
-      }
-      {
-        name = "org.kde.plasma.folder";
-        config.General.url = "file://${config.home.homeDirectory}/Downloads";
-      }
-      "org.kde.plasma.trash"
-    ];
+        }
+        {
+          name = "org.kde.plasma.folder";
+          config.General.url = "file://${config.home.homeDirectory}/Downloads";
+        }
+        "org.kde.plasma.trash"
+      ];
   };
 in {
   programs.plasma = {

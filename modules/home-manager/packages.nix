@@ -1,11 +1,5 @@
 {pkgs, ...}: {
   home.packages = with pkgs; [
-    # Plasma widgets
-    ai-usage-widget
-    kde-powerchart
-    advanced-weather-widget
-    kde-nixdatifier
-
     # Terminal & CLI
     btop
     fastfetch
