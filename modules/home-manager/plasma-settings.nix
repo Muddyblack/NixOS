@@ -45,6 +45,7 @@
           showCpuCores = "true";
           cpuTitle = "CPU Cores";
           glowLine = "true";
+          gpuBloom = "false";
           targetFps = "15";
           showBg = "true";
           bgColor = "#800d0f1a";
