@@ -5,13 +5,13 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "glassy-system-monitor";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "Muddyblack";
     repo = "kde-glassy-system-monitor";
     rev = "refs/tags/v${version}";
-    hash = "sha256-sx+teB6huCRlv3DbeRfoC1/JVJXHPqoPCYs0AshJsBo=";
+    hash = "sha256-Ocuu+1/LH4VLev2ZHzeDop5sSUlK97v426Xy3lBcQvA=";
   };
 
   dontConfigure = true;
