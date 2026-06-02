@@ -216,8 +216,8 @@
           antigravityEnabled = "true";
           openaiEnabled = "true";
           mistralEnabled = "true";
-          popupBgOpacity = "0.2";
-          cardBgOpacity = "0";
+          popupBgOpacity = "0.4";
+          cardBgOpacity = "0.1";
         };
       })
       ++ (lib.optional cfg.tagesschau.enable {
