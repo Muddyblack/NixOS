@@ -4,8 +4,13 @@ final: _prev: {
   # ═══════════════════════════════════════════════════════════════════════════
   plasma-audio-visualizer = final.callPackage ./widgets/plasma-audio-visualizer.nix {};
   kde-modern-clock = final.callPackage ./widgets/modern-clock.nix {};
-  netspeed-widget = final.callPackage ./widgets/netspeed-widget.nix {};
   kde-overview-widget = final.callPackage ./widgets/overview-widget.nix {};
+  ai-usage-widget = final.callPackage ./widgets/ai-usage-widget.nix {};
+  kde-powerchart = final.callPackage ./widgets/powerchart-widget.nix {};
+  advanced-weather-widget = final.callPackage ./widgets/advanced-weather-widget.nix {};
+  kde-nixdatifier = final.callPackage ./widgets/nixdatifier.nix {};
+  glassy-system-monitor = final.callPackage ./widgets/glassy-system-monitor.nix {};
+  tagesschau-widget = final.callPackage ./widgets/tagesschau-widget.nix {};
 
   # ═══════════════════════════════════════════════════════════════════════════
   # THEMES - Plasma themes, look-and-feel, kvantum
@@ -40,6 +45,7 @@ final: _prev: {
   # ═══════════════════════════════════════════════════════════════════════════
   # APPS - Custom applications
   # ═══════════════════════════════════════════════════════════════════════════
+  portmaster = final.callPackage ./apps/portmaster.nix {};
   guitar-pro = final.callPackage ./apps/guitar-pro.nix {};
   photopea = final.callPackage ./apps/photopea.nix {};
   recraft = final.callPackage ./apps/recraft.nix {};

@@ -1,4 +1,4 @@
-# Source: https://github.com/Muddyblack/plasma-audio-visualizer
+# Source: https://github.com/Muddyblack/kde-audio-visualizer
 {
   stdenvNoCC,
   lib,
@@ -10,13 +10,13 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "plasma-audio-visualizer";
-  version = "1.1.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "Muddyblack";
-    repo = "plasma-audio-visualizer";
+    repo = "kde-audio-visualizer";
     rev = "v${version}";
-    hash = "sha256-XKqy21NyyvIcyspRMJiKtl3/ZEmaQryjF+aQz8fxM6c=";
+    hash = "sha256-lWCyj9NkCyYs41uZCWMt04oVFO3CGS9l30/e/P2grjU=";
   };
 
   nativeBuildInputs = [makeWrapper];
