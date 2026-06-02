@@ -5,13 +5,13 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "kde-nixdatifier";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "Muddyblack";
     repo = "kde-nixdatifier";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jCJ/ZDI/Dat25jxQVqhCrkdW0Q9l40nkfGcTurpl/V0=";
+    hash = "sha256-dRhdbkkL8HvFz+zJGwnRgxfqSrqsgXAvK/R0cyans/E=";
   };
 
   dontConfigure = true;

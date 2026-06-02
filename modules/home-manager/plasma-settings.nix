@@ -27,6 +27,7 @@
     ++ (lib.optional cfg.plasmaAudioVisualizer.enable {
       name = "org.muddyblack.plasmaAudioVisualizer";
       config.General.framerate = "24";
+      config.General.progressBarStyle = "4";
       position = {
         horizontal = 826;
         vertical = 544;
@@ -213,6 +214,9 @@
           claudeEnabled = "true";
           antigravityEnabled = "true";
           openaiEnabled = "true";
+          mistralEnabled = "true";
+          popupBgOpacity = "0.2";
+          cardBgOpacity = "0";
         };
       })
       ++ (lib.optional cfg.tagesschau.enable {
