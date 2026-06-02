@@ -39,6 +39,7 @@
     opencode
     notebooklm
     perplexity
+    mistral-vibe
 
     # File management
     czkawka

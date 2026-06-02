@@ -85,6 +85,7 @@
                   antigravity
                   claude-code
                   codex
+                  mistral-vibe
                   typst
                   typstyle
                   tinymist

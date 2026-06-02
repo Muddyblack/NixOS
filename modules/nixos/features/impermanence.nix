@@ -75,6 +75,7 @@
           "Thunderbird"
           ".claude"
           ".claude-code-router"
+          ".vibe"
           ".codex"
           ".opencode"
           ".windsurf"
