@@ -207,6 +207,7 @@
     # udev rule: wake BT adapter fast after suspend
     services.udev.extraRules = ''
       ACTION=="add", SUBSYSTEM=="bluetooth", ATTR{type}=="1", ATTR{idle_timeout}="0"
+      SUBSYSTEM=="powercap", ACTION=="add", RUN+="${pkgs.coreutils}/bin/chmod a+r /sys/%p/energy_uj"
     '';
 
     hardware.graphics = {

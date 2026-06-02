@@ -39,7 +39,7 @@
       };
       services = {
         useFahrenheit = false;
-        weatherLocation = "Friedrichshafen";
+        weatherLocation = "";
       };
       session = {
         commands = {

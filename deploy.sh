@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-FLAKE_DIR="$(cd "$(dirname "$0")" && pwd)"
+FLAKE_DIR="$(cd "$(dirname "$(realpath "$0")")" && pwd)"
 NIXOS_USER="${NIXOS_USER:-muddyblack}"
 
 STATE_FILE="${FLAKE_DIR}/.deploy-state"

@@ -139,6 +139,7 @@
     kdePackages.spectacle
     kdePackages.ark
     kdePackages.sddm-kcm
+    kdePackages.qtwebengine
   ];
 
   programs.kdeconnect.enable = true;

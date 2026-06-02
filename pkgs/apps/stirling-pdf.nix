@@ -49,7 +49,8 @@ stdenvNoCC.mkDerivation {
       --set STIRLING_SYSTEMCTL "${systemd}/bin/systemctl" \
       --set-default ELECTRON_FORCE_IS_PACKAGED "true" \
       --set-default ELECTRON_APP_NAME "Stirling-PDF" \
-      --set-default ELECTRON_OZONE_PLATFORM_HINT "auto"
+      --set-default ELECTRON_OZONE_PLATFORM_HINT "auto" \
+      --add-flags "--disable-gpu"
 
     mkdir -p $out/share/icons/hicolor/512x512/apps
     cp ${../../assets/icons/stirlingpdf.png} $out/share/icons/hicolor/512x512/apps/stirlingpdf.png

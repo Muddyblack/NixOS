@@ -20,6 +20,16 @@
         owner = username;
         mode = "0400";
       };
+
+      # Weather widget location (kept out of git plaintext)
+      secrets.weather-latitude = {
+        owner = username;
+        mode = "0400";
+      };
+      secrets.weather-longitude = {
+        owner = username;
+        mode = "0400";
+      };
     };
   };
 }

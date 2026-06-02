@@ -64,35 +64,63 @@
     };
   };
 
-  home.file.".local/share/user-places.xbel".text = ''
-    <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE xbel>
-    <xbel xmlns:bookmark="http://www.freedesktop.org/standards/bookmark" xmlns:kdepriv="http://www.kde.org/kdepriv">
-      <bookmark href="file:///mnt/projects">
-        <title>Projects</title>
-        <info>
-          <metadata owner="http://freedesktop.org">
-            <bookmark:icon name="folder-development"/>
-          </metadata>
-        </info>
-      </bookmark>
-      <bookmark href="file:///mnt/data">
-        <title>Data</title>
-        <info>
-          <metadata owner="http://freedesktop.org">
-            <bookmark:icon name="folder-database"/>
-          </metadata>
-        </info>
-      </bookmark>
-      <bookmark href="file:///mnt/data/01%20Hobby/Gitarre/Gitarrenst%C3%BCcke/Selbst%20probieren">
-        <title>Gitarre</title>
-        <info>
-          <metadata owner="http://freedesktop.org">
-            <bookmark:icon name="folder-music"/>
-          </metadata>
-        </info>
-      </bookmark>
-    </xbel>
+  home.file.".local/share/user-places.xbel" = {
+    force = true;
+    text = ''
+      <?xml version="1.0" encoding="UTF-8"?>
+      <!DOCTYPE xbel>
+      <xbel xmlns:bookmark="http://www.freedesktop.org/standards/bookmark" xmlns:kdepriv="http://www.kde.org/kdepriv">
+        <bookmark href="file:///mnt/projects">
+          <title>Projects</title>
+          <info>
+            <metadata owner="http://freedesktop.org">
+              <bookmark:icon name="folder-development"/>
+            </metadata>
+          </info>
+        </bookmark>
+      <bookmark href="file:///etc/nixos">
+          <title>NixOS Config</title>
+          <info>
+            <metadata owner="http://freedesktop.org">
+              <bookmark:icon name="nix-snowflake-white"/>
+            </metadata>
+          </info>
+        </bookmark>
+        <bookmark href="file:///mnt/data">
+          <title>Data</title>
+          <info>
+            <metadata owner="http://freedesktop.org">
+              <bookmark:icon name="folder-database"/>
+            </metadata>
+          </info>
+        </bookmark>
+        <bookmark href="file:///mnt/data/01%20Hobby/Gitarre/Gitarrenst%C3%BCcke/Selbst%20probieren">
+          <title>Gitarre</title>
+          <info>
+            <metadata owner="http://freedesktop.org">
+              <bookmark:icon name="folder-music"/>
+            </metadata>
+          </info>
+        </bookmark>
+      </xbel>
+    '';
+  };
+
+  home.activation.fixNixosBookmark = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    PLACES="$HOME/.local/share/user-places.xbel"
+
+    # Home Manager creates a read-only symlink. We must replace it with a
+    # writable file, otherwise KDE will delete/reset the file on reboot.
+    if [ -L "$PLACES" ]; then
+      temp=$(${pkgs.coreutils}/bin/mktemp)
+      ${pkgs.coreutils}/bin/cat "$PLACES" > "$temp"
+      ${pkgs.coreutils}/bin/rm "$PLACES"
+      ${pkgs.coreutils}/bin/mv "$temp" "$PLACES"
+    fi
+    ${pkgs.coreutils}/bin/chmod 644 "$PLACES"
+
+    real=$(${pkgs.coreutils}/bin/readlink -f /etc/nixos 2>/dev/null || echo /etc/nixos)
+    ${pkgs.gnused}/bin/sed -i "s|file:///etc/nixos|file://$real|g" "$PLACES"
   '';
 
   # Styling for nwg-dock-hyprland to match the translucent KDE look
@@ -142,6 +170,7 @@
 
   imports = [
     ./packages.nix
+    ./widgets.nix
     ./theme.nix
     ./shell.nix
     ./ai.nix
@@ -158,6 +187,7 @@
     ./obsidian.nix
     ./espanso.nix
     ./steam.nix
+    ./weather-patch.nix
   ];
 
   home.sessionVariables = {

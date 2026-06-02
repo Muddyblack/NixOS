@@ -6,4 +6,5 @@ contextBridge.exposeInMainWorld("api", {
   onOutput: (cb) => ipcRenderer.on("output", (_, m) => cb(m)),
   onError:  (cb) => ipcRenderer.on("error",  (_, m) => cb(m)),
   onDone:   (cb) => ipcRenderer.on("done",   ()      => cb()),
+  ready:    ()   => ipcRenderer.send("renderer-ready"),
 });
