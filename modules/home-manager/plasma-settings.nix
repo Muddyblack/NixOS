@@ -189,6 +189,7 @@
           refreshIntervalMinutes = "15";
           autoRefresh = "true";
           autoDetectLocation = "false";
+          tooltipEnabled = "false";
         };
       })
       ++ (lib.optional cfg.aiUsage.enable {

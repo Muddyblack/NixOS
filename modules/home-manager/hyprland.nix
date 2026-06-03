@@ -1,9 +1,8 @@
 {pkgs, ...}: {
   wayland.windowManager.hyprland = {
     enable = true;
-    configType = "hyprlang";
+    configType = "hyprlang"; # explicit: suppress 26.05 default→lua warning (stateVersion < 26.05)
     systemd.variables = ["--all"];
-    xwayland.enable = true;
 
     settings = {
       "$mod" = "SUPER";
@@ -19,9 +18,6 @@
         "${pkgs.networkmanagerapplet}/bin/nm-applet --indicator"
         "wl-paste --type text --watch cliphist store"
         "wl-paste --type image --watch cliphist store"
-        # Managed by systemd
-        "awww-daemon"
-        "awww img ${../../assets/wallpapers/desktop.png} --transition-type simple"
         "nwg-dock-hyprland -d -p bottom -l overlay -a center -i 48"
       ];
 
@@ -96,7 +92,6 @@
       };
 
       dwindle = {
-        pseudotile = true;
         preserve_split = true;
         smart_split = false;
       };
@@ -106,9 +101,10 @@
       misc = {
         force_default_wallpaper = 0;
         disable_hyprland_logo = true;
-        vfr = true;
         vrr = 0;
       };
+
+      debug.vfr = true;
 
       input = {
         kb_layout = "de";
@@ -133,7 +129,7 @@
         "$mod, V, togglefloating"
         "$mod, Space, exec, $menu"
         "$mod, P, pseudo"
-        "$mod, J, togglesplit"
+        "$mod, J, layoutmsg, togglesplit"
         "$mod, G, togglegroup"
         "$mod SHIFT, G, moveoutofgroup"
         "$mod, Tab, changegroupactive, f"
@@ -178,9 +174,9 @@
         "$mod SHIFT, S, exec, pkill slurp || true; hyprshot -m region"
         "$mod, T, exec, $terminal"
         "CTRL ALT, T, exec, $terminal"
-        "$mod, H, exec, notify-send 'Keybindings' '<b>Win+T</b>: Terminal\\n<b>Win+Space</b>: Menu\\n<b>Win+Q</b>: Close Window\\n<b>Win+V</b>: Float\\n<b>Win+F</b>: Fullscreen\\n<b>Win+G</b>: Group\\n<b>Win+(-)</b>: Magic/Minimize\\n<b>Win+L</b>: Lock' --icon=dialog-information"
+        "$mod, H, exec, bash -c 'hyprctl clients | grep -q hypr-cheatsheet && hyprctl dispatch closewindow class:hypr-cheatsheet || ghostty --class=hypr-cheatsheet -e hypr-cheatsheet'"
         "$mod, S, exec, caelestia shell drawers toggle sidebar"
-        "$mod, I, exec, pkill -f 'ghostty --class=intelligence-center' || ghostty --class=intelligence-center -e antigravity"
+        "$mod, I, exec, bash -c 'hyprctl clients | grep -q intelligence-center && hyprctl dispatch closewindow class:intelligence-center || ghostty --class=intelligence-center -e antigravity'"
         "$mod, C, exec, caelestia shell drawers toggle dashboard"
         "$mod, N, exec, caelestia shell drawers toggle utilities"
         "$mod, M, exec, caelestia shell drawers toggle session"
@@ -188,7 +184,8 @@
 
         "$mod, MINUS, togglespecialworkspace, magic"
         "$mod SHIFT, MINUS, movetoworkspacesilent, special:magic"
-        "$mod, plus, exec, hyprctl dispatch movetoworkspace $(hyprctl activeworkspace -j | grep -oP '\"id\":\\s*\\K\\d+')"
+        # Move window out of special/magic back to the current regular workspace
+        "$mod, plus, movetoworkspace, e+0"
       ];
 
       binde = [
@@ -223,35 +220,41 @@
         ",XF86AudioPrev, exec, playerctl previous"
       ];
 
-      windowrulev2 = [
-        "suppressevent maximize, class:.*"
-        "nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0"
-        "float, class:^(pavucontrol)$"
-        "float, class:^(nm-applet)$"
-        "float, class:^(nm-connection-editor)$"
-        "pin, title:^(Picture-in-Picture)$"
-        "float, class:(intelligence-center)"
-        "size 35% 95%, class:(intelligence-center)"
-        "move 64% 2.5%, class:(intelligence-center)"
-        "opacity 0.9, class:(intelligence-center)"
-        "animation slide right, class:(intelligence-center)"
+      windowrule = [
+        "match:class .*, suppress_event maximize"
+        "match:class ^$, match:title ^$, match:xwayland 1, match:float 1, match:fullscreen 0, match:pin 0, no_initial_focus on"
+        "match:class ^(pavucontrol)$, float on"
+        "match:class ^(nm-applet)$, float on"
+        "match:class ^(nm-connection-editor)$, float on"
+        "match:title ^(Picture-in-Picture)$, pin on"
+        "match:class (intelligence-center), float on"
+        "match:class (intelligence-center), size 35% 95%"
+        "match:class (intelligence-center), move 64% 2.5%"
+        "match:class (intelligence-center), opacity 0.9"
+        "match:class (intelligence-center), animation slide right"
+        # Cheat sheet overlay
+        "match:class ^(hypr-cheatsheet)$, float on"
+        "match:class ^(hypr-cheatsheet)$, size 820 620"
+        "match:class ^(hypr-cheatsheet)$, center on"
+        "match:class ^(hypr-cheatsheet)$, opacity 0.97"
+        "match:class ^(hypr-cheatsheet)$, animation popin 80%"
       ];
 
       layerrule = [
-        "blur, caelestia"
-        "ignorezero, caelestia"
-        "blur, notifications"
-        "ignorezero, notifications"
-        "blur, dashboard"
-        "ignorezero, dashboard"
-        "blur, launcher"
-        "ignorezero, launcher"
-        "blur, nwg-dock"
-        "ignorezero, nwg-dock"
-        "blur, org.quickshell"
-        "ignorezero, org.quickshell"
-        "blur, sidebar"
-        "ignorezero, sidebar"
+        "blur on, match:namespace caelestia"
+        "ignore_alpha 0.5, match:namespace caelestia"
+        "blur on, match:namespace notifications"
+        "ignore_alpha 0.5, match:namespace notifications"
+        "blur on, match:namespace dashboard"
+        "ignore_alpha 0.5, match:namespace dashboard"
+        "blur on, match:namespace launcher"
+        "ignore_alpha 0.5, match:namespace launcher"
+        "blur on, match:namespace nwg-dock"
+        "ignore_alpha 0.5, match:namespace nwg-dock"
+        "blur on, match:namespace org.quickshell"
+        "ignore_alpha 0.5, match:namespace org.quickshell"
+        "blur on, match:namespace sidebar"
+        "ignore_alpha 0.5, match:namespace sidebar"
       ];
     };
   };
