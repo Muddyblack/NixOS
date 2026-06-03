@@ -37,7 +37,6 @@
     # AI & productivity
     gemini-cli
     opencode
-    notebooklm
     perplexity
     mistral-vibe
 

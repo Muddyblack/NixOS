@@ -12,6 +12,11 @@
   # Profile picture
   home.file.".face".source = ../../assets/profile.png;
 
+  # Stable wallpaper paths — avoids plasma-manager re-running the wallpaper
+  # script on every rebuild due to a changing Nix store hash.
+  home.file.".local/share/wallpapers/desktop.png".source = ../../assets/wallpapers/desktop.png;
+  home.file.".local/share/wallpapers/lockscreen.png".source = ../../assets/wallpapers/lockscreen.png;
+
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {

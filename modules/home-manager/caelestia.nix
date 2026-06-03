@@ -57,6 +57,11 @@
     Install.WantedBy = lib.mkForce ["hyprland-session.target"];
   };
 
+  xdg.configFile."autostart/blueman.desktop".text = ''
+    [Desktop Entry]
+    Hidden=true
+  '';
+
   home.packages = with pkgs; [
     material-symbols
     nerd-fonts.caskaydia-cove
