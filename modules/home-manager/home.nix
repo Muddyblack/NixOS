@@ -58,9 +58,10 @@
   xdg.userDirs = {
     enable = true;
     createDirectories = true;
+    setSessionVariables = true;
     extraConfig = {
-      XDG_PROJECTS_DIR = "/mnt/projects";
-      XDG_DATA_DIR = "/mnt/data";
+      PROJECTS = "/mnt/projects";
+      DATA = "/mnt/data";
     };
   };
 

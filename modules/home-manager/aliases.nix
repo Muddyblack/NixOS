@@ -3,6 +3,9 @@
     ll = "ls -l";
     nix-check = "nix flake update --dry-run";
     ".." = "cd ..";
+    "..." = "cd ../..";
+    "...." = "cd ../../..";
+    "....." = "cd ../../../..";
     cls = "clear";
     copy = "cp";
     grep = "rg";

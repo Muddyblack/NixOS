@@ -2,6 +2,8 @@
   programs.neovim = {
     enable = true;
     defaultEditor = true;
+    withRuby = false;
+    withPython3 = false;
     viAlias = true;
     vimAlias = true;
     vimdiffAlias = true;
@@ -11,14 +13,14 @@
       lua-language-server
       nil
       nixd
-      nodePackages.typescript-language-server
-      nodePackages.vscode-langservers-extracted
+      typescript-language-server
+      vscode-langservers-extracted
       pyright
       rust-analyzer
       gopls
       bash-language-server
       marksman
-      nodePackages.svelte-language-server
+      svelte-language-server
 
       # Formatters
       stylua
@@ -37,7 +39,7 @@
       tree-sitter
     ];
 
-    extraLuaConfig = ''
+    initLua = ''
       -- Bootstrap lazy.nvim
       local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
       if not (vim.uv or vim.loop).fs_stat(lazypath) then

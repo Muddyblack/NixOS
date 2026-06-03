@@ -4,7 +4,7 @@
     freetube
     nwg-dock-hyprland
     swaybg
-    swww
+    awww
 
     # Development & API tools
     bruno

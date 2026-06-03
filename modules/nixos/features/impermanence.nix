@@ -28,6 +28,7 @@
         "/var/lib/AccountsService"
         "/var/lib/private/ollama"
         "/var/lib/open-webui"
+        "/var/lib/portmaster"
         {
           directory = "/var/lib/colord";
           user = "colord";

@@ -1,6 +1,7 @@
 {pkgs, ...}: {
   wayland.windowManager.hyprland = {
     enable = true;
+    configType = "hyprlang";
     systemd.variables = ["--all"];
     xwayland.enable = true;
 
@@ -19,8 +20,8 @@
         "wl-paste --type text --watch cliphist store"
         "wl-paste --type image --watch cliphist store"
         # Managed by systemd
-        "swww-daemon"
-        "swww img ${../../assets/wallpapers/desktop.png} --transition-type simple"
+        "awww-daemon"
+        "awww img ${../../assets/wallpapers/desktop.png} --transition-type simple"
         "nwg-dock-hyprland -d -p bottom -l overlay -a center -i 48"
       ];
 

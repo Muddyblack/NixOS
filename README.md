@@ -99,7 +99,7 @@ In the first few weeks, I managed to like break the system three times a day and
 
 | | |
 |:--|:--|
-| **OS** | NixOS 25.11 |
+| **OS** | NixOS 26.05 |
 | **WM** | Hyprland · KDE Plasma 6 |
 | **Shell** | Zsh · Powerlevel10k |
 | **Terminal** | Ghostty |

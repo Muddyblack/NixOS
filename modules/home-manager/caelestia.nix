@@ -66,6 +66,6 @@
     ddcutil
     app2unit
     swappy
-    blueberry
+    blueman
   ];
 }

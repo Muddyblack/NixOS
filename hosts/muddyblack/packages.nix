@@ -5,7 +5,6 @@
     gnupg
     pinentry-qt
 
-    sniffnet
     bandwhich
     firejail
 
