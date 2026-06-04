@@ -7,6 +7,5 @@ hardware-configuration.nix
 .claude/
 .deploy-state
 .codex
-hosts/deploy-config.nix
 notes.md
 .sops.yaml

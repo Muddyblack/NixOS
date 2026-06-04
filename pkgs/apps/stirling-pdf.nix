@@ -7,7 +7,6 @@
   copyDesktopItems,
   makeDesktopItem,
   systemd,
-  podman,
 }:
 stdenvNoCC.mkDerivation {
   pname = "stirling-pdf-ui";
@@ -45,8 +44,8 @@ stdenvNoCC.mkDerivation {
       --add-flags "$out/lib/stirlingpdf/main.js" \
       --add-flags "--class=stirling-pdf-ui" \
       --add-flags "--name=stirling-pdf-ui" \
-      --set STIRLING_PODMAN    "${podman}/bin/podman" \
-      --set STIRLING_SYSTEMCTL "${systemd}/bin/systemctl" \
+      --set STIRLING_SYSTEMCTL  "${systemd}/bin/systemctl" \
+      --set STIRLING_JOURNALCTL "${systemd}/bin/journalctl" \
       --set-default ELECTRON_FORCE_IS_PACKAGED "true" \
       --set-default ELECTRON_APP_NAME "Stirling-PDF" \
       --set-default ELECTRON_OZONE_PLATFORM_HINT "auto" \

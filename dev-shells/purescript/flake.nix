@@ -21,14 +21,11 @@
     devShells = forEachSupportedSystem (
       {pkgs}: {
         default = pkgs.mkShellNoCC {
-          packages = with pkgs;
-            [
-              nodejs_latest
-              purescript
-              spago
-            ]
-            ++ (with nodePackages_latest; [
-              ]);
+          packages = with pkgs; [
+            nodejs_latest
+            purescript
+            spago
+          ];
         };
       }
     );

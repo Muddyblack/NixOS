@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 28" width="180" height="28">
+  <!-- Panel Background -->
+  <rect width="180" height="28" rx="6" fill="rgba(20, 20, 26, 0.45)" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1"/>
+
+  <!-- Left: Normal State -->
+  <g transform="translate(8, 2)">
+    <!-- Hover Background (subtle) -->
+    <rect width="32" height="24" rx="4" fill="rgba(255, 255, 255, 0.03)"/>
+    <!-- Icon -->
+    <g fill="#e0e0e8" transform="translate(16, 12) scale(0.08) translate(-170.07, -170.15)">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M202.51,202.88V122l-81.3,29.18v20.1l26.92-9.73v60.78 L202.51,202.88z M170.07,101.22c-38.07,0-68.92,30.86-68.92,68.93c0,38.07,30.85,68.94,68.92,68.94 c38.07,0,68.94-30.87,68.94-68.94C239.01,132.08,208.14,101.22,170.07,101.22z M170.07,89.38c44.63,0,80.8,36.17,80.8,80.78 c0,44.61-36.17,80.79-80.8,80.79c-44.61,0-80.78-36.19-80.78-80.79C89.29,125.54,125.46,89.38,170.07,89.38z" />
+    </g>
+    <!-- Label -->
+    <text x="38" y="16" font-family="sans-serif" font-size="9" fill="rgba(255, 255, 255, 0.7)">Normal</text>
+  </g>
+
+  <!-- Divider -->
+  <line x1="90" y1="5" x2="90" y2="23" stroke="rgba(255, 255, 255, 0.12)" stroke-width="1"/>
+
+  <!-- Right: Breaking News (Eilmeldung) -->
+  <g transform="translate(98, 2)">
+    <!-- Hover Background (subtle) -->
+    <rect width="32" height="24" rx="4" fill="rgba(255, 255, 255, 0.03)"/>
+    
+    <!-- Pulsating Red Circle Background -->
+    <circle cx="16" cy="12" r="11" fill="#ff3333" opacity="0.2">
+      <animate attributeName="r" values="8;13;8" dur="2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.3;0.05;0.3" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    
+    <!-- Icon in Alert Red -->
+    <g fill="#ff3333" transform="translate(16, 12) scale(0.08) translate(-170.07, -170.15)">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M202.51,202.88V122l-81.3,29.18v20.1l26.92-9.73v60.78 L202.51,202.88z M170.07,101.22c-38.07,0-68.92,30.86-68.92,68.93c0,38.07,30.85,68.94,68.92,68.94 c38.07,0,68.94-30.87,68.94-68.94C239.01,132.08,208.14,101.22,170.07,101.22z M170.07,89.38c44.63,0,80.8,36.17,80.8,80.78 c0,44.61-36.17,80.79-80.8,80.79c-44.61,0-80.78-36.19-80.78-80.79C89.29,125.54,125.46,89.38,170.07,89.38z" />
+    </g>
+
+    <!-- Small Red Dot (Breaking Indicator) -->
+    <circle cx="28" cy="12" r="3" fill="#ff3333">
+      <animate attributeName="opacity" values="1;0.2;1" dur="1.5s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Label -->
+    <text x="38" y="16" font-family="sans-serif" font-size="9" font-weight="bold" fill="#ff4d4d">Alert!</text>
+  </g>
+</svg>

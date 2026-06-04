@@ -50,7 +50,6 @@ final: _prev: {
   photopea = final.callPackage ./apps/photopea.nix {};
   recraft = final.callPackage ./apps/recraft.nix {};
   whatsapp = final.callPackage ./apps/whatsapp.nix {};
-  notebooklm = final.callPackage ./apps/notebooklm.nix {};
   perplexity = final.callPackage ./apps/perplexity.nix {};
   stirling-pdf-ui = final.callPackage ./apps/stirling-pdf.nix {};
   gmaps = final.callPackage ./apps/gmaps.nix {};

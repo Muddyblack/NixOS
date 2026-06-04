@@ -1,18 +1,18 @@
 const { app, BrowserWindow, shell, ipcMain } = require("electron");
 const http = require("http");
 const path = require("path");
-const { spawn, spawnSync } = require("child_process");
+const { spawn } = require("child_process");
 
 app.setName("Stirling-PDF");
 app.setDesktopName("stirling-pdf-ui.desktop");
 
-const TARGET    = "http://localhost:8080";
-const IMAGE     = "stirlingtools/stirling-pdf:latest-fat";
-const SERVICE   = "podman-stirling-pdf";
-const PODMAN    = process.env.STIRLING_PODMAN;
-const SYSTEMCTL = process.env.STIRLING_SYSTEMCTL;
+const TARGET     = "http://localhost:8080";
+const SERVICE    = "podman-stirling-pdf";
+const SYSTEMCTL  = process.env.STIRLING_SYSTEMCTL;
+const JOURNALCTL = process.env.STIRLING_JOURNALCTL;
 
 let mainWindow;
+let journal;
 
 function send(channel, msg) {
   if (mainWindow && !mainWindow.isDestroyed()) {
@@ -20,44 +20,41 @@ function send(channel, msg) {
   }
 }
 
-function imageExists() {
-  return spawnSync(PODMAN, ["image", "exists", IMAGE]).status === 0;
+function followJournal() {
+  if (!JOURNALCTL || journal) return;
+  journal = spawn(JOURNALCTL, ["--system", "-fu", SERVICE, "-n", "0", "-o", "cat"]);
+  journal.stdout.on("data", (d) => send("output", d.toString()));
+  journal.stderr.on("data", (d) => send("output", d.toString()));
+  journal.on("error", () => {});
 }
 
-function pullImage(cb) {
-  send("hint", "Pulling image — first run downloads ~1 GB…");
-  send("status", "$ podman pull " + IMAGE);
-
-  const proc = spawn(PODMAN, ["pull", IMAGE], {
-    env: Object.assign({}, process.env, { TERM: "xterm-256color" }),
-  });
-
-  proc.stdout.on("data", (d) => send("output", d.toString()));
-  proc.stderr.on("data", (d) => send("output", d.toString()));
-
-  proc.on("error", (e) => send("error", "Failed to spawn podman: " + e.message));
-
-  proc.on("close", (code) => {
-    if (code === 0) {
-      send("status", "Pull complete.");
-      setTimeout(cb, 300);
-    } else {
-      send("error", "podman pull exited with code " + code);
-    }
-  });
+function stopJournal() {
+  if (journal && !journal.killed) journal.kill();
+  journal = null;
 }
 
-function startContainer(cb) {
-  send("hint", "Starting container…");
+function startService() {
+  send("hint", "Starting Stirling-PDF — first run downloads ~2 GB…");
   send("status", "$ systemctl --system start " + SERVICE);
-  const r = spawnSync(SYSTEMCTL, ["--system", "start", SERVICE]);
-  if (r.status !== 0) {
-    const out = (r.stdout && r.stdout.toString().trim()) || "";
-    const err = (r.stderr && r.stderr.toString().trim()) || "";
-    send("error", (err || out || ("systemctl exit " + r.status)));
-    return;
-  }
-  waitForService(cb);
+  followJournal();
+
+  const proc = spawn(SYSTEMCTL, ["--system", "start", SERVICE]);
+  let err = "";
+  proc.stderr.on("data", (d) => { err += d.toString(); });
+  proc.on("error", (e) => { stopJournal(); send("error", "Failed to spawn systemctl: " + e.message); });
+  proc.on("close", (code) => {
+    if (code !== 0) {
+      stopJournal();
+      send("error", err.trim() || ("systemctl exited with code " + code));
+      return;
+    }
+    send("status", "Service started — waiting for UI…");
+    waitForService(() => {
+      stopJournal();
+      send("done");
+      mainWindow.loadURL(TARGET);
+    });
+  });
 }
 
 function waitForService(cb) {
@@ -112,24 +109,11 @@ function createWindow() {
 
   mainWindow.loadFile(path.join(__dirname, "index.html"));
 
-  ipcMain.once("renderer-ready", () => {
-    const proceed = () => {
-      startContainer(() => {
-        send("done");
-        mainWindow.loadURL(TARGET);
-      });
-    };
-    if (imageExists()) {
-      send("hint", "Image already cached.");
-      send("status", IMAGE + " — using local copy");
-      proceed();
-    } else {
-      pullImage(proceed);
-    }
-  });
+  ipcMain.once("renderer-ready", () => startService());
 }
 
 app.whenReady().then(createWindow);
 app.on("window-all-closed", () => {
+  stopJournal();
   if (process.platform !== "darwin") app.quit();
 });

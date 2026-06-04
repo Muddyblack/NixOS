@@ -58,19 +58,19 @@
       pango
       cairo
       # Xorg
-      xorg.libX11
-      xorg.libXcomposite
-      xorg.libXcursor
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXi
-      xorg.libXrandr
-      xorg.libXrender
-      xorg.libXScrnSaver
-      xorg.libXtst
-      xorg.libxcb
-      xorg.libxshmfence
+      libX11
+      libXcomposite
+      libXcursor
+      libXdamage
+      libXext
+      libXfixes
+      libXi
+      libXrandr
+      libXrender
+      libxscrnsaver
+      libXtst
+      libxcb
+      libxshmfence
       # Wayland
       wayland
       libxkbcommon
@@ -306,6 +306,12 @@ in {
         Restart = "on-failure";
         RestartSec = 10;
         PIDFile = "${dataDir}/core-lock.pid";
+
+        # Portmaster's core ignores SIGTERM on shutdown, so systemd waits the
+        # full default timeout (90s) before SIGKILL. Kill it fast instead —
+        # ExecStopPost still recovers iptables, so the network stays clean.
+        TimeoutStopSec = 10;
+        SendSIGKILL = true;
 
         # Use the mutable launcher, ensuring it can self-update properly without
         # "Unsupported Launcher" warnings in the UI.

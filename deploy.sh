@@ -104,8 +104,8 @@ write_deploy_config() {
     exit 1
   fi
 
-  if [[ ! "$bl" =~ ^(grub|refind)$ ]]; then
-    echo "Error: bootloader must be grub or refind"
+  if [[ ! "$bl" =~ ^(grub|refind|systemd-boot)$ ]]; then
+    echo "Error: bootloader must be grub, refind, or systemd-boot"
     exit 1
   fi
   if [[ ! "$dual_boot" =~ ^(true|false)$ ]]; then
@@ -456,6 +456,8 @@ cmd_switch() {
 
   if [[ -z "$host" ]]; then
     ensure_symlink "$FLAKE_DIR"
+
+
     echo "Rebuilding & switching local config (profile: ${FLAKE_TARGET})..."
     sudo systemctl stop nixos-rebuild-switch-to-configuration.service 2>/dev/null || true
     local success=false
@@ -468,7 +470,7 @@ cmd_switch() {
         fi
     else
         if sudo -E HOME=/root NIX_CONFIG="experimental-features = nix-command flakes" \
-          nixos-rebuild switch --flake "${FLAKE_DIR}#${FLAKE_TARGET}" $offline; then
+          nixos-rebuild switch --install-bootloader --flake "${FLAKE_DIR}#${FLAKE_TARGET}" $offline; then
           success=true
         else
           success=false

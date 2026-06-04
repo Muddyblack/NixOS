@@ -5,6 +5,8 @@
 }: {
   # Display & Desktop
   services.xserver.enable = true;
+  services.xserver.desktopManager.xterm.enable = false;
+  services.xserver.excludePackages = [pkgs.xterm];
   services.displayManager.sddm = {
     enable = true;
     wayland.enable = false;

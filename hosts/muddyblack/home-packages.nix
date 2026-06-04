@@ -4,7 +4,7 @@
     freetube
     nwg-dock-hyprland
     swaybg
-    swww
+    awww
 
     # Development & API tools
     bruno
@@ -37,7 +37,6 @@
     # AI & productivity
     gemini-cli
     opencode
-    notebooklm
     perplexity
     mistral-vibe
 
