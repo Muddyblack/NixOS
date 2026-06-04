@@ -11,6 +11,9 @@
    <div align="center">
       <p></p>
       <div align="center">
+         <a href="https://muddyblack.github.io/NixOS/">
+            <img src="https://img.shields.io/badge/Showcase-Demo-6366f1?style=for-the-badge&logo=github&logoColor=white&labelColor=0d0d0d" alt="Live Showcase">
+         </a>
          <a href="https://github.com/muddyblack/NixOS/stargazers">
             <img src="https://img.shields.io/github/stars/muddyblack/NixOS?style=for-the-badge&logo=starship&color=7c3aed&logoColor=white&labelColor=0d0d0d" alt="GitHub Stars">
          </a>
@@ -33,6 +36,9 @@
 As previous dual-boot cachyos user I wanted to switch to fully use linux in my daily life. Someone mentioned he started newly using nixos and well here we are. This rice is now built over a period of 5 months until I said it is good and bug free to use.
 
 In the first few weeks, I managed to like break the system three times a day and I was told nixos is not breakable ...  only via live usb the pc was fixable as I edited the hardware-configuration.nix file lol stupid beginner mistake right? And the refind/grub customization caused that too but totally worth it.
+
+> [!TIP]
+> **Live Showcase:** View the interactive web showcase of this configuration at [muddyblack.github.io/NixOS](https://muddyblack.github.io/NixOS/).
 
 
 
