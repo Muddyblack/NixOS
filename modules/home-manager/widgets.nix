@@ -14,7 +14,7 @@ in {
     overview.enable = lib.mkEnableOption "KDE Overview widget" // {default = true;};
     weather.enable = lib.mkEnableOption "Advanced Weather widget" // {default = true;};
     aiUsage.enable = lib.mkEnableOption "AI Usage monitor widget" // {default = true;};
-    tagesschau.enable = lib.mkEnableOption "Tagesschau news widget";
+    tagesschau.enable = lib.mkEnableOption "Tagesschau news widget" // {default = true;};
     nixosGenerationExplorer.enable = lib.mkEnableOption "NixOS Generation Explorer widget" // {default = true;};
   };
 
