@@ -48,19 +48,39 @@ In the first few weeks, I managed to like break the system three times a day and
 <img src="assets/readme/hyprland-desktop.png" width="100%" alt="Hyprland Desktop Screenshot" />
 
 <details>
-<summary><b>📷 View Widget Screenshots</b></summary>
+<summary><b>Widgets</b></summary>
 <br>
 
-**AI API Usage (Claude Code)**
+**Glassy System Monitor**
+<img src="assets/readme/glassy_monitor.svg" width="100%" alt="Glassy System Monitor" />
+
+**Nixdatifier**
+<img src="assets/readme/nixdatifier.svg" width="100%" alt="Nixdatifier Widget" />
+
+**Plasma Audio Visualizer**
+<img src="assets/readme/audio_visualizer.svg" width="100%" alt="Plasma Audio Visualizer" />
+
+**AI API Usage**
 <p align="center">
-  <img src="assets/readme/ai_usage_panel.svg" alt="AI Usage Panel View" width="128" valign="middle"/>
+  <img src="assets/readme/ai_usage_panel.svg" alt="AI Usage panel" width="128" valign="middle"/>
   &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="assets/readme/ai_usage.svg" alt="AI Usage Popup View" width="312" valign="middle"/>
+  <img src="assets/readme/ai_usage.svg" alt="AI Usage popup" width="312" valign="middle"/>
 </p>
-<img src="assets/readme/ai_usage_widget.png" width="100%" alt="AI Usage Widget Screenshot" />
+<img src="assets/readme/ai_usage_chart.svg" width="100%" alt="AI Usage chart" />
+
+**Tagesschau**
+<p align="center">
+  <img src="assets/readme/tagesschau_panel.svg" alt="Tagesschau panel" width="128" valign="middle"/>
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="assets/readme/tagesschau.svg" alt="Tagesschau widget" width="360" valign="middle"/>
+</p>
+
+**Advanced Weather**
+<img src="assets/readme/weather_widget.png" width="100%" alt="Advanced Weather Widget" />
 
 **Battery & Power Consumption Graph**
 <img src="assets/readme/battery_widget.png" width="100%" alt="Battery Widget Screenshot" />
+
 </details>
 
 
@@ -99,7 +119,7 @@ In the first few weeks, I managed to like break the system three times a day and
 
 | | |
 |:--|:--|
-| **OS** | NixOS 25.11 |
+| **OS** | NixOS 26.05 |
 | **WM** | Hyprland · KDE Plasma 6 |
 | **Shell** | Zsh · Powerlevel10k |
 | **Terminal** | Ghostty |

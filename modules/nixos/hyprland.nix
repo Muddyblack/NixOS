@@ -6,8 +6,11 @@
   };
 
   xdg.portal = {
-    extraPortals = [pkgs.xdg-desktop-portal-hyprland];
-    config.hyprland.default = ["hyprland" "gtk"];
+    extraPortals = [
+      pkgs.xdg-desktop-portal-hyprland
+      pkgs.kdePackages.xdg-desktop-portal-kde
+    ];
+    config.hyprland.default = ["kde" "hyprland" "gtk"];
   };
 
   security.pam.services.hyprlock = {};

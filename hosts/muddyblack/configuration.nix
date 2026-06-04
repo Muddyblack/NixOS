@@ -33,13 +33,6 @@
   features.keyring.enable = true;
   features.power.enable = true;
 
-  security.wrappers.sniffnet = {
-    source = "${pkgs.sniffnet}/bin/sniffnet";
-    capabilities = "cap_net_raw,cap_net_admin=eip";
-    owner = "root";
-    group = "root";
-  };
-
   security.wrappers.bandwhich = {
     source = "${pkgs.bandwhich}/bin/bandwhich";
     capabilities = "cap_net_raw,cap_net_admin=eip";

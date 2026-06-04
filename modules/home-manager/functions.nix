@@ -9,17 +9,17 @@
     }
 
     dashboard() {
-      if ! systemctl is-active --quiet os-dashboard; then
-        echo "Starting os-dashboard..."
-        sudo systemctl start os-dashboard
+      if ! systemctl is-active --quiet homepage-dashboard; then
+        echo "Starting homepage-dashboard..."
+        sudo systemctl start homepage-dashboard
       fi
       for i in $(seq 1 10); do
-        if command curl -s http://localhost:8083 &>/dev/null; then
+        if command curl -s http://localhost:8082 &>/dev/null; then
           break
         fi
         sleep 1
       done
-      xdg-open http://localhost:8083
+      xdg-open http://localhost:8082
     }
 
     extract() {

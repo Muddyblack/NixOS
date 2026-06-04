@@ -60,6 +60,7 @@
   programs.yazi = {
     enable = true;
     enableZshIntegration = true;
+    shellWrapperName = "y";
   };
 
   programs.zoxide = {
@@ -140,6 +141,8 @@
 
     initContent = ''
       export FLAKE_DIR="/etc/nixos"
+
+      [[ $SHLVL -gt 1 ]] && typeset -gi _ghostty_state=1
 
       [[ ! -f ${./p10k.zsh} ]] || source ${./p10k.zsh}
 

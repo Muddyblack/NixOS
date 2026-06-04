@@ -5,7 +5,7 @@
   ...
 }: let
   cfg = config.desktop.widgets;
-  wallpaper = "${../../assets/wallpapers/desktop.png}";
+  wallpaper = "${config.home.homeDirectory}/.local/share/wallpapers/desktop.png";
 
   desktopWidgets =
     (lib.optional cfg.modernClock.enable {
@@ -66,6 +66,7 @@
           showCpuCores = "false";
           cpuTitle = "CPU Total";
           glowLine = "true";
+          gpuBloom = "true";
           targetFps = "15";
           showBg = "true";
           bgColor = "#800d0f1a";
@@ -85,6 +86,7 @@
           activeSection = "3";
           memoryTitle = "Memory";
           glowLine = "true";
+          gpuBloom = "true";
           targetFps = "15";
           showBg = "true";
           bgColor = "#800d0f1a";
@@ -105,6 +107,7 @@
           networkTitle = "Network Speed";
           networkInterface = "auto";
           glowLine = "true";
+          gpuBloom = "true";
           targetFps = "15";
           showBg = "true";
           bgColor = "#800d0f1a";
@@ -131,7 +134,6 @@
       };
     });
 
-  # Helper to create top panel with specific launcher
   makeTopPanel = screen: launcher: {
     inherit screen;
     location = "top";
@@ -143,30 +145,10 @@
       [
         launcher
         {
-          iconTasks = {
-            launchers = [
-              "applications:systemsettings.desktop"
-              "applications:org.kde.dolphin.desktop"
-              "applications:com.mitchellh.ghostty.desktop"
-            ];
-            appearance = {
-              showTooltips = true;
-              highlightWindows = true;
-              indicateAudioStreams = true;
-              fill = true;
-            };
-            behavior = {
-              grouping = {
-                method = "byProgramName";
-                clickAction = "showPresentWindowsEffect";
-              };
-              minimizeActiveTaskOnClick = true;
-              middleClickAction = "newInstance";
-              wheel = {
-                switchBetweenTasks = true;
-                ignoreMinimizedTasks = true;
-              };
-            };
+          name = "org.kde.plasma.pager";
+          config.General = {
+            displayedText = "2"; # 0 = desktop number, 1 = desktop name, 2 = none (just thumbnails)
+            showWindowIcons = "true";
           };
         }
         "org.kde.plasma.panelspacer"
@@ -207,6 +189,7 @@
           refreshIntervalMinutes = "15";
           autoRefresh = "true";
           autoDetectLocation = "false";
+          tooltipEnabled = "false";
         };
       })
       ++ (lib.optional cfg.aiUsage.enable {
@@ -233,6 +216,7 @@
           panelShowBg = "false";
           showBg = "false";
           glowLine = "true";
+          gpuBloom = "true";
           targetFps = "15";
         };
       })
@@ -357,28 +341,17 @@ in {
 
     desktop.widgets = desktopWidgets;
 
-    panels =
-      # Top Panels: kickoff on screen 0, kicker on others (to avoid lag)
-      (map (s:
-        makeTopPanel s (
-          if s == 0
-          then {
-            name = "org.kde.plasma.kickoff";
-            config.General = {
-              icon = "nix-snowflake-white";
-              alphaSort = "true";
-              display = "popup";
-            };
-          }
-          else {
-            name = "org.kde.plasma.kicker";
-            config.General = {
-              icon = "nix-snowflake-white";
-              alphaSort = "true";
-            };
-          }
-        )) (lib.range 0 3))
-      ++ (map (s: makeBottomPanel s) (lib.range 0 3));
+    panels = [
+      (makeTopPanel "all" {
+        name = "org.kde.plasma.kickoff";
+        config.General = {
+          icon = "nix-snowflake-white";
+          alphaSort = "true";
+          display = "popup";
+        };
+      })
+      (makeBottomPanel "all")
+    ];
 
     shortcuts = {
       ksmserver."Lock Session" = ["Meta+L" "Screensaver"];
@@ -432,8 +405,8 @@ in {
       krunnerrc.General.historyBehavior = "ImmediateCompletion";
 
       # Lock screen wallpaper
-      kscreenlockerrc."Greeter/Wallpaper/org.kde.image/General".Image = "${../../assets/wallpapers/lockscreen.png}";
-      kscreenlockerrc."Greeter/Wallpaper/org.kde.image/General".PreviewImage = "${../../assets/wallpapers/lockscreen.png}";
+      kscreenlockerrc."Greeter/Wallpaper/org.kde.image/General".Image = "${config.home.homeDirectory}/.local/share/wallpapers/lockscreen.png";
+      kscreenlockerrc."Greeter/Wallpaper/org.kde.image/General".PreviewImage = "${config.home.homeDirectory}/.local/share/wallpapers/lockscreen.png";
       kscreenlockerrc.Daemon.Timeout = 10;
 
       ksplashrc.KSplash.Theme = "Illusion";

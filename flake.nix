@@ -2,7 +2,7 @@
   description = "NixOS Configuration";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
     nixpkgs-unstable.url = "https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz";
 
     disko = {
@@ -11,7 +11,7 @@
     };
 
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.11";
+      url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -44,9 +44,8 @@
   # Service ports reference:
   #   Netdata      → http://localhost:19999
   #   Ollama       → http://localhost:11434
-  #   Open WebUI   → http://localhost:8080
+  #   Open WebUI   → http://localhost:8765
   #   Homepage     → http://localhost:8082
-  #   OS Dashboard → http://localhost:8083
 
   outputs = {
     nixpkgs,
