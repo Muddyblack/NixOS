@@ -8,7 +8,7 @@
   xdg.portal = {
     extraPortals = [
       pkgs.xdg-desktop-portal-hyprland
-      pkgs.xdg-desktop-portal-kde
+      pkgs.kdePackages.xdg-desktop-portal-kde
     ];
     config.hyprland.default = ["kde" "hyprland" "gtk"];
   };

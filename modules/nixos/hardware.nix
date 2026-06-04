@@ -28,7 +28,7 @@
     boot.kernelModules = ["kvm-intel" "kvm-amd" "elan_i2c" "i2c-hid-acpi"];
 
     # Always allow touching EFI variables — all UEFI loaders need this.
-    boot.loader.timeout = 5;
+    boot.loader.timeout = 0;
     boot.loader.efi.canTouchEfiVariables = true;
     boot.loader.efi.efiSysMountPoint = "/boot";
 

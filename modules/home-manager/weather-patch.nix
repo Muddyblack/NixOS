@@ -29,6 +29,15 @@
 
     appletsrc="$HOME/.config/plasma-org.kde.plasma.desktop-appletsrc"
 
+    # Plasma Manager can delete and recreate appletsrc during a layout rebuild.
+    # Wait briefly for the weather widget stanza to exist before giving up.
+    for _ in $(seq 1 60); do
+      if [ -f "$appletsrc" ] && ${pkgs.gnugrep}/bin/grep -q 'plugin=org\.kde\.plasma\.advanced-weather-widget' "$appletsrc" 2>/dev/null; then
+        break
+      fi
+      sleep 1
+    done
+
     # Find every weather widget section header in appletsrc, e.g.
     #   [Containments][30][Applets][36]
     mapfile -t sections < <(
@@ -110,6 +119,8 @@ in {
       PartOf = ["graphical-session.target"];
     };
     Path = {
+      PathExists = "%h/.config/plasma-org.kde.plasma.desktop-appletsrc";
+      PathModified = "%h/.config/plasma-org.kde.plasma.desktop-appletsrc";
       PathChanged = "%h/.config/plasma-org.kde.plasma.desktop-appletsrc";
       Unit = "weather-location-patch.service";
     };

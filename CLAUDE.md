@@ -138,7 +138,7 @@ These are active shell aliases/overrides. Always use the right-hand side when su
 - `mkcd <dir>` — mkdir + cd in one
 - `cat <file>.log` — auto-uses `tspin` for log files
 - `cht <query>` — interactive cheat sheet (`cht.sh`)
-- `dashboard` — start and open the OS dashboard (localhost:8083)
+- `dashboard` — start and open Homepage (localhost:8082)
 - `gcnix <keep>` — clean nix garbage (default: keep 5 generations)
 - `rollback <N>` — switch to generation N (`gen` to list)
 - `cc-gemini`, `cc-openrouter`, `cc-ollama` — Claude Code integrations

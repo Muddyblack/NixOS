@@ -44,9 +44,8 @@
   # Service ports reference:
   #   Netdata      → http://localhost:19999
   #   Ollama       → http://localhost:11434
-  #   Open WebUI   → http://localhost:8080
+  #   Open WebUI   → http://localhost:8765
   #   Homepage     → http://localhost:8082
-  #   OS Dashboard → http://localhost:8083
 
   outputs = {
     nixpkgs,
