@@ -30,7 +30,7 @@
 
   qt = {
     enable = true;
-    platformTheme.name = "kvantum";
+    platformTheme.name = "kde";
     style.name = "kvantum";
   };
 
@@ -91,7 +91,12 @@
   xdg.dataFile = {
     # Kvantum themes
     "Kvantum/Sweet".source = "${pkgs.sweet-kvantum}/share/Kvantum/Sweet";
-    "Kvantum/Sweet-transparent-toolbar".source = "${pkgs.sweet-kvantum}/share/Kvantum/Sweet-transparent-toolbar";
+    "Kvantum/Sweet-transparent-toolbar".source = "${pkgs.runCommand "sweet-opaque-dolphin" {} ''
+      cp -r ${pkgs.sweet-kvantum}/share/Kvantum/Sweet-transparent-toolbar $out
+      chmod -R u+w $out
+      substituteInPlace $out/Sweet-transparent-toolbar.kvconfig \
+        --replace-fail "transparent_dolphin_view=true" "transparent_dolphin_view=false"
+    ''}";
 
     # Plasma themes
     "plasma/desktoptheme/Iridescent-round".source = "${pkgs.iridescent-plasma-style}/share/plasma/desktoptheme/Iridescent-round";

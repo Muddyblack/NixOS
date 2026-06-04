@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>muddyblack's NixOS — Hyprland + KDE Plasma 6 rice</title>
+<meta name="description" content="A NixOS rice built on Flakes, Home Manager and Disko — Hyprland & KDE Plasma 6, Btrfs + LUKS + Impermanence, Sweet Dark theme, custom widgets and boot themes." />
+<meta property="og:title" content="muddyblack's NixOS configuration" />
+<meta property="og:description" content="Hyprland + KDE Plasma 6 · Btrfs + LUKS + Impermanence · Flakes + Home Manager + Disko" />
+<meta property="og:image" content="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/readme/kde-desktop.png" />
+<meta property="og:type" content="website" />
+<link rel="icon" type="image/svg+xml" href="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/nix_icon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --bg:     #080810;
+  --bg2:    #0f0f1a;
+  --card:   rgba(18,18,30,0.7);
+  --border: rgba(255,255,255,0.07);
+  --text:   #e8e8f4;
+  --muted:  #8888a8;
+  --purple: #a855f7;
+  --pink:   #ec4899;
+  --cyan:   #38bdf8;
+  --grad:   linear-gradient(120deg,#38bdf8,#a855f7 50%,#ec4899);
+  --glow-p: rgba(168,85,247,0.35);
+  --glow-c: rgba(56,189,248,0.25);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Inter',system-ui,sans-serif;
+  line-height:1.6;
+  overflow-x:hidden;
+}
+a{color:var(--cyan);text-decoration:none}
+a:hover{color:var(--pink)}
+.mono{font-family:'JetBrains Mono',monospace}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px;position:relative;z-index:2}
+.grad-text{
+  background:var(--grad);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  height:58px;
+  backdrop-filter:blur(20px) saturate(1.4);
+  -webkit-backdrop-filter:blur(20px) saturate(1.4);
+  background:rgba(8,8,16,0.6);
+  border-bottom:1px solid var(--border);
+}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:100%}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:15px}
+.brand img{width:24px;height:24px}
+.nav-links{display:flex;gap:20px}
+.nav-links a{color:var(--muted);font-size:13px;font-weight:500;transition:color .15s}
+.nav-links a:hover{color:var(--text)}
+@media(max-width:720px){.nav-links{display:none}}
+
+/* ── HERO ── */
+#hero{
+  position:relative;
+  min-height:100svh;
+  display:flex;align-items:center;justify-content:center;
+  text-align:center;
+  overflow:hidden;
+}
+.hero-bg{
+  position:absolute;inset:0;z-index:0;
+  background-image:url('https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/readme/kde-desktop.png');
+  background-size:cover;background-position:center;
+  filter:brightness(0.18) saturate(1.2);
+  transform:scale(1.04);
+}
+.hero-bg::after{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 100%,rgba(8,8,16,0.98),transparent),
+    radial-gradient(ellipse 60% 50% at 20% 0%,rgba(56,189,248,0.12),transparent),
+    radial-gradient(ellipse 60% 50% at 80% 0%,rgba(168,85,247,0.14),transparent);
+}
+.hero-inner{position:relative;z-index:2;padding:100px 24px 80px;max-width:820px}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 16px;border-radius:999px;
+  border:1px solid rgba(168,85,247,0.3);
+  background:rgba(168,85,247,0.08);
+  font-family:'JetBrains Mono',monospace;font-size:12px;
+  color:var(--purple);margin-bottom:32px;
+  backdrop-filter:blur(8px);
+  animation:badge-float 4s ease-in-out infinite;
+}
+@keyframes badge-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+.hero-icon{width:36px;height:36px;vertical-align:middle}
+h1{
+  font-size:clamp(44px,8vw,88px);
+  font-weight:900;line-height:1.02;
+  letter-spacing:-0.03em;
+  margin-bottom:22px;
+}
+.hero-lead{
+  color:var(--muted);
+  font-size:clamp(16px,2.2vw,20px);
+  max-width:580px;margin:0 auto;
+  line-height:1.65;
+}
+.typewriter{
+  display:block;margin-top:14px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:clamp(13px,1.6vw,16px);
+  min-height:26px;
+  color:var(--cyan);
+}
+.typewriter::after{
+  content:"|";
+  animation:blink .7s step-end infinite;
+  color:var(--purple);margin-left:1px;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* stats row */
+.stats{
+  display:flex;gap:32px;justify-content:center;flex-wrap:wrap;
+  margin:36px 0;
+}
+.stat .n{
+  font-size:clamp(28px,4vw,42px);font-weight:900;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  line-height:1;
+}
+.stat .l{color:var(--muted);font-size:12px;margin-top:4px;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.08em}
+
+.cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+.btn{
+  padding:13px 26px;border-radius:14px;
+  font-weight:700;font-size:14px;
+  border:1px solid var(--border);
+  color:var(--text);
+  background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(8px);
+  transition:transform .15s,border-color .15s,background .15s,box-shadow .15s;
+  cursor:pointer;
+}
+.btn:hover{
+  transform:translateY(-2px);
+  border-color:rgba(168,85,247,0.5);
+  color:var(--text);
+  box-shadow:0 4px 20px rgba(168,85,247,0.15);
+}
+.btn.primary{
+  background:var(--grad);color:#05050d;
+  border:none;font-size:15px;
+}
+.btn.primary:hover{
+  color:#05050d;
+  transform:translateY(-2px);
+  filter:brightness(1.08);
+  box-shadow:0 4px 25px rgba(56,189,248,0.3), 0 4px 25px rgba(168,85,247,0.3);
+}
+
+
+
+/* ── SHARED SECTION STYLES ── */
+section{padding:80px 0}
+.section-head{margin-bottom:44px}
+.kicker{
+  font-family:'JetBrains Mono',monospace;font-size:12px;
+  color:var(--purple);letter-spacing:.12em;text-transform:uppercase;
+}
+.section-head h2{
+  font-size:clamp(28px,4vw,42px);font-weight:900;
+  margin-top:8px;letter-spacing:-.02em;
+}
+.section-head p{color:var(--muted);margin-top:10px;max-width:600px;font-size:16px}
+
+/* glass card mixin */
+.glass{
+  background:var(--card);
+  border:1px solid var(--border);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border-radius:18px;
+  transition:border-color .2s,transform .2s,box-shadow .2s;
+}
+.glass:hover{
+  border-color:rgba(168,85,247,0.4);
+  transform:translateY(-4px);
+  box-shadow:0 8px 32px rgba(168,85,247,0.12);
+}
+/* animated gradient border on hover */
+.glass-glow{position:relative;isolation:isolate}
+.glass-glow::before{
+  content:"";position:absolute;inset:-1px;border-radius:19px;z-index:-1;
+  background:var(--grad);opacity:0;
+  transition:opacity .25s;
+  padding:1px;
+  -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  pointer-events:none;
+}
+.glass-glow:hover::before{opacity:1}
+.glass-glow:hover{border-color:transparent}
+
+/* ── SPECS ── */
+.specs{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.spec{padding:18px 20px}
+.spec .k{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.spec .v{font-weight:700;margin-top:5px;font-size:15px}
+
+/* ── SCREENSHOTS ── */
+.shots{display:grid;gap:20px}
+.shot{display:flex;flex-direction:column;overflow:hidden;height:100%}
+.shot img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block;transition:transform .4s ease}
+.shot:hover img{transform:scale(1.015)}
+.cap{
+  padding:13px 18px;
+  display:flex;align-items:center;gap:10px;
+  font-weight:600;font-size:15px;
+  border-top:1px solid var(--border);
+  margin-top:auto;
+}
+.cap span{color:var(--muted);font-weight:400;font-size:13px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--grad);flex-shrink:0}
+
+/* ── FEATURES ── */
+.features{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
+.feature{padding:26px}
+.feature .icon{font-size:28px;margin-bottom:14px}
+.feature h3{font-size:17px;font-weight:800}
+.feature p{color:var(--muted);font-size:14px;margin-top:8px;line-height:1.6}
+
+/* ── WIDGET GALLERY ── */
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.widget{display:flex;flex-direction:column;overflow:hidden}
+.widget .frame{
+  background:radial-gradient(140% 120% at 50% 0%,#1c1230,#09090f);
+  padding:20px;
+  display:flex;align-items:center;justify-content:center;
+  min-height:160px;
+}
+.widget .frame img{width:100%;height:auto;display:block;border-radius:8px}
+.widget .frame.tall img{max-height:380px;width:auto;max-width:100%}
+.widget .meta{padding:16px 18px;border-top:1px solid var(--border)}
+.widget .meta h3{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.tag{
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  padding:2px 8px;border-radius:6px;
+  background:rgba(168,85,247,0.15);color:var(--purple);
+  border:1px solid rgba(168,85,247,0.3);
+}
+.widget .meta p{color:var(--muted);font-size:13px;margin-top:6px}
+.widget.span2{grid-column:span 2}
+@media(max-width:700px){.widget.span2{grid-column:span 1}
+  .bootloader-row{grid-template-columns:1fr !important}}
+
+.pills{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.pill{
+  padding:8px 16px;border-radius:999px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);
+  font-size:13px;font-family:'JetBrains Mono',monospace;
+  transition:border-color .15s;
+}
+.pill:hover{border-color:var(--cyan)}
+
+/* ── BOOT ── */
+.boot-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+.boot{overflow:hidden;background:#000}
+.boot video,.boot img{width:100%;display:block;aspect-ratio:16/10;object-fit:cover}
+.boot .name{
+  padding:10px 16px;
+  font-family:'JetBrains Mono',monospace;font-size:13px;
+  display:flex;align-items:center;gap:8px;
+  border-top:1px solid var(--border);
+  background:rgba(12,12,20,0.9);
+}
+.boot:hover{border-color:var(--cyan)}
+
+/* ── TOOLS ── */
+.tools{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}
+.tool{
+  display:flex;align-items:center;gap:10px;
+  padding:13px 16px;font-size:14px;
+}
+.tool .old{color:var(--muted);text-decoration:line-through;font-family:'JetBrains Mono',monospace;font-size:13px}
+.tool .arrow{color:var(--purple);font-size:16px}
+.tool .new{color:var(--cyan);font-family:'JetBrains Mono',monospace;font-weight:600}
+
+/* ── CODE ── */
+pre{
+  background:rgba(10,10,20,0.8);
+  border:1px solid var(--border);
+  backdrop-filter:blur(8px);
+  border-radius:16px;padding:24px;
+  overflow-x:auto;
+  font-family:'JetBrains Mono',monospace;font-size:13px;
+  line-height:1.75;color:#c8cce0;
+}
+pre .c1{color:var(--muted)}
+pre .c2{color:var(--cyan)}
+pre .c3{color:var(--pink)}
+
+/* ── FOOTER ── */
+footer{
+  border-top:1px solid var(--border);
+  padding:44px 0;text-align:center;
+  color:var(--muted);font-size:14px;
+}
+footer .heart{color:var(--pink)}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .55s ease,transform .55s ease}
+.reveal.in{opacity:1;transform:none}
+
+/* ambient glow blobs */
+.blob{
+  position:fixed;border-radius:50%;pointer-events:none;z-index:0;
+  filter:blur(80px);opacity:.18;
+}
+.blob1{width:600px;height:600px;background:var(--purple);top:-200px;right:-100px;animation:drift1 18s ease-in-out infinite}
+.blob2{width:500px;height:500px;background:var(--cyan);bottom:-150px;left:-100px;animation:drift2 22s ease-in-out infinite}
+@keyframes drift1{0%,100%{transform:translate(0,0)}50%{transform:translate(-60px,80px)}}
+@keyframes drift2{0%,100%{transform:translate(0,0)}50%{transform:translate(80px,-60px)}}
+</style>
+</head>
+<body>
+
+<!-- ambient blobs -->
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="wrap">
+    <div class="brand">
+      <img src="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/nix_icon.svg" alt="NixOS" />
+      <span>muddyblack<span class="grad-text">/NixOS</span></span>
+    </div>
+    <div class="nav-links">
+      <a href="#specs">Specs</a>
+      <a href="#shots">Screenshots</a>
+      <a href="#features">Features</a>
+      <a href="#widgets">Widgets</a>
+      <a href="#boot">Boot</a>
+      <a href="#tools">Tools</a>
+      <a href="#install">Install</a>
+      <a href="https://github.com/Muddyblack/NixOS">GitHub →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <img class="hero-icon" src="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/nix_icon_animated.svg" alt="NixOS" />
+      NixOS 26.05 · Flakes · Home Manager · Disko
+    </div>
+    <h1>A reproducible<br /><span class="grad-text">NixOS rice</span><br />built to last.</h1>
+    <p class="hero-lead">
+      Hyprland &amp; KDE Plasma 6 on an encrypted, impermanent Btrfs system —
+      declared once, rebuilt anywhere.
+      <span class="typewriter" id="typed"></span>
+    </p>
+    <div class="stats">
+      <div class="stat"><div class="n" data-target="5">0</div><div class="l">months built</div></div>
+      <div class="stat"><div class="n" data-target="9">0</div><div class="l">custom widgets</div></div>
+      <div class="stat"><div class="n" data-target="4">0</div><div class="l">boot themes</div></div>
+      <div class="stat"><div class="n" data-target="2">0</div><div class="l">window managers</div></div>
+    </div>
+    <div class="cta">
+      <a class="btn primary" href="https://github.com/Muddyblack/NixOS">⭐ View on GitHub</a>
+      <a class="btn" href="#shots">Screenshots</a>
+      <a class="btn" href="#install">Install</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── SPECS ── -->
+<section id="specs">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">// rice.toml</div>
+      <h2>The setup at a glance</h2>
+      <p>Everything is declared in this repo. No imperative drift — <span class="mono">upnix</span> and it's exactly this, every time.</p>
+    </div>
+    <div class="specs">
+      <div class="spec glass glass-glow reveal"><div class="k">OS</div><div class="v">NixOS 26.05</div></div>
+      <div class="spec glass glass-glow reveal"><div class="k">Window Manager</div><div class="v">Hyprland · KDE Plasma 6</div></div>
+      <div class="spec glass glass-glow reveal"><div class="k">Shell</div><div class="v">Zsh · Powerlevel10k</div></div>
+      <div class="spec glass glass-glow reveal"><div class="k">Terminal</div><div class="v">Ghostty</div></div>
+      <div class="spec glass glass-glow reveal"><div class="k">Bar</div><div class="v">Caelestia Shell</div></div>
+      <div class="spec glass glass-glow reveal"><div class="k">Browser</div><div class="v">Zen Browser</div></div>
+      <div class="spec glass glass-glow reveal"><div class="k">Editor</div><div class="v">Neovim (LazyVim) · Zed</div></div>
+      <div class="spec glass glass-glow reveal"><div class="k">File Manager</div><div class="v">Yazi · Dolphin</div></div>
+      <div class="spec glass glass-glow reveal"><div class="k">Theme</div><div class="v">Sweet Dark · Kvantum</div></div>
+      <div class="spec glass glass-glow reveal"><div class="k">Icons</div><div class="v">Papirus · Slot · Vivid</div></div>
+      <div class="spec glass glass-glow reveal"><div class="k">Login</div><div class="v">SDDM · Sonomatic</div></div>
+      <div class="spec glass glass-glow reveal"><div class="k">Boot</div><div class="v">Plymouth · GRUB2 · rEFInd</div></div>
+      <div class="spec glass glass-glow reveal"><div class="k">Disk</div><div class="v">Btrfs · LUKS · Impermanence</div></div>
+      <div class="spec glass glass-glow reveal"><div class="k">Secrets</div><div class="v">sops-nix · age</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SCREENSHOTS ── -->
+<section id="shots">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">// screenshots</div>
+      <h2>Two desktops, one config</h2>
+      <p>Switch between tiling Hyprland and full KDE Plasma 6 at the login screen — both themed from the same source of truth.</p>
+    </div>
+    <div class="shots">
+      <div class="shot glass reveal">
+        <img loading="lazy" src="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/readme/kde-desktop.png" alt="KDE Plasma 6 desktop" />
+        <div class="cap"><i class="dot"></i>KDE Plasma 6 <span>— Sweet Dark · custom widgets · Iridescent theme</span></div>
+      </div>
+      <div class="shot glass reveal">
+        <img loading="lazy" src="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/readme/hyprland-desktop.png" alt="Hyprland desktop" />
+        <div class="cap"><i class="dot"></i>Hyprland <span>— Caelestia Shell bar · awww wallpapers</span></div>
+      </div>
+      <div class="bootloader-row" style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div class="shot glass reveal">
+          <img loading="lazy" src="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/readme/grub.png" alt="Custom GRUB2 theme" />
+          <div class="cap"><i class="dot"></i>GRUB2 <span>— themed bootloader</span></div>
+        </div>
+        <div class="shot glass reveal">
+          <img loading="lazy" src="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/readme/refind.png" alt="Custom rEFInd theme" />
+          <div class="cap"><i class="dot"></i>rEFInd <span>— alternate bootloader</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURES ── -->
+<section id="features">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">// why this build</div>
+      <h2>Pretty AND resilient</h2>
+      <p>A desktop that survives reinstalls, rebuilds clean, and wipes back to a known state on every boot.</p>
+    </div>
+    <div class="features">
+      <div class="feature glass reveal">
+        <div class="icon">🔁</div><h3>Fully declarative</h3>
+        <p>Flakes + Home Manager pin every package, dotfile and service. Clone and rebuild — identical machine every time.</p>
+      </div>
+      <div class="feature glass reveal">
+        <div class="icon">🫧</div><h3>Impermanence</h3>
+        <p>Root is wiped to a blank Btrfs snapshot on every boot. Only explicitly persisted paths survive.</p>
+      </div>
+      <div class="feature glass reveal">
+        <div class="icon">🔐</div><h3>LUKS + sops-nix</h3>
+        <p>Full-disk encryption, secrets managed with age — no plaintext credentials anywhere in the repo.</p>
+      </div>
+      <div class="feature glass reveal">
+        <div class="icon">💿</div><h3>Disko-driven install</h3>
+        <p>No <span class="mono">hardware-configuration.nix</span> committed. Any drive, dual-boot ready, one command.</p>
+      </div>
+      <div class="feature glass reveal">
+        <div class="icon">🎬</div><h3>Custom boot themes</h3>
+        <p>Four Plymouth animations (dotted, flower, icy, matrix) and themed GRUB2 + rEFInd bootloaders.</p>
+      </div>
+      <div class="feature glass reveal">
+        <div class="icon">🧩</div><h3>9 custom widgets</h3>
+        <p>A suite of self-built Plasma widgets, each packaged as a Nix derivation and overlaid into the config.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── WIDGETS ── -->
+<section id="widgets">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">// pkgs/widgets</div>
+      <h2>Home-grown Plasma widgets</h2>
+      <p>Each one lives in <span class="mono">pkgs/widgets/</span> as its own Nix derivation. The demos below are live SVGs — several animate in-browser.</p>
+    </div>
+    <div class="gallery">
+      <div class="widget glass reveal">
+        <div class="frame tall"><img loading="lazy" src="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/readme/glassy_monitor.svg" alt="Glassy System Monitor" /></div>
+        <div class="meta"><h3>Glassy System Monitor <span class="tag">animated</span></h3><p>Glass-style CPU, RAM &amp; network panels with a live scrolling readout.</p></div>
+      </div>
+      <div class="widget glass span2 reveal">
+        <div class="frame"><img loading="lazy" src="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/readme/nixdatifier.svg" alt="Nixdatifier" /></div>
+        <div class="meta"><h3>Nixdatifier <span class="tag">animated</span></h3><p>NixOS generations, updates, package diffs &amp; secrets at a glance.</p></div>
+      </div>
+      <div class="widget glass span2 reveal">
+        <div class="frame"><img loading="lazy" src="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/readme/audio_visualizer.svg" alt="Plasma Audio Visualizer" /></div>
+        <div class="meta"><h3>Plasma Audio Visualizer <span class="tag">animated</span></h3><p>Album art + reactive bars/dots/lines that sweep to the beat.</p></div>
+      </div>
+      <div class="widget glass reveal">
+        <div class="frame"><img loading="lazy" src="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/readme/ai_usage.svg" alt="AI Usage widget" /></div>
+        <div class="meta"><h3>AI Usage <span class="tag">Claude Code</span></h3><p>Live token &amp; cost tracking for Claude Code sessions.</p></div>
+      </div>
+      <div class="widget glass reveal">
+        <div class="frame tall"><img loading="lazy" src="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/readme/ai_usage_chart.svg" alt="AI Usage chart" /></div>
+        <div class="meta"><h3>AI Usage — Chart</h3><p>Daily usage history as a clean spend graph.</p></div>
+      </div>
+      <div class="widget glass reveal">
+        <div class="frame tall"><img loading="lazy" src="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/readme/tagesschau.svg" alt="Tagesschau" /></div>
+        <div class="meta"><h3>Tagesschau <span class="tag">animated</span></h3><p>German public-broadcaster news headlines on the desktop.</p></div>
+      </div>
+      <div class="widget glass reveal">
+        <div class="frame"><img loading="lazy" src="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/readme/weather_widget.png" alt="Advanced Weather" /></div>
+        <div class="meta"><h3>Advanced Weather</h3><p>Forecast, conditions &amp; trends with a rich popup layout.</p></div>
+      </div>
+      <div class="widget glass reveal">
+        <div class="frame"><img loading="lazy" src="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/readme/battery_widget.png" alt="Powerchart" /></div>
+        <div class="meta"><h3>Powerchart</h3><p>Battery level &amp; power-consumption history graph.</p></div>
+      </div>
+    </div>
+    <div class="pills">
+      <span class="pill reveal">+ Modern Clock</span>
+      <span class="pill reveal">+ Overview</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── BOOT ── -->
+<section id="boot">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">// plymouth</div>
+      <h2>Boot animations</h2>
+      <p>Four custom Plymouth themes driven by MP4 sources. Plays before you even unlock the disk.</p>
+    </div>
+    <div class="boot-grid">
+      <div class="boot glass reveal">
+        <video autoplay loop muted playsinline poster="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/plymouth/dotted/dotted.gif">
+          <source src="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/plymouth/dotted/dotted.mp4" type="video/mp4" />
+          <img src="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/plymouth/dotted/dotted.gif" alt="dotted" />
+        </video>
+        <div class="name"><i class="dot"></i>dotted</div>
+      </div>
+      <div class="boot glass reveal">
+        <video autoplay loop muted playsinline poster="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/plymouth/flower/flower.gif">
+          <source src="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/plymouth/flower/flower.mp4" type="video/mp4" />
+          <img src="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/plymouth/flower/flower.gif" alt="flower" />
+        </video>
+        <div class="name"><i class="dot"></i>flower</div>
+      </div>
+      <div class="boot glass reveal">
+        <video autoplay loop muted playsinline poster="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/plymouth/icy/icy.gif">
+          <source src="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/plymouth/icy/icy.mp4" type="video/mp4" />
+          <img src="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/plymouth/icy/icy.gif" alt="icy" />
+        </video>
+        <div class="name"><i class="dot"></i>icy</div>
+      </div>
+      <div class="boot glass reveal">
+        <video autoplay loop muted playsinline poster="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/plymouth/matrix/matrix.gif">
+          <source src="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/plymouth/matrix/matrix.mp4" type="video/mp4" />
+          <img src="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/plymouth/matrix/matrix.gif" alt="matrix" />
+        </video>
+        <div class="name"><i class="dot"></i>matrix</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TOOLS ── -->
+<section id="tools">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">// modern CLI</div>
+      <h2>The terminal, rebuilt</h2>
+      <p>Classic Unix tools transparently replaced with faster, prettier modern equivalents.</p>
+    </div>
+    <div class="tools">
+      <div class="tool glass reveal"><span class="old">ls</span><span class="arrow">→</span><span class="new">eza</span></div>
+      <div class="tool glass reveal"><span class="old">cat</span><span class="arrow">→</span><span class="new">bat / tspin</span></div>
+      <div class="tool glass reveal"><span class="old">find</span><span class="arrow">→</span><span class="new">fd</span></div>
+      <div class="tool glass reveal"><span class="old">grep</span><span class="arrow">→</span><span class="new">ripgrep</span></div>
+      <div class="tool glass reveal"><span class="old">du</span><span class="arrow">→</span><span class="new">dust</span></div>
+      <div class="tool glass reveal"><span class="old">df</span><span class="arrow">→</span><span class="new">duf</span></div>
+      <div class="tool glass reveal"><span class="old">ps</span><span class="arrow">→</span><span class="new">procs</span></div>
+      <div class="tool glass reveal"><span class="old">top</span><span class="arrow">→</span><span class="new">btop</span></div>
+      <div class="tool glass reveal"><span class="old">ping</span><span class="arrow">→</span><span class="new">gping</span></div>
+      <div class="tool glass reveal"><span class="old">curl</span><span class="arrow">→</span><span class="new">xh</span></div>
+      <div class="tool glass reveal"><span class="old">cd</span><span class="arrow">→</span><span class="new">zoxide</span></div>
+      <div class="tool glass reveal"><span class="old">git diff</span><span class="arrow">→</span><span class="new">difftastic</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── INSTALL ── -->
+<section id="install">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">// getting started</div>
+      <h2>Try it yourself</h2>
+      <p>No machine-specific files to scrub. Spin it in a VM first, or deploy straight to hardware.</p>
+    </div>
+    <pre class="reveal"><span class="c1"># clone</span>
+git clone https://github.com/Muddyblack/NixOS.git && cd NixOS
+
+<span class="c1"># review flags</span>
+bash deploy.sh <span class="c3">help</span>
+
+<span class="c1"># install — prompts for disk, dual-boot sizes, …</span>
+bash deploy.sh <span class="c3">install</span> <span class="c2">--device</span> /dev/nvme0n1
+
+<span class="c1"># day-to-day rebuild (plays a sound on done 🔊)</span>
+upnix</pre>
+    <div class="cta" style="justify-content:flex-start;margin-top:24px">
+      <a class="btn primary" href="https://github.com/Muddyblack/NixOS">Browse the repo</a>
+      <a class="btn" href="https://nixos.org/download">Get the NixOS ISO</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="wrap">
+    <p>Built with <span class="heart">♥</span> on NixOS ·
+      <a href="https://github.com/Muddyblack/NixOS">github.com/Muddyblack/NixOS</a></p>
+    <p class="mono" style="margin-top:8px;font-size:12px;color:#555">
+      Hyprland + KDE Plasma 6 · Btrfs + LUKS + Impermanence · Flakes + Home Manager + Disko
+    </p>
+  </div>
+</footer>
+
+<script>
+// ── typewriter (clean, no cursor clash)
+const LINES = [
+  "nixos-rebuild switch --flake .#desktop",
+  "status: 100% declarative, 0% drift",
+  "root wiped clean on every boot",
+  "upnix --update",
+];
+const el = document.getElementById('typed');
+let li = 0, ci = 0, del = false;
+function tick() {
+  const full = LINES[li];
+  el.textContent = full.slice(0, ci);
+  if (!del && ci < full.length)        { ci++;              setTimeout(tick, 60); }
+  else if (!del && ci === full.length) { del = true;        setTimeout(tick, 1800); }
+  else if (del && ci > 0)              { ci--;              setTimeout(tick, 30); }
+  else                                 { del = false; li = (li + 1) % LINES.length; setTimeout(tick, 200); }
+}
+tick();
+
+// ── stat counters (fire when hero scrolls into view)
+function animCount(el, target, dur) {
+  const start = performance.now();
+  function step(now) {
+    const t = Math.min((now - start) / dur, 1);
+    el.textContent = Math.round(t * t * target);
+    if (t < 1) requestAnimationFrame(step);
+    else el.textContent = target;
+  }
+  requestAnimationFrame(step);
+}
+const statEls = document.querySelectorAll('.stat .n[data-target]');
+let statsFired = false;
+const statsObs = new IntersectionObserver(entries => {
+  if (entries[0].isIntersecting && !statsFired) {
+    statsFired = true;
+    statEls.forEach(n => animCount(n, +n.dataset.target, 900));
+    statsObs.disconnect();
+  }
+}, { threshold: 0.4 });
+statsObs.observe(document.getElementById('hero'));
+
+// ── scroll reveal
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); revealObs.unobserve(e.target); }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach((n, i) => {
+  n.style.transitionDelay = (i % 7 * 0.045) + 's';
+  revealObs.observe(n);
+});
+</script>
+</body>
+</html>

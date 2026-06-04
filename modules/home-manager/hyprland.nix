@@ -23,8 +23,13 @@
 
       env = [
         "XCURSOR_SIZE,24"
-        "QT_QPA_PLATFORMTHEME,kvantum"
+        "QT_QPA_PLATFORM,wayland;xcb"
+        "QT_WAYLAND_DISABLE_WINDOWDECORATION,1"
         "NIXOS_OZONE_WL,1"
+        "XDG_CURRENT_DESKTOP,KDE:Hyprland"
+        "XDG_SESSION_TYPE,wayland"
+        "XDG_SESSION_DESKTOP,Hyprland"
+        "KDE_SESSION_VERSION,6"
       ];
 
       general = {

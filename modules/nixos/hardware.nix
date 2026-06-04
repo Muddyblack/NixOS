@@ -5,9 +5,11 @@
   ...
 }: {
   options.bootloader = lib.mkOption {
-    type = lib.types.enum ["grub" "refind"];
-    default = "grub";
-    description = "Bootloader to use: grub (works on both BIOS and UEFI) or refind (UEFI only).";
+    type = lib.types.enum ["grub" "refind" "systemd-boot"];
+    # Bare safety-net fallback only (used when no deploy-config.nix exists).
+    # The real per-machine value lives in hosts/deploy-config.nix.
+    default = "systemd-boot";
+    description = "Bootloader to use: grub (BIOS+UEFI), refind (UEFI), or systemd-boot (UEFI).";
   };
 
   options.plymouthTheme = lib.mkOption {
@@ -18,31 +20,33 @@
 
   config = let
     useRefind = config.bootloader == "refind";
+    useGrub = config.bootloader == "grub";
+    useSystemdBoot = config.bootloader == "systemd-boot";
   in {
     boot.kernelPackages = pkgs.linuxPackages_latest;
     boot.initrd.availableKernelModules = ["ata_piix" "mptspi" "uhci_hcd" "ehci_pci" "ahci" "sd_mod" "sr_mod" "i915" "i2c_designware_platform" "i2c_designware_core" "i2c_hid_acpi" "hid_multitouch"];
     boot.kernelModules = ["kvm-intel" "kvm-amd" "elan_i2c" "i2c-hid-acpi"];
 
-    # Always allow touching EFI variables — both GRUB and rEFInd need this on UEFI systems.
-    # On a legacy BIOS machine this setting is harmless (ignored by the loader).
-    boot.loader.timeout = 0;
+    # Always allow touching EFI variables — all UEFI loaders need this.
+    boot.loader.timeout = 5;
     boot.loader.efi.canTouchEfiVariables = true;
     boot.loader.efi.efiSysMountPoint = "/boot";
 
     # rEFInd (UEFI only, opt-in via bootloader = "refind")
     boot.loader.refind = lib.mkIf useRefind {
       enable = true;
-      maxGenerations = 10;
+      # ESP is 1G and rEFInd copies each generation's kernel+initrd onto it;
+      # keep this capped so a kernel bump can't fill the partition mid-install.
+      maxGenerations = 8;
+      # scanfor manual: show only our themed NixOS entries (keeps the systemd-boot
+      # backup from showing up as a duplicate); graphics mode + theme assets follow.
       extraConfig = ''
         timeout 0
         textonly false
-        use_graphics_for linux,windows
+        scanfor manual
         screensaver 300
-        scan_all_linux_kernels false
-        fold_linux_kernels false
         extra_kernel_version_strings linux-nixos
 
-        # Theme (using absolute paths relative to ESP root)
         hideui singleuser,hints,arrows,badges
         icons_dir /EFI/refind/themes/refind-minimal/icons
         big_icon_size 128
@@ -55,45 +59,46 @@
       '';
     };
 
-    # Install theme during activation (nixos-rebuild), not at boot.
-    # This ensures the theme is present BEFORE rEFInd looks for it on first boot.
+    # The installer wipes anything it didn't write and runs before activation, so
+    # (re)install the theme and patch refind.conf here: newest generation default,
+    # plus a NixOS icon on each entry (otherwise entries fall back to a folder icon).
     system.activationScripts.refind-theme-install = lib.mkIf useRefind (
       lib.stringAfter ["specialfs"] ''
-        echo "Updating rEFInd visual configuration..."
-
-        # 1. Install theme files
         dest="/boot/EFI/refind/themes/refind-minimal"
         mkdir -p "$dest"
         ${pkgs.rsync}/bin/rsync -a --delete ${pkgs.refind-theme-minimal}/. "$dest/"
 
         cfg="/boot/EFI/refind/refind.conf"
         if [ -f "$cfg" ]; then
-          # Fix default_selection to always boot the newest generation (index 1)
           ${pkgs.gnused}/bin/sed -i 's/^default_selection [0-9]\+$/default_selection 1/' "$cfg"
-          # Only add the icon line if it's missing from the NixOS entries
           if ! grep -q "os_nixos.png" "$cfg"; then
-            echo "Injecting NixOS icons into rEFInd configuration..."
             ${pkgs.gnused}/bin/sed -i \
               '/loader \/efi\/refind\/kernels\//a\  icon /EFI/refind/themes/refind-minimal/icons/os_nixos.png' \
               "$cfg"
           fi
         fi
-        echo "rEFInd configuration update complete."
       ''
     );
 
-    # GRUB (default); disabled when using rEFInd
+    # systemd-boot (UEFI; opt-in via bootloader = "systemd-boot")
+    boot.loader.systemd-boot = lib.mkIf useSystemdBoot {
+      enable = true;
+      configurationLimit = 10;
+      consoleMode = "auto";
+    };
+
+    # GRUB (opt-in via bootloader = "grub"); disabled for the other loaders
     boot.loader.grub = lib.mkForce (
-      if useRefind
+      if useGrub
       then {
-        enable = false;
-      }
-      else {
         enable = true;
         efiSupport = true;
         device = "nodev";
         theme = pkgs.whitesur-grub-theme;
         splashImage = null;
+      }
+      else {
+        enable = false;
       }
     );
 
@@ -204,8 +209,9 @@
       };
     };
 
-    # udev rule: wake BT adapter fast after suspend
+    # udev rules: unblock IdeaPad bluetooth rfkill (boots soft-blocked) + wake BT adapter fast after suspend
     services.udev.extraRules = ''
+      ACTION=="add", SUBSYSTEM=="rfkill", ATTR{type}=="bluetooth", ATTR{soft}="0"
       ACTION=="add", SUBSYSTEM=="bluetooth", ATTR{type}=="1", ATTR{idle_timeout}="0"
       SUBSYSTEM=="powercap", ACTION=="add", RUN+="${pkgs.coreutils}/bin/chmod a+r /sys/%p/energy_uj"
     '';

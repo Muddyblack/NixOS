@@ -1,0 +1,191 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 480" width="360" height="480">
+  <defs>
+    <!-- Background Gradient for glassmorphic depth -->
+    <linearGradient id="windowBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#141520" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#0b0c10" stop-opacity="0.98"/>
+    </linearGradient>
+    
+    <!-- Shading Gradients -->
+    <linearGradient id="tagesschauBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#003e7e"/>
+      <stop offset="100%" stop-color="#002040"/>
+    </linearGradient>
+    
+    <linearGradient id="breakingBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ff4444"/>
+      <stop offset="100%" stop-color="#cc1111"/>
+    </linearGradient>
+    
+    <!-- Drop Shadow for Cards -->
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- Main Window -->
+  <rect width="360" height="480" rx="12" fill="url(#windowBg)" stroke="rgba(255,255,255,0.12)" stroke-width="1.2" filter="url(#shadow)"/>
+  <!-- Highlight inner border -->
+  <rect x="1" y="1" width="358" height="478" rx="11" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+  <!-- ── HEADER ── -->
+  <g transform="translate(14, 14)">
+    <!-- Red Alert Header Box because we have Eilmeldung! -->
+    <rect width="32" height="32" rx="7" fill="url(#breakingBg)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+    <!-- Logo SVG -->
+    <g fill="#ffffff" transform="translate(16, 16) scale(0.11) translate(-170.07, -170.15)">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M202.51,202.88V122l-81.3,29.18v20.1l26.92-9.73v60.78 L202.51,202.88z M170.07,101.22c-38.07,0-68.92,30.86-68.92,68.93c0,38.07,30.85,68.94,68.92,68.94 c38.07,0,68.94-30.87,68.94-68.94C239.01,132.08,208.14,101.22,170.07,101.22z M170.07,89.38c44.63,0,80.8,36.17,80.8,80.78 c0,44.61-36.17,80.79-80.8,80.79c-44.61,0-80.78-36.19-80.78-80.79C89.29,125.54,125.46,89.38,170.07,89.38z" />
+    </g>
+
+    <!-- Title Texts -->
+    <text x="42" y="16" font-family="system-ui, sans-serif" font-size="13" font-weight="bold" fill="#ffffff">tagesschau</text>
+    <text x="42" y="27" font-family="system-ui, sans-serif" font-size="9" font-weight="bold" fill="#ff4444">🚨 BREAKING NEWS</text>
+
+    <!-- Refresh Button -->
+    <g transform="translate(312, 10)">
+      <text x="6" y="8" font-family="system-ui, sans-serif" font-size="14" fill="rgba(255,255,255,0.6)" text-anchor="middle">↻</text>
+    </g>
+  </g>
+
+  <!-- ── FEED TABS ── -->
+  <g transform="translate(14, 58)">
+    <!-- Active Tab: Tagesschau -->
+    <g>
+      <rect width="84" height="34" rx="6" fill="url(#tagesschauBg)" stroke="#005ca9" stroke-width="1"/>
+      <text x="42" y="18" font-family="system-ui, sans-serif" font-size="10" font-weight="bold" fill="#ffffff" text-anchor="middle">Tagesschau</text>
+      <text x="42" y="28" font-family="system-ui, sans-serif" font-size="8" fill="#ffffff" opacity="0.6" text-anchor="middle">09:45</text>
+    </g>
+
+    <!-- Inactive Tab: Märkte -->
+    <g transform="translate(90, 5)">
+      <rect width="64" height="24" rx="6" fill="rgba(255, 255, 255, 0.04)" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1"/>
+      <text x="32" y="15" font-family="system-ui, sans-serif" font-size="10" fill="rgba(255, 255, 255, 0.8)" text-anchor="middle">Märkte</text>
+    </g>
+
+    <!-- Inactive Tab: Custom Feed -->
+    <g transform="translate(160, 5)">
+      <rect width="64" height="24" rx="6" fill="rgba(255, 255, 255, 0.04)" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1"/>
+      <text x="32" y="15" font-family="system-ui, sans-serif" font-size="10" fill="rgba(255, 255, 255, 0.8)" text-anchor="middle">Netzpolitik</text>
+    </g>
+
+    <!-- Add Button -->
+    <g transform="translate(230, 5)">
+      <rect width="24" height="24" rx="6" fill="rgba(255, 255, 255, 0.04)" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1"/>
+      <text x="12" y="16" font-family="system-ui, sans-serif" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">+</text>
+    </g>
+  </g>
+
+  <!-- ── RESSORT FILTER BAR ── -->
+  <g transform="translate(14, 102)">
+    <!-- All (Active) -->
+    <g>
+      <rect width="36" height="20" rx="10" fill="#3daee9"/>
+      <text x="18" y="13" font-family="system-ui, sans-serif" font-size="9" font-weight="bold" fill="#ffffff" text-anchor="middle">All</text>
+    </g>
+    <!-- Inland -->
+    <g transform="translate(42, 0)">
+      <rect width="52" height="20" rx="10" fill="rgba(255, 255, 255, 0.05)" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1"/>
+      <text x="26" y="13" font-family="system-ui, sans-serif" font-size="9" fill="rgba(255, 255, 255, 0.75)" text-anchor="middle">Domestic</text>
+    </g>
+    <!-- Ausland -->
+    <g transform="translate(100, 0)">
+      <rect width="68" height="20" rx="10" fill="rgba(255, 255, 255, 0.05)" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1"/>
+      <text x="34" y="13" font-family="system-ui, sans-serif" font-size="9" fill="rgba(255, 255, 255, 0.75)" text-anchor="middle">International</text>
+    </g>
+    <!-- Wirtschaft -->
+    <g transform="translate(174, 0)">
+      <rect width="54" height="20" rx="10" fill="rgba(255, 255, 255, 0.05)" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1"/>
+      <text x="27" y="13" font-family="system-ui, sans-serif" font-size="9" fill="rgba(255, 255, 255, 0.75)" text-anchor="middle">Business</text>
+    </g>
+    <!-- Sport -->
+    <g transform="translate(234, 0)">
+      <rect width="44" height="20" rx="10" fill="rgba(255, 255, 255, 0.05)" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1"/>
+      <text x="22" y="13" font-family="system-ui, sans-serif" font-size="9" fill="rgba(255, 255, 255, 0.75)" text-anchor="middle">Sports</text>
+    </g>
+  </g>
+
+  <!-- Divider Line -->
+  <line x1="14" y1="132" x2="346" y2="132" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1"/>
+
+  <!-- ── CONTENT NEWS LIST ── -->
+  <g transform="translate(14, 142)">
+    
+    <!-- News Card 1 (Breaking News!) -->
+    <g>
+      <!-- Background Card -->
+      <rect width="332" height="136" rx="8" fill="rgba(255, 255, 255, 0.03)" stroke="rgba(255, 68, 68, 0.25)" stroke-width="1"/>
+      
+      <!-- Breaking Badge -->
+      <rect x="12" y="12" width="72" height="14" rx="3" fill="#ff4444"/>
+      <text x="48" y="22" font-family="system-ui, sans-serif" font-size="8" font-weight="bold" fill="#ffffff" text-anchor="middle">EILMELDUNG</text>
+      <text x="90" y="22" font-family="system-ui, sans-serif" font-size="8" fill="rgba(255, 255, 255, 0.4)">· 5 min ago</text>
+      
+      <!-- News Image -->
+      <rect x="12" y="34" width="76" height="54" rx="4" fill="rgba(255, 255, 255, 0.05)" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1"/>
+      <!-- Stylized News graphic -->
+      <path d="M 22 72 L 40 46 L 56 60 L 78 40" fill="none" stroke="#ff4444" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="78" cy="40" r="2" fill="#ff4444"/>
+      <circle cx="22" cy="72" r="2" fill="#ff4444"/>
+
+      <!-- News Title -->
+      <text x="100" y="44" font-family="system-ui, sans-serif" font-size="11" font-weight="bold" fill="#ffffff">Bundestag beschließt Reform</text>
+      <text x="100" y="58" font-family="system-ui, sans-serif" font-size="11" font-weight="bold" fill="#ffffff">des Klimaschutzgesetzes</text>
+      
+      <!-- News Body (Truncated) -->
+      <text x="100" y="74" font-family="system-ui, sans-serif" font-size="9" fill="rgba(255, 255, 255, 0.6)">Nach intensiven Debatten hat das Parlament</text>
+      <text x="100" y="86" font-family="system-ui, sans-serif" font-size="9" fill="rgba(255, 255, 255, 0.6)">weitreichende Änderungen verabschiedet...</text>
+
+      <!-- Expand Indicator/Inline Details -->
+      <line x1="12" y1="102" x2="320" y2="102" stroke="rgba(255, 255, 255, 0.05)" stroke-width="1"/>
+      <text x="16" y="120" font-family="system-ui, sans-serif" font-size="8.5" font-weight="bold" fill="#3daee9">Expand Article</text>
+      <text x="316" y="120" font-family="system-ui, sans-serif" font-size="10" fill="rgba(255, 255, 255, 0.4)" text-anchor="end">▼</text>
+    </g>
+
+    <!-- News Card 2 (Regular News) -->
+    <g transform="translate(0, 146)">
+      <!-- Background Card -->
+      <rect width="332" height="120" rx="8" fill="rgba(255, 255, 255, 0.02)" stroke="rgba(255, 255, 255, 0.06)" stroke-width="1"/>
+      
+      <text x="12" y="22" font-family="system-ui, sans-serif" font-size="8.5" font-weight="bold" fill="#3daee9">WIRTSCHAFT</text>
+      <text x="76" y="22" font-family="system-ui, sans-serif" font-size="8" fill="rgba(255, 255, 255, 0.4)">· 1 hr ago</text>
+      
+      <!-- News Image -->
+      <rect x="12" y="34" width="76" height="54" rx="4" fill="rgba(255, 255, 255, 0.05)" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1"/>
+      <!-- Stylized chip graphic -->
+      <rect x="36" y="48" width="28" height="26" rx="2" fill="none" stroke="#3daee9" stroke-width="1.5"/>
+      <line x1="32" y1="52" x2="36" y2="52" stroke="#3daee9" stroke-width="1.5"/>
+      <line x1="32" y1="60" x2="36" y2="60" stroke="#3daee9" stroke-width="1.5"/>
+      <line x1="32" y1="68" x2="36" y2="68" stroke="#3daee9" stroke-width="1.5"/>
+      <line x1="64" y1="52" x2="68" y2="52" stroke="#3daee9" stroke-width="1.5"/>
+      <line x1="64" y1="60" x2="68" y2="60" stroke="#3daee9" stroke-width="1.5"/>
+      <line x1="64" y1="68" x2="68" y2="68" stroke="#3daee9" stroke-width="1.5"/>
+
+      <!-- News Title -->
+      <text x="100" y="44" font-family="system-ui, sans-serif" font-size="11" font-weight="bold" fill="#ffffff">Rekordgewinne bei US-Tech-</text>
+      <text x="100" y="58" font-family="system-ui, sans-serif" font-size="11" font-weight="bold" fill="#ffffff">Konzernen treiben Börsen an</text>
+      
+      <!-- News Body -->
+      <text x="100" y="74" font-family="system-ui, sans-serif" font-size="9" fill="rgba(255, 255, 255, 0.6)">Starke Zahlen aus der Halbleiterbranche</text>
+      <text x="100" y="86" font-family="system-ui, sans-serif" font-size="9" fill="rgba(255, 255, 255, 0.6)">verhelfen DAX zu Rekordhochs...</text>
+
+      <line x1="12" y1="96" x2="320" y2="96" stroke="rgba(255, 255, 255, 0.05)" stroke-width="1"/>
+      <text x="16" y="110" font-family="system-ui, sans-serif" font-size="8.5" font-weight="bold" fill="#3daee9">Expand Article</text>
+      <text x="316" y="110" font-family="system-ui, sans-serif" font-size="10" fill="rgba(255, 255, 255, 0.4)" text-anchor="end">▼</text>
+    </g>
+
+  </g>
+
+  <!-- Sleek scrollbar track and handle -->
+  <rect x="350" y="142" width="4" height="268" rx="2" fill="rgba(255, 255, 255, 0.02)"/>
+  <rect x="350" y="142" width="4" height="120" rx="2" fill="rgba(255, 255, 255, 0.15)"/>
+
+  <!-- Divider Line -->
+  <line x1="14" y1="452" x2="346" y2="452" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1"/>
+
+  <!-- ── FOOTER ── -->
+  <g transform="translate(14, 458)">
+    <text x="0" y="11" font-family="system-ui, sans-serif" font-size="9" fill="rgba(255,255,255,0.3)">Updated: 09:45</text>
+    <text x="332" y="11" font-family="system-ui, sans-serif" font-size="9" fill="rgba(255,255,255,0.3)" font-weight="bold" text-anchor="end">Tagesschau</text>
+  </g>
+
+</svg>

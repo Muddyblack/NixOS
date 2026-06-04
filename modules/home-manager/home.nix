@@ -209,10 +209,12 @@
       hdr "🗂  WORKSPACES"
       key "Super + 1–0"         "Switch to workspace 1–10"
       key "Super + Shift + 1–0" "Move window to workspace 1–10"
-      key "Super + –"           "Toggle special/magic workspace"
-      key "Super + Shift + –"   "Send window to magic workspace"
-      key "Super + +"           "Pull window out of magic/special"
       key "Super + scroll"      "Switch workspace (mouse wheel)"
+
+      hdr "🫥  HIDE / SPECIAL WORKSPACE"
+      key "Super + –"           "Toggle magic workspace (show/hide all)"
+      key "Super + Shift + –"   "Hide active window → magic (silent)"
+      key "Super + +"           "Unhide window → current workspace"
 
       hdr "🚀  LAUNCH"
       key "Super + Return / T"  "Terminal (Ghostty)"
