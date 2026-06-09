@@ -39,6 +39,11 @@
       url = "github:caelestia-dots/shell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    antigravity-nix = {
+      url = "github:jacopone/antigravity-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   # Service ports reference:
@@ -77,11 +82,9 @@
             nixpkgs.overlays = [
               (import ./pkgs)
               inputs.nur.overlays.default
-              (_final: _prev: {
+              (_final: prev: {
                 inherit
                   (unstablePkgs)
-                  gemini-cli
-                  antigravity
                   claude-code
                   codex
                   mistral-vibe
@@ -92,6 +95,9 @@
                   zed-editor
                   vscode
                   ;
+                google-antigravity = inputs.antigravity-nix.packages.${prev.stdenv.hostPlatform.system}.google-antigravity;
+                google-antigravity-cli = inputs.antigravity-nix.packages.${prev.stdenv.hostPlatform.system}.google-antigravity-cli;
+                google-antigravity-ide = inputs.antigravity-nix.packages.${prev.stdenv.hostPlatform.system}.google-antigravity-ide;
               })
             ];
             home-manager = {

@@ -221,6 +221,22 @@
         | jq -r '.data[].id' | sort
     }
 
+    _resolve_flake_dir() {
+      local candidate
+      for candidate in \
+        "$FLAKE_DIR" \
+        "$PWD" \
+        "$HOME/nixos-config" \
+        "/mnt/projects/nixos-config" \
+        "/etc/nixos"
+      do
+        [[ -n "$candidate" && -d "$candidate/dev-shells" ]] || continue
+        readlink -f "$candidate" 2>/dev/null || echo "$candidate"
+        return 0
+      done
+      return 1
+    }
+
     devnew() {
       if [ -z "$1" ]; then
         echo "Usage: devnew <template>"
@@ -228,7 +244,11 @@
         return 1
       fi
       local _flake_path _src
-      _flake_path="$(readlink -f "''${FLAKE_DIR:-/etc/nixos}" 2>/dev/null || echo "''${FLAKE_DIR:-/etc/nixos}")"
+      _flake_path="$(_resolve_flake_dir)"
+      if [[ -z "$_flake_path" ]]; then
+        echo "Could not locate a nixos-config with a dev-shells directory."
+        return 1
+      fi
       _src="''${_flake_path}/dev-shells/$1"
       if [[ ! -d "$_src" ]]; then
         echo "Template not found: $_src"
@@ -239,8 +259,10 @@
     }
 
     _devnew() {
+      local _flake_path
       local -a templates
-      templates=($(find "''${FLAKE_DIR:-/etc/nixos}/dev-shells" -maxdepth 1 -mindepth 1 -type d -printf '%f\n' 2>/dev/null))
+      _flake_path="$(_resolve_flake_dir)" || return 0
+      templates=($(find "$_flake_path/dev-shells" -maxdepth 1 -mindepth 1 -type d -printf '%f\n' 2>/dev/null))
       compadd -a templates
     }
     compdef _devnew devnew

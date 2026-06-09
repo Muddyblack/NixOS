@@ -54,6 +54,9 @@
       After = lib.mkForce ["hyprland-session.target"];
       PartOf = lib.mkForce ["hyprland-session.target"];
     };
+    Service.Environment = [
+      "NIXPKGS_QT6_QML_IMPORT_PATH=${pkgs.kdePackages.kirigami.unwrapped}/lib/qt-6/qml"
+    ];
     Install.WantedBy = lib.mkForce ["hyprland-session.target"];
   };
 

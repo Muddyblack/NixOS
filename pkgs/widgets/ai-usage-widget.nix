@@ -5,13 +5,13 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "ai-usage-widget";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "Muddyblack";
     repo = "kde-ai-usage";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/1ZcvryYQvY6kajXJ3/q3eGpXqYd6Gk4KxpgcU4n0iM=";
+    hash = "sha256-0KwQoIVLTN1NPLTA0sq1EWnZB9BLini9R+NNrlrVwoo=";
   };
 
   dontConfigure = true;

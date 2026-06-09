@@ -29,6 +29,8 @@
         "/var/lib/private/ollama"
         "/var/lib/open-webui"
         "/var/lib/portmaster"
+        "/var/lib/docker"
+        "/var/lib/containers"
         {
           directory = "/var/lib/colord";
           user = "colord";
@@ -60,10 +62,9 @@
           ".gnupg"
           ".cache"
           ".vscode"
-          ".antigravity"
-          ".antigravity-server"
           ".docker"
           ".gemini"
+          ".antigravity-ide"
           ".local/share/keyrings"
           ".local/share/Steam"
           ".pki"
@@ -72,14 +73,11 @@
           ".vmware"
           ".wine"
           ".zen"
-          ".mozilla"
-          "Thunderbird"
+          "thunderbird"
           ".claude"
-          ".claude-code-router"
           ".vibe"
           ".codex"
           ".opencode"
-          ".windsurf"
         ];
         files = [
           ".bash_history"
@@ -88,6 +86,8 @@
         ];
       };
     };
+
+    environment.etc."nixos".source = "/mnt/projects/nixos-config";
 
     # Required for impermanence to work correctly with sudo
     security.sudo.extraConfig = "Defaults lecture=never";
