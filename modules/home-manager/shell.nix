@@ -140,7 +140,12 @@
     ];
 
     initContent = ''
-      export FLAKE_DIR="/etc/nixos"
+      for candidate in "$HOME/nixos-config" "/mnt/projects/nixos-config" "/etc/nixos"; do
+        if [[ -d "$candidate/dev-shells" ]]; then
+          export FLAKE_DIR="$candidate"
+          break
+        fi
+      done
 
       [[ $SHLVL -gt 1 ]] && typeset -gi _ghostty_state=1
 

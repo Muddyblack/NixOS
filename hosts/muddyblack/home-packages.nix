@@ -35,7 +35,6 @@
     devenv
 
     # AI & productivity
-    gemini-cli
     opencode
     perplexity
     mistral-vibe
@@ -119,7 +118,9 @@
 
     # Editors & IDEs
     kiro
-    antigravity
+    google-antigravity
+    google-antigravity-ide
+    google-antigravity-cli
     zed-editor
     claude-code
     codex

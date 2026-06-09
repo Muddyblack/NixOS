@@ -1,4 +1,10 @@
-{pkgs, ...}: let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}: let
+  cfg = config.desktop.widgets;
   qdbus = "${pkgs.kdePackages.qttools}/bin/qdbus";
   kwrite = "${pkgs.kdePackages.kconfig}/bin/kwriteconfig6";
 
@@ -98,8 +104,20 @@
     ) &
     disown
   '';
+  networkWatchScript = pkgs.writeShellScript "weather-network-watch" ''
+    # Already online — main service handles it
+    ${pkgs.curl}/bin/curl -sf --max-time 3 https://nominatim.openstreetmap.org/ -o /dev/null 2>/dev/null && exit 0
+    # Poll until internet arrives (max 10 min) then re-run the patch
+    for i in $(seq 1 120); do
+      sleep 5
+      if ${pkgs.curl}/bin/curl -sf --max-time 5 https://nominatim.openstreetmap.org/ -o /dev/null 2>/dev/null; then
+        systemctl --user start weather-location-patch.service
+        exit 0
+      fi
+    done
+  '';
 in {
-  systemd.user.services.weather-location-patch = {
+  systemd.user.services.weather-location-patch = lib.mkIf cfg.weather.enable {
     Unit = {
       Description = "Set weather widget location from SOPS secrets";
       After = ["graphical-session.target"];
@@ -112,7 +130,7 @@ in {
     Install.WantedBy = ["graphical-session.target"];
   };
 
-  systemd.user.paths.weather-location-patch = {
+  systemd.user.paths.weather-location-patch = lib.mkIf cfg.weather.enable {
     Unit = {
       Description = "Watch appletsrc and re-apply weather location";
       After = ["graphical-session.target"];
@@ -123,6 +141,19 @@ in {
       PathModified = "%h/.config/plasma-org.kde.plasma.desktop-appletsrc";
       PathChanged = "%h/.config/plasma-org.kde.plasma.desktop-appletsrc";
       Unit = "weather-location-patch.service";
+    };
+    Install.WantedBy = ["graphical-session.target"];
+  };
+
+  systemd.user.services.weather-location-network-watch = lib.mkIf cfg.weather.enable {
+    Unit = {
+      Description = "Re-apply weather location once internet is reachable";
+      After = ["graphical-session.target"];
+      PartOf = ["graphical-session.target"];
+    };
+    Service = {
+      Type = "oneshot";
+      ExecStart = "${networkWatchScript}";
     };
     Install.WantedBy = ["graphical-session.target"];
   };

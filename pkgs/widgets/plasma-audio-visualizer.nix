@@ -10,13 +10,13 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "plasma-audio-visualizer";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "Muddyblack";
     repo = "kde-audio-visualizer";
     rev = "v${version}";
-    hash = "sha256-lWCyj9NkCyYs41uZCWMt04oVFO3CGS9l30/e/P2grjU=";
+    hash = "sha256-MWahdgkvvqNakV0tg96O/Xjs7mUkA3zXBfqkrN9ntrs=";
   };
 
   nativeBuildInputs = [makeWrapper];

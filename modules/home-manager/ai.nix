@@ -1,13 +1,21 @@
-{...}: {
+{pkgs, ...}: {
   home.file.".config/opencode/config.json".text = builtins.toJSON {
-    "$schema" = "https://opencode.ai/config.json";
+    "$schema" = "${pkgs.opencode}/share/opencode/config.json";
     model = "ollama/gemma4:e4b";
-    providers = {
+    provider = {
       ollama = {
+        npm = "@ai-sdk/openai-compatible";
         name = "Ollama";
-        apiUrl = "http://localhost:11434/v1";
+        options = {
+          apiKey = "ollama";
+          baseURL = "http://localhost:11434/v1";
+        };
+        models = {
+          "gemma4:e4b" = {
+            name = "Gemma 4 e4b";
+          };
+        };
       };
     };
-    context_length = 32768;
   };
 }

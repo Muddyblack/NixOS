@@ -26,10 +26,11 @@
     })
     ++ (lib.optional cfg.plasmaAudioVisualizer.enable {
       name = "org.muddyblack.plasmaAudioVisualizer";
-      config.General.framerate = "24";
+      config.General.framerate = "60";
       config.General.progressBarStyle = "4";
+      config.General.numBars = "32";
       position = {
-        horizontal = 826;
+        horizontal = 790;
         vertical = 544;
       };
       size = {
@@ -46,7 +47,7 @@
           cpuTitle = "CPU Cores";
           glowLine = "true";
           gpuBloom = "false";
-          targetFps = "15";
+          targetFps = "24";
           showBg = "true";
           bgColor = "#800d0f1a";
         };
@@ -67,7 +68,7 @@
           cpuTitle = "CPU Total";
           glowLine = "true";
           gpuBloom = "true";
-          targetFps = "15";
+          targetFps = "24";
           showBg = "true";
           bgColor = "#800d0f1a";
         };
@@ -87,7 +88,7 @@
           memoryTitle = "Memory";
           glowLine = "true";
           gpuBloom = "true";
-          targetFps = "15";
+          targetFps = "24";
           showBg = "true";
           bgColor = "#800d0f1a";
         };
@@ -108,7 +109,7 @@
           networkInterface = "auto";
           glowLine = "true";
           gpuBloom = "true";
-          targetFps = "15";
+          targetFps = "24";
           showBg = "true";
           bgColor = "#800d0f1a";
         };
@@ -199,6 +200,7 @@
           antigravityEnabled = "true";
           openaiEnabled = "true";
           mistralEnabled = "true";
+          kiroEnabled = "true";
           popupBgOpacity = "0.4";
           cardBgOpacity = "0.1";
         };
@@ -258,14 +260,15 @@
               scaleToFit = false;
             };
             items = {
-              shown = [
-                "org.kde.plasma.notifications"
-                "org.kde.plasma.volume"
-                "org.kde.plasma.bluetooth"
-                "org.kde.plasma.brightness"
-                "org.kde.plasma.networkmanagement"
-                "org.kde.plasma.batterymonitor-boero"
-              ];
+              shown =
+                [
+                  "org.kde.plasma.notifications"
+                  "org.kde.plasma.volume"
+                  "org.kde.plasma.bluetooth"
+                  "org.kde.plasma.brightness"
+                  "org.kde.plasma.networkmanagement"
+                ]
+                ++ (lib.optional cfg.powerchart.enable "org.kde.plasma.batterymonitor-boero");
               hidden = [
                 "org.kde.plasma.battery"
                 "org.kde.plasma.weather"
@@ -295,7 +298,7 @@
         {
           iconTasks = {
             launchers = [
-              "applications:antigravity.desktop"
+              "applications:antigravity-ide.desktop"
               "applications:code.desktop"
               "applications:zen.desktop"
             ];
@@ -416,17 +419,27 @@ in {
       kwinrc."org.kde.kdecoration2".theme = "__aurorae__svg__Utterly-Round-Dark";
       kwinrc."org.kde.kdecoration2".library = "org.kde.kwin.aurorae";
 
+      # Compositor — OpenGL, low latency, smooth
+      kwinrc.Compositing.Backend = "OpenGL";
+      kwinrc.Compositing.GLCore = true;
+      kwinrc.Compositing.LatencyPolicy = "Low";
+      kwinrc.Compositing.MaxFPS = 144;
+      kwinrc.Compositing.RefreshRate = 0;
+      kwinrc.Compositing.HiddenPreviews = 5;
+      kwinrc.Compositing.WindowsBlockCompositing = false;
+
       # Blur & transparency
-      kwinrc."Effect-blur".BlurStrength = 12;
-      kwinrc."Effect-blur".NoiseStrength = 2;
+      kwinrc."Effect-blur".BlurStrength = 8;
+      kwinrc."Effect-blur".NoiseStrength = 0;
       kwinrc."Effect-contrast".contrast = 20;
       kwinrc."Effect-contrast".intensity = 150;
       kwinrc."Effect-contrast".saturation = 100;
 
       kwinrc.Plugins.blurEnabled = true;
       kwinrc.Plugins.contrastEnabled = true;
-      kwinrc.Plugins.dimscreenEnabled = true;
-      kwinrc.Plugins.slidebackEnabled = true;
+      kwinrc.Plugins.dimscreenEnabled = false;
+      kwinrc.Plugins.slidebackEnabled = false;
+      kwinrc.Plugins.wobblywindowsEnabled = false;
 
       # Night Color
       kwinrc.NightColor.Active = false;
@@ -441,7 +454,7 @@ in {
       kdeglobals.General.BrowserApplication = "zen.desktop";
       kdeglobals.General.soundTheme = "ocean";
       kdeglobals.General.ColorScheme = "BreezeDark";
-      kdeglobals.KDE.AnimationDurationFactor = 0.25;
+      kdeglobals.KDE.AnimationDurationFactor = 0.5;
       kdeglobals.KDE.widgetStyle = "kvantum";
 
       baloofilerc."Basic Settings".Indexing-Enabled = false;
@@ -508,7 +521,7 @@ in {
     Type=Service
     ServiceTypes=KonqPopupMenu/Plugin
     MimeType=inode/directory;
-    Actions=openInGhostty;openWithVSCode;openWithAntigravity;
+    Actions=openInGhostty;openWithVSCode;openWithAntigravityIDE;openWithZed;
     X-KDE-Priority=TopLevel
 
     [Desktop Action openInGhostty]
@@ -521,13 +534,18 @@ in {
     Icon=vscode
     Exec=code %f
 
-    [Desktop Action openWithAntigravity]
-    Name=Open with Antigravity
-    Icon=antigravity
-    Exec=antigravity %f
+    [Desktop Action openWithAntigravityIDE]
+    Name=Open with Antigravity IDE
+    Icon=antigravity-ide
+    Exec=antigravity-ide %f
+
+    [Desktop Action openWithZed]
+    Name=Open with Zed
+    Icon=zed
+    Exec=zeditor %f
   '';
 
-  systemd.user.services.powerchart-rapl-config = {
+  systemd.user.services.powerchart-rapl-config = lib.mkIf cfg.powerchart.enable {
     Unit = {
       Description = "Set RAPL system power source for batterymonitor-boero widget";
       After = ["graphical-session.target"];
@@ -572,7 +590,7 @@ in {
     Install.WantedBy = ["graphical-session.target"];
   };
 
-  systemd.user.paths.powerchart-rapl-config = {
+  systemd.user.paths.powerchart-rapl-config = lib.mkIf cfg.powerchart.enable {
     Unit = {
       Description = "Watch appletsrc and re-apply RAPL source for powerchart";
       After = ["graphical-session.target"];

@@ -4,7 +4,7 @@
   inputs.nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.1"; # unstable Nixpkgs
 
   outputs = {...} @ inputs: let
-    goVersion = 24; # Change this to update the whole stack
+    goVersion = 25; # Change this to update the whole stack
 
     supportedSystems = [
       "x86_64-linux"
@@ -34,12 +34,33 @@
             # go (version is specified by overlay)
             go
 
+            # Some generator dependencies still build through cgo.
+            gcc
+
+            (python3.withPackages (ps:
+              with ps; [
+                ruamel-yaml
+              ]))
+
             # goimports, godoc, etc.
             gotools
+
+            # Project fmt target dependencies.
+            gofumpt
+            gci
+            golines
 
             # https://github.com/golangci/golangci-lint
             golangci-lint
           ];
+
+          shellHook = ''
+            export GOBIN="$PWD/.direnv/go/bin"
+            export PATH="$GOBIN:$PATH"
+            mkdir -p "$GOBIN"
+            mkdir -p "$PWD/venv/bin"
+            ln -sfn "$(command -v python3)" "$PWD/venv/bin/python"
+          '';
         };
       }
     );
