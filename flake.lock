@@ -55,11 +55,11 @@
         "quickshell": "quickshell"
       },
       "locked": {
-        "lastModified": 1780907625,
-        "narHash": "sha256-YH1LHLhoAlSmXmVz9qhY+QLFWbLVFJWSaPJ3ORr5grQ=",
+        "lastModified": 1781010355,
+        "narHash": "sha256-NDyyluwMcKqERl7I24+fZJBOY07/DlLKJtq2mldYhBA=",
         "owner": "caelestia-dots",
         "repo": "shell",
-        "rev": "66a9f2f220a9cc6a29ce4b66691f0117bdd35704",
+        "rev": "3c7df45505f8364f1a397468bf1e3db018260ba0",
         "type": "github"
       },
       "original": {
@@ -191,17 +191,17 @@
     "m3shapes": {
       "flake": false,
       "locked": {
-        "lastModified": 1777812556,
-        "narHash": "sha256-E5nqOucRQBWKuT31AMekmfgMywRdHgSbU86R7t4BKKA=",
+        "lastModified": 1781001698,
+        "narHash": "sha256-yJ7IFqIbFBhSB5iXQK1/z/l1V8SRhiK2CK+hTVvwW2o=",
         "owner": "soramanew",
         "repo": "m3shapes",
-        "rev": "356825d31f16052a782735cce264331cba0cb71b",
+        "rev": "eb93964ab8583ae21c3a0bb9897f96ef9a1b5377",
         "type": "github"
       },
       "original": {
         "owner": "soramanew",
         "repo": "m3shapes",
-        "rev": "356825d31f16052a782735cce264331cba0cb71b",
+        "rev": "eb93964ab8583ae21c3a0bb9897f96ef9a1b5377",
         "type": "github"
       }
     },
@@ -235,11 +235,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1780734595,
-        "narHash": "sha256-DmTfP92QFYRLOGXlMIE54MAgxSJjDWocl3gRNOu72Os=",
+        "lastModified": 1780902259,
+        "narHash": "sha256-q8yYEC5f1mFlQO9RGna4LTc9QrcvWunX6FYp83munkQ=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "9b696460ac78b5ccfc17c854d8c976f20456e943",
+        "rev": "bd0ff2d3eac24699c3664d5966b9ef36f388e2ca",
         "type": "github"
       },
       "original": {
@@ -271,11 +271,11 @@
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
-        "lastModified": 1780907504,
-        "narHash": "sha256-lHkTeTiaNNcamo4VIM0DVpd+ZzfG/Qa2D6WE0aD8F3M=",
+        "lastModified": 1781012362,
+        "narHash": "sha256-WO+J6ViGM7wlFDuOacxhsq1nZZqJbR2OCG/Vk5gImrE=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "90174b0b0fb9db75cb81dcd3e3bb5daec8a1998f",
+        "rev": "254b8c50385a8f3acc30e37332418d1e2ff546c0",
         "type": "github"
       },
       "original": {
