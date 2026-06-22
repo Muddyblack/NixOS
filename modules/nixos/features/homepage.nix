@@ -9,6 +9,9 @@ in {
   options.features.homepage.enable = lib.mkEnableOption "homepage dashboard";
 
   config = lib.mkIf config.features.homepage.enable {
+    # Next.js standalone server binds 0.0.0.0 by default; force localhost-only.
+    systemd.services.homepage-dashboard.environment.HOSTNAME = "127.0.0.1";
+
     services.homepage-dashboard = {
       enable = true;
       listenPort = 8082;
@@ -133,6 +136,11 @@ in {
               icon = "stirling-pdf.svg";
               href = "http://localhost:8080";
               description = "Local PDF tools";
+            })
+            (mkService "Firefly III" {
+              icon = "firefly-iii.svg";
+              href = "http://localhost:8083";
+              description = "Personal finance and spending tracker";
             })
             (mkService "Netdata" {
               icon = "netdata.svg";

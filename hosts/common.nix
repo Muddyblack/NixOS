@@ -76,10 +76,12 @@
     substituters = [
       "https://cache.nixos.org"
       "https://nix-community.cachix.org"
+      "https://outfoxxed.cachix.org"
     ];
     trusted-public-keys = [
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      "outfoxxed.cachix.org-1:9xW415x/jY9b1G57i+qF5pP0Hk6aZlS3G4M6Hh6Vz0s="
     ];
     narinfo-cache-negative-ttl = 0;
     connect-timeout = 5;

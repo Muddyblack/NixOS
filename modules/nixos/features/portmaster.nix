@@ -161,6 +161,10 @@
       exec "$start_bin" --data "$data_dir" "''${passthrough[@]}" "$command" "''${command_args[@]}"
     fi
 
+    if ! ${pkgs.systemd}/bin/systemctl --quiet is-active portmaster.service; then
+      ${pkgs.systemd}/bin/systemctl start portmaster.service >/dev/null 2>&1 || true
+    fi
+
     app_bin="$(
       ${pkgs.findutils}/bin/find "$data_dir/updates/linux_amd64/app" \
         -mindepth 2 -maxdepth 2 -type f -executable -name 'portmaster-app_v*' 2>/dev/null \

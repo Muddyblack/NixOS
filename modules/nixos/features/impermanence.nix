@@ -28,6 +28,7 @@
         "/var/lib/AccountsService"
         "/var/lib/private/ollama"
         "/var/lib/open-webui"
+        "/var/lib/firefly-iii"
         "/var/lib/portmaster"
         "/var/lib/docker"
         "/var/lib/containers"

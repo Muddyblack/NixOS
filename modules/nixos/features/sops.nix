@@ -30,6 +30,12 @@
         owner = username;
         mode = "0400";
       };
+
+      # Firefly III APP_KEY (encrypts stored secrets); read by the firefly user.
+      secrets.firefly-app-key = {
+        owner = "firefly-iii";
+        mode = "0400";
+      };
     };
   };
 }
