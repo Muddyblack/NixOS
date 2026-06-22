@@ -25,6 +25,8 @@
         "terminal.integrated.fontFamily" = "'MesloLGS NF', monospace";
         "window.menuBarVisibility" = "classic";
         "editor.formatOnSave" = true;
+        "files.autoSave" = "afterDelay";
+        "files.autoSaveDelay" = 1000;
         "[nix]" = {
           "editor.defaultFormatter" = "kamadorueda.alejandra";
         };

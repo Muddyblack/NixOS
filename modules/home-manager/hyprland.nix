@@ -9,11 +9,20 @@
       "$terminal" = "ghostty";
       "$fileManager" = "dolphin";
       "$menu" = "caelestia shell drawers toggle launcher";
+      # Snip into satty editor: annotate/crop, Ctrl+C copies, Ctrl+S saves, Esc discards
+      "$screenshotEdit" = toString (pkgs.writeShellScript "screenshot-edit" ''
+        mkdir -p "$HOME/Pictures/Screenshots"
+        hyprshot -m "$1" --raw | satty --filename - \
+          --output-filename "$HOME/Pictures/Screenshots/%Y-%m-%d_%H%M%S_satty.png" \
+          --early-exit --copy-command wl-copy
+      '');
 
       monitor = [",preferred,auto,1"];
 
       exec-once = [
-        "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
+        "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_MENU_PREFIX"
+        # Rebuild KService cache with this session's env so KDE app lists are populated
+        "${pkgs.kdePackages.kservice}/bin/kbuildsycoca6"
         "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
         "${pkgs.networkmanagerapplet}/bin/nm-applet --indicator"
         "wl-paste --type text --watch cliphist store"
@@ -30,6 +39,10 @@
         "XDG_SESSION_TYPE,wayland"
         "XDG_SESSION_DESKTOP,Hyprland"
         "KDE_SESSION_VERSION,6"
+        # KDE open-with dialog / app lists read ''${XDG_MENU_PREFIX}applications.menu;
+        # only plasma-applications.menu exists, and Plasma sets this itself. Without
+        # it the "Choose an application" dialog is empty under Hyprland.
+        "XDG_MENU_PREFIX,plasma-"
       ];
 
       general = {
@@ -175,10 +188,12 @@
         "$mod SHIFT, 0, movetoworkspace, 10"
         "$mod, mouse_down, workspace, e+1"
         "$mod, mouse_up, workspace, e-1"
-        ", Print, exec, pkill slurp || true; hyprshot -m region"
-        "SHIFT, Print, exec, pkill slurp || true; hyprshot -m window"
-        "CTRL, Print, exec, pkill slurp || true; hyprshot -m output"
-        "$mod SHIFT, S, exec, pkill slurp || true; hyprshot -m region"
+        # Region/window snips open in satty (annotate, Ctrl+C to copy, Ctrl+S to save);
+        # only full-screen captures auto-save to disk.
+        ", Print, exec, pkill slurp || true; $screenshotEdit region"
+        "SHIFT, Print, exec, pkill slurp || true; $screenshotEdit window"
+        "CTRL, Print, exec, pkill slurp || true; hyprshot -m output -o ~/Pictures/Screenshots"
+        "$mod SHIFT, S, exec, pkill slurp || true; $screenshotEdit region"
         "$mod, T, exec, $terminal"
         "CTRL ALT, T, exec, $terminal"
         "$mod, H, exec, bash -c 'hyprctl clients | grep -q hypr-cheatsheet && hyprctl dispatch closewindow class:hypr-cheatsheet || ghostty --class=hypr-cheatsheet -e hypr-cheatsheet'"
@@ -239,6 +254,10 @@
         "match:class (intelligence-center), move 64% 2.5%"
         "match:class (intelligence-center), opacity 0.9"
         "match:class (intelligence-center), animation slide right"
+        # Screenshot annotation editor
+        "match:class ^(com.gabm.satty)$, float on"
+        "match:class ^(com.gabm.satty)$, size 75% 80%"
+        "match:class ^(com.gabm.satty)$, center on"
         # Cheat sheet overlay
         "match:class ^(hypr-cheatsheet)$, float on"
         "match:class ^(hypr-cheatsheet)$, size 820 620"

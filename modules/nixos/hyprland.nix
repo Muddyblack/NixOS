@@ -18,6 +18,7 @@
   environment.systemPackages = with pkgs; [
     hyprpicker
     hyprshot
+    satty
     hyprlock
     hypridle
     wl-clipboard

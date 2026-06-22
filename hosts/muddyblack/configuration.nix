@@ -11,6 +11,7 @@
     ../../modules/nixos/features/gaming.nix
     ../../modules/nixos/features/homepage.nix
     ../../modules/nixos/features/stirling-pdf.nix
+    ../../modules/nixos/features/firefly-iii.nix
     ../../modules/nixos/features/portmaster.nix
     ../../modules/nixos/features/tailscale.nix
     ../../modules/nixos/features/keyring.nix
@@ -27,6 +28,7 @@
 
   programs.wireshark.enable = true;
   features.stirling-pdf.enable = true;
+  features.firefly-iii.enable = true;
   features.portmaster.enable = true;
   features.tailscale.enable = true;
   features.snapshots.enable = true;
@@ -44,6 +46,6 @@
   home-manager.users.${username} = {
     imports = [./home-packages.nix];
     programs.gimp-photogim.enable = true;
-    desktop.widgets.glassySystemMonitor.enable = true;
+    desktop.widgets.glassySystemMonitor.enable = false;
   };
 }

@@ -51,6 +51,7 @@
   #   Ollama       → http://localhost:11434
   #   Open WebUI   → http://localhost:8765
   #   Homepage     → http://localhost:8082
+  #   Firefly III  → http://localhost:8083
 
   outputs = {
     nixpkgs,

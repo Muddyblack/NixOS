@@ -37,7 +37,7 @@
     # AI & productivity
     opencode
     perplexity
-    mistral-vibe
+    # mistral-vibe
 
     # File management
     czkawka
@@ -46,7 +46,7 @@
     peazip
 
     # Communication
-    vesktop
+    discord
     google-chrome
     thunderbird
     whatsapp
@@ -60,6 +60,7 @@
     obsidian
     portfolio
     stirling-pdf-ui
+    firefly-iii-app
 
     # Networking
     motrix
@@ -68,7 +69,7 @@
     whois
 
     # Security
-    bitwarden-desktop
+    # bitwarden-desktop
     vulnix
     photopea
     recraft
@@ -139,10 +140,10 @@
     rapid-photo-downloader
 
     # Design & creative
-    krita
+    # krita
     blender
     inkscape
-    lunacy
+    # lunacy
     eyedropper
     displaycal
     f3d

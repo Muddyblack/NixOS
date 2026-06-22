@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  username,
+  ...
+}: {
   security.apparmor.enable = true;
   security.rtkit.enable = true;
 
@@ -23,6 +27,9 @@
     enable = true;
     logReversePathDrops = true;
   };
+
+  # LLMNR is a legacy fallback name-resolution protocol, spoofable on hostile networks
+  services.resolved.settings.Resolve.LLMNR = false;
 
   services.openssh = {
     enable = true;
@@ -57,8 +64,8 @@
     };
   };
 
+  # No daemon: clamscan loads its own DB; clamd would only waste ~1GB RAM
   services.clamav = {
-    daemon.enable = true;
     updater.enable = true;
     updater.frequency = 12;
   };
@@ -71,14 +78,28 @@
     };
   };
 
+  # Runs as ${username}: the clamav user cannot read a 0700 home dir,
+  # and a parser exploit should never gain more privileges than the user has anyway.
   systemd.services.clamav-scan = {
     description = "ClamAV daily home scan";
-    after = ["clamav-daemon.service"];
-    requires = ["clamav-daemon.service"];
+    onFailure = ["clamav-alert.service"];
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = "${pkgs.clamav}/bin/clamscan --recursive --infected --log=/var/log/clamav/scan.log /home";
-      User = "clamav";
+      ExecStart = "${pkgs.clamav}/bin/clamscan --recursive --infected --exclude-dir=node_modules --exclude-dir=\\.cache /home/${username}";
+      User = username;
+      Nice = 19;
+      IOSchedulingClass = "idle";
+    };
+  };
+
+  # clamscan exits 1 on findings, 2 on errors — both trigger this alert
+  systemd.services.clamav-alert = {
+    description = "Desktop notification for ClamAV findings";
+    serviceConfig = {
+      Type = "oneshot";
+      User = username;
+      Environment = "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus";
+      ExecStart = "${pkgs.libnotify}/bin/notify-send --urgency=critical 'ClamAV' 'Scan failed or found infected files. Check: journalctl -u clamav-scan'";
     };
   };
 
