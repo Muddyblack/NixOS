@@ -1,4 +1,5 @@
 {
+  lib,
   pkgs,
   username,
   ...
@@ -85,7 +86,34 @@
     onFailure = ["clamav-alert.service"];
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = "${pkgs.clamav}/bin/clamscan --recursive --infected --exclude-dir=node_modules --exclude-dir=\\.cache /home/${username}";
+      ExecStart = lib.concatStringsSep " " [
+        "${pkgs.clamav}/bin/clamscan"
+        "--recursive"
+        "--infected"
+        # Nix — immutable, content-addressed
+        "--exclude-dir=^\\.nix-profile$"
+        # VCS and editor caches
+        "--exclude-dir=\\.git$"
+        "--exclude-dir=\\.cache$"
+        # Package manager caches
+        "--exclude-dir=^node_modules$"
+        "--exclude-dir=^\\.npm$"
+        "--exclude-dir=^\\.cargo$"
+        "--exclude-dir=^\\.gradle$"
+        "--exclude-dir=^\\.m2$"
+        "--exclude-dir=^__pycache__$"
+        "--exclude-dir=^\\.venv$"
+        # Build outputs
+        "--exclude-dir=^target$"
+        "--exclude-dir=^dist$"
+        "--exclude-dir=^build$"
+        "--exclude-dir=^\\.next$"
+        # Large binary stores
+        "--exclude-dir=^Steam$"
+        "--exclude-dir=^containers$"
+        "--exclude-dir=^\\.docker$"
+        "/home/${username}"
+      ];
       User = username;
       Nice = 19;
       IOSchedulingClass = "idle";

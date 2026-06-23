@@ -6,10 +6,6 @@
     pinentry-qt
 
     bandwhich
-    firejail
-
-    podman
-    slirp4netns
 
     exfatprogs
     dosfstools

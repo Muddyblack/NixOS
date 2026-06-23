@@ -20,6 +20,8 @@
 
   networking.hostName = "muddyblack";
 
+  boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
+
   features.ai.enable = true;
   features.gaming.enable = true;
   features.virt.enable = true;

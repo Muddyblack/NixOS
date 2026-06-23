@@ -47,11 +47,7 @@ final: _prev: {
   # ═══════════════════════════════════════════════════════════════════════════
   portmaster = final.callPackage ./apps/portmaster.nix {};
   guitar-pro = final.callPackage ./apps/guitar-pro.nix {};
-  photopea = final.callPackage ./apps/photopea.nix {};
-  recraft = final.callPackage ./apps/recraft.nix {};
   whatsapp = final.callPackage ./apps/whatsapp.nix {};
-  perplexity = final.callPackage ./apps/perplexity.nix {};
   stirling-pdf-ui = final.callPackage ./apps/stirling-pdf.nix {};
   firefly-iii-app = final.callPackage ./apps/firefly-iii-app.nix {};
-  gmaps = final.callPackage ./apps/gmaps.nix {};
 }

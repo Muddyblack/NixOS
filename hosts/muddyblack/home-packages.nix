@@ -2,12 +2,9 @@
   home.packages = with pkgs; [
     # Media & Desktop
     freetube
-    nwg-dock-hyprland
-    swaybg
-    awww
 
     # Development & API tools
-    bruno
+    # bruno
 
     # Wine/compatibility
     (pkgs.bottles.override {removeWarningPopup = true;})
@@ -31,13 +28,10 @@
     # Dev tools
     gh
     gource
-    act
     devenv
 
     # AI & productivity
     opencode
-    perplexity
-    # mistral-vibe
 
     # File management
     czkawka
@@ -50,13 +44,11 @@
     google-chrome
     thunderbird
     whatsapp
-    gmaps
     termius
 
     # Documents
     libreoffice-qt6
     onlyoffice-desktopeditors
-    qpdf
     obsidian
     portfolio
     stirling-pdf-ui
@@ -69,10 +61,7 @@
     whois
 
     # Security
-    # bitwarden-desktop
     vulnix
-    photopea
-    recraft
 
     # Containers
     distrobox
@@ -101,12 +90,12 @@
     veracrypt
 
     # Audio & music
-    easyeffects
-    calf
-    lsp-plugins
-    zam-plugins
-    deepfilternet
-    rnnoise
+    # easyeffects
+    # calf
+    # lsp-plugins
+    # zam-plugins
+    # deepfilternet
+    # rnnoise
 
     # Media & conversion
     ffmpeg-full
@@ -119,7 +108,7 @@
 
     # Editors & IDEs
     kiro
-    google-antigravity
+    # google-antigravitya
     google-antigravity-ide
     google-antigravity-cli
     zed-editor
@@ -137,7 +126,6 @@
     # Photography & RAW
     rawtherapee
     digikam
-    rapid-photo-downloader
 
     # Design & creative
     # krita
@@ -146,7 +134,7 @@
     # lunacy
     eyedropper
     displaycal
-    f3d
+    # f3d
 
     (gimp-with-plugins.override {
       plugins = with gimpPlugins; [
