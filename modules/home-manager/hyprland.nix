@@ -14,7 +14,7 @@
         mkdir -p "$HOME/Pictures/Screenshots"
         hyprshot -m "$1" --raw | satty --filename - \
           --output-filename "$HOME/Pictures/Screenshots/%Y-%m-%d_%H%M%S_satty.png" \
-          --early-exit --copy-command wl-copy
+          --early-exit --copy-command wl-copy --disable-notifications
       '');
 
       monitor = [",preferred,auto,1"];

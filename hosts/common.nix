@@ -68,28 +68,43 @@
   ];
 
   nix.settings = {
-    trusted-users = ["root" "@wheel"];
     auto-optimise-store = true;
     experimental-features = ["nix-command" "flakes"];
+    max-jobs = 4;
+    cores = 4;
     min-free = 5 * 1024 * 1024 * 1024;
     max-free = 15 * 1024 * 1024 * 1024;
     substituters = [
       "https://cache.nixos.org"
+      "https://cache.garnix.io"
       "https://nix-community.cachix.org"
-      "https://outfoxxed.cachix.org"
+      "https://zen-browser.cachix.org"
+      "https://caelestia.cachix.org"
+      "https://attic.xuyh0120.win/lantian"
     ];
     trusted-public-keys = [
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+      "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-      "outfoxxed.cachix.org-1:9xW415x/jY9b1G57i+qF5pP0Hk6aZlS3G4M6Hh6Vz0s="
+      "zen-browser.cachix.org-1:s1nHwe9zLAHRZOTMA/3qdVaRvbhBTAHAOW/dEhPsZvQ="
+      "caelestia.cachix.org-1:mDeJrzCkSbMDDdfHxHEJUHyHgCVlG0sfbECuFqB2gME="
+      "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
     ];
     narinfo-cache-negative-ttl = 0;
+    always-allow-substitutes = true;
+    fallback = true;
     connect-timeout = 5;
     http-connections = 128;
     max-substitution-jobs = 128;
     warn-dirty = false;
     flake-registry = "";
   };
+
+  # Keep the laptop responsive during rebuilds: bounded parallelism (above) plus
+  # build jobs that yield CPU/IO to interactive processes.
+  nix.daemonCPUSchedPolicy = "batch";
+  nix.daemonIOSchedClass = "best-effort";
+  nix.daemonIOSchedPriority = 7;
 
   programs.nh = {
     enable = true;
@@ -161,8 +176,6 @@
 
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.permittedInsecurePackages = [
-    "electron-37.10.3"
-    "electron-39.8.10"
   ];
 
   system.stateVersion = "25.11";

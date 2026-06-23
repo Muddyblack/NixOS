@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
-    nixpkgs-unstable.url = "https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
 
     disko = {
       url = "github:nix-community/disko";
@@ -44,6 +44,8 @@
       url = "github:jacopone/antigravity-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
   };
 
   # Service ports reference:
@@ -83,6 +85,7 @@
             nixpkgs.overlays = [
               (import ./pkgs)
               inputs.nur.overlays.default
+              inputs.nix-cachyos-kernel.overlays.pinned
               (_final: prev: {
                 inherit
                   (unstablePkgs)

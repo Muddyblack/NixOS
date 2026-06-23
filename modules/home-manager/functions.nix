@@ -197,9 +197,9 @@
         echo "Starting Ollama..."
         sudo systemctl start ollama
       fi
-      if ! systemctl is-active --quiet open-webui; then
+      if ! systemctl is-active --quiet podman-open-webui; then
         echo "Starting Open WebUI (first start can take a minute)..."
-        sudo systemctl start open-webui
+        sudo systemctl start podman-open-webui
       fi
       for i in $(seq 1 60); do
         if command curl -s http://localhost:8765 &>/dev/null; then
@@ -211,7 +211,7 @@
     }
 
     ai-webui-stop() {
-      sudo systemctl stop open-webui
+      sudo systemctl stop podman-open-webui
       echo "Open WebUI stopped."
     }
 

@@ -161,30 +161,10 @@ in {
               href = "http://localhost:8765";
               description = "Local chat UI for Ollama";
             })
-            (mkService "Perplexity" {
-              icon = "https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/icons/perplexity.png";
-              href = "https://www.perplexity.ai";
-              description = "Research and web search";
-            })
-            (mkService "Recraft" {
-              icon = "https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/icons/recraft.png";
-              href = "https://www.recraft.ai";
-              description = "AI image and vector generation";
-            })
           ];
         }
         {
           "Web Apps" = [
-            (mkService "Photopea" {
-              icon = "https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/icons/photopea.png";
-              href = "https://www.photopea.com";
-              description = "Browser image editor";
-            })
-            (mkService "Google Maps" {
-              icon = "https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/icons/gmaps.png";
-              href = "https://maps.google.com";
-              description = "Navigation and places";
-            })
             (mkService "GitHub" {
               icon = "mdi-github";
               href = "https://github.com/Muddyblack";
