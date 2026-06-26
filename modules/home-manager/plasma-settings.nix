@@ -149,7 +149,7 @@
           name = "org.kde.plasma.pager";
           config.General = {
             displayedText = "2"; # 0 = desktop number, 1 = desktop name, 2 = none (just thumbnails)
-            showWindowIcons = "true";
+            showWindowIcons = "false";
           };
         }
         "org.kde.plasma.panelspacer"
