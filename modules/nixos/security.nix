@@ -86,10 +86,12 @@
     onFailure = ["clamav-alert.service"];
     serviceConfig = {
       Type = "oneshot";
+      RuntimeMaxSec = "2h";
       ExecStart = lib.concatStringsSep " " [
         "${pkgs.clamav}/bin/clamscan"
         "--recursive"
         "--infected"
+        "--max-scantime=30000"
         # Nix — immutable, content-addressed
         "--exclude-dir=^\\.nix-profile$"
         # VCS and editor caches
