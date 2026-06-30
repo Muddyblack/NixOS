@@ -33,6 +33,7 @@
       "video/webm" = ["mpv.desktop"];
       "audio/mpeg" = ["mpv.desktop"];
       "audio/flac" = ["mpv.desktop"];
+      "text/plain" = ["org.kde.kate.desktop"];
       "text/html" = ["zen.desktop"];
       "x-scheme-handler/http" = ["zen.desktop"];
       "x-scheme-handler/https" = ["zen.desktop"];

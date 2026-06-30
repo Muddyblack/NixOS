@@ -37,6 +37,9 @@
         "git.confirmSync" = false;
         "editor.copySelection" = false;
         "remote.SSH.path" = "/run/current-system/sw/bin/ssh";
+        "workbench.editorAssociations" = {
+          "*.qrc" = "qt-core.qrcEditor";
+        };
       };
     };
   };

@@ -135,7 +135,7 @@
       };
     });
 
-  makeTopPanel = screen: launcher: {
+  makeTopPanel = screen: {
     inherit screen;
     location = "top";
     height = 32;
@@ -144,7 +144,7 @@
     opacity = "translucent";
     widgets =
       [
-        launcher
+        # Launcher removed — use Meta+Space (KRunner) instead.
         {
           name = "org.kde.plasma.pager";
           config.General = {
@@ -345,14 +345,7 @@ in {
     desktop.widgets = desktopWidgets;
 
     panels = [
-      (makeTopPanel "all" {
-        name = "org.kde.plasma.kickoff";
-        config.General = {
-          icon = "nix-snowflake-white";
-          alphaSort = "true";
-          display = "popup";
-        };
-      })
+      (makeTopPanel "all")
       (makeBottomPanel "all")
     ];
 
