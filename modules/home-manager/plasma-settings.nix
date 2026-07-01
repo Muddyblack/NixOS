@@ -144,7 +144,7 @@
     opacity = "translucent";
     widgets =
       [
-        # Launcher removed — use Meta+Space (KRunner) instead.
+        # Launcher removed — use Meta (KRunner) instead.
         {
           name = "org.kde.plasma.pager";
           config.General = {
@@ -344,6 +344,12 @@ in {
 
     desktop.widgets = desktopWidgets;
 
+    # Hyprland-style: 5 always-present virtual desktops (Meta+1..5).
+    kwin.virtualDesktops = {
+      number = 5;
+      rows = 1;
+    };
+
     panels = [
       (makeTopPanel "all")
       (makeBottomPanel "all")
@@ -365,11 +371,39 @@ in {
         "Show Desktop" = "Meta+D";
         "Overview" = "Meta+W";
         "Toggle Night Color" = ["Meta+Shift+N"];
+
+        # Hyprland-style desktop switching: Meta+1..5.
+        "Switch to Desktop 1" = "Meta+1";
+        "Switch to Desktop 2" = "Meta+2";
+        "Switch to Desktop 3" = "Meta+3";
+        "Switch to Desktop 4" = "Meta+4";
+        "Switch to Desktop 5" = "Meta+5";
+
+        # KWin-script actions: the scripts (move-follow, toggle-bottom-panel)
+        # register the callbacks, but their own registerShortcut() key requests
+        # are NOT reliably grabbed under plasma-manager. Declare the bindings
+        # here so plasma-manager owns them — same path as every working shortcut.
+        "MoveFollowDesktop1" = "Meta+Shift+1";
+        "MoveFollowDesktop2" = "Meta+Shift+2";
+        "MoveFollowDesktop3" = "Meta+Shift+3";
+        "MoveFollowDesktop4" = "Meta+Shift+4";
+        "MoveFollowDesktop5" = "Meta+Shift+5";
+        "ToggleBottomPanel" = "Meta+B";
       };
       # Disable default Activities shortcut to free up Meta+Q
       plasmashell."manage activities" = "none";
-      plasmashell."activate application launcher" = ["Alt+F1" "Meta"];
-      "services/org.kde.krunner.desktop"._launch = "Meta+Space";
+      plasmashell."activate application launcher" = "none";
+      plasmashell."activate task manager entry 1" = "none";
+      plasmashell."activate task manager entry 2" = "none";
+      plasmashell."activate task manager entry 3" = "none";
+      plasmashell."activate task manager entry 4" = "none";
+      plasmashell."activate task manager entry 5" = "none";
+      plasmashell."activate task manager entry 6" = "none";
+      plasmashell."activate task manager entry 7" = "none";
+      plasmashell."activate task manager entry 8" = "none";
+      plasmashell."activate task manager entry 9" = "none";
+      plasmashell."activate task manager entry 10" = "none";
+      "services/org.kde.krunner.desktop"._launch = ["Meta+Space" "Search"];
       "services/org.kde.systemmonitor.desktop"._launch = "none";
       "caelestia-monitor.desktop"."_launch" = "Ctrl+Shift+Esc";
       "services/com.mitchellh.ghostty.desktop"._launch = "Ctrl+Alt+T";
@@ -440,8 +474,12 @@ in {
       kwinrc.NightColor.NightTemperature = 3500;
       kwinrc.NightColor.DayTemperature = 6500;
 
-      kwinrc.Desktops.Number = 2;
-      kwinrc.Desktops.Rows = 1;
+      # Virtual desktop count/rows are managed by kwin.virtualDesktops above.
+
+      # Enable the custom "move window to desktop N and follow" KWin script.
+      kwinrc.Plugins."move-followEnabled" = true;
+      kwinrc.Plugins."toggle-bottom-panelEnabled" = true;
+      kwinrc.ModifierOnlyShortcuts.Meta = "org.kde.krunner,/App,,toggleDisplay";
 
       # Global settings
       kdeglobals.General.BrowserApplication = "zen.desktop";
@@ -536,6 +574,91 @@ in {
     Name=Open with Zed
     Icon=zed
     Exec=zeditor %f
+  '';
+
+  # Hyprland-style "move active window to desktop N and follow it".
+  # Bound to Meta+Shift+1..9 and Meta+Shift+0 (= desktop 10).
+  # Enabled via kwinrc.Plugins."move-followEnabled" above.
+  xdg.dataFile."kwin/scripts/move-follow/metadata.json".text = builtins.toJSON {
+    KPlugin = {
+      Id = "move-follow";
+      Name = "Move Window to Desktop and Follow";
+      Description = "Meta+Shift+N moves the active window to desktop N and follows it.";
+      Version = "1.0";
+      EnabledByDefault = true;
+    };
+    KPackageStructure = "KWin/Script";
+    "X-Plasma-API" = "javascript";
+    "X-Plasma-MainScript" = "code/main.js";
+  };
+
+  xdg.dataFile."kwin/scripts/move-follow/contents/code/main.js".text = ''
+    function registerForDesktop(n) {
+      var key = (n === 10) ? "0" : ("" + n);
+      registerShortcut(
+        "MoveFollowDesktop" + n,
+        "Move Window to Desktop " + n + " and Follow",
+        "Meta+Shift+" + key,
+        function () {
+          print("MoveFollowDesktop callback triggered for desktop " + n);
+          var w = workspace.activeWindow;
+          if (!w) {
+            print("MoveFollowDesktop: No active window");
+            return;
+          }
+          var desks = workspace.desktops;
+          if (n > desks.length) {
+            print("MoveFollowDesktop: n " + n + " is greater than desktops count " + desks.length);
+            return;
+          }
+          var target = desks[n - 1];
+          print("MoveFollowDesktop: Moving window to desktop " + n);
+          w.desktops = [target];
+          workspace.currentDesktop = target;
+          print("MoveFollowDesktop: Finished");
+        }
+      );
+    }
+    for (var i = 1; i <= 5; i++) {
+      registerForDesktop(i);
+    }
+  '';
+
+  xdg.dataFile."kwin/scripts/toggle-bottom-panel/metadata.json".text = builtins.toJSON {
+    KPlugin = {
+      Id = "toggle-bottom-panel";
+      Name = "Toggle Bottom Panel";
+      Description = "Toggles the bottom Plasma panel.";
+      Version = "1.0";
+      EnabledByDefault = true;
+    };
+    KPackageStructure = "KWin/Script";
+    "X-Plasma-API" = "javascript";
+    "X-Plasma-MainScript" = "code/main.js";
+  };
+
+  xdg.dataFile."kwin/scripts/toggle-bottom-panel/contents/code/main.js".text = ''
+    var toggleBottomPanelScript =
+      "panels().forEach(function(panel) {" +
+      "  if (panel.location === 'bottom') {" +
+      "    panel.hiding = (panel.hiding === 'dodgewindows') ? 'autohide' : 'dodgewindows';" +
+      "  }" +
+      "});";
+
+    registerShortcut(
+      "ToggleBottomPanel",
+      "Toggle Bottom Panel",
+      "Meta+B",
+      function () {
+        callDBus(
+          "org.kde.plasmashell",
+          "/PlasmaShell",
+          "org.kde.PlasmaShell",
+          "evaluateScript",
+          toggleBottomPanelScript
+        );
+      }
+    );
   '';
 
   systemd.user.services.powerchart-rapl-config = lib.mkIf cfg.powerchart.enable {

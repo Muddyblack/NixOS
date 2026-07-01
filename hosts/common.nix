@@ -79,7 +79,6 @@
       "https://cache.garnix.io"
       "https://nix-community.cachix.org"
       "https://zen-browser.cachix.org"
-      "https://caelestia.cachix.org"
       "https://attic.xuyh0120.win/lantian"
     ];
     trusted-public-keys = [
@@ -87,7 +86,6 @@
       "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "zen-browser.cachix.org-1:s1nHwe9zLAHRZOTMA/3qdVaRvbhBTAHAOW/dEhPsZvQ="
-      "caelestia.cachix.org-1:mDeJrzCkSbMDDdfHxHEJUHyHgCVlG0sfbECuFqB2gME="
       "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
     ];
     narinfo-cache-negative-ttl = 0;

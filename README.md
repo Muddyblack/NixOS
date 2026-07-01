@@ -290,6 +290,37 @@ gcnix         # garbage collect (keeps last 5 generations)
 
 </details>
 
+<details>
+<summary>Keybindings (KDE Plasma)</summary>
+
+> `Meta` = `Super` (Windows key).
+
+| Shortcut | Action |
+|:--|:--|
+| `Meta` (tap) | KRunner |
+| `Meta + Space` | KRunner |
+| `Meta + 1–5` | Switch to desktop 1–5 |
+| `Meta + Shift + 1–5` | Move window to desktop 1–5 **and follow** |
+| `Meta + Q` / `Alt + F4` | Close window |
+| `Meta + Left/Right/Up/Down` | Quick-tile window |
+| `Meta + PgUp` / `PgDown` | Maximize / minimize window |
+| `Meta + D` | Show desktop |
+| `Meta + W` | Overview |
+| `Meta + B` | Toggle bottom panel (dock) |
+| `Meta + L` | Lock session |
+| `Meta + I` | System Settings |
+| `Meta + P` | Display config |
+| `Meta + Shift + N` | Toggle Night Color |
+| `Meta + Drag` | Move (L) / raise-lower (M) / resize (R) window |
+| `Ctrl + Alt + T` | Terminal (Ghostty) |
+| `Ctrl + Alt + A` | Terminal (Konsole) |
+| `Ctrl + Shift + Esc` | System monitor |
+| `Print` / `Meta + Shift + S` | Screenshot (full / region) |
+
+> **Note:** Some shortcuts are powered by KWin scripts (`move-follow`, `toggle-bottom-panel`) and the `Meta`-tap is a modifier-only shortcut. These are armed by KWin at startup — after editing them in [`plasma-settings.nix`](modules/home-manager/plasma-settings.nix), **log out and back in** for the keyboard bindings to take effect.
+
+</details>
+
 **KDE Plasma layout:**
 
 Desktop widgets and panel layout are managed by [plasma-manager](https://github.com/nix-community/plasma-manager) via [`modules/home-manager/plasma-settings.nix`](modules/home-manager/plasma-settings.nix). After editing and running `upnix`, Plasma needs a layout rebuild to pick up changes:
