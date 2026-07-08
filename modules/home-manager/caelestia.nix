@@ -60,6 +60,14 @@
     Install.WantedBy = lib.mkForce ["hyprland-session.target"];
   };
 
+  home.activation.caelestiaWritableConfig = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    cfg="$HOME/.config/caelestia/shell.json"
+    if [ -L "$cfg" ]; then
+      $DRY_RUN_CMD cp --remove-destination "$(readlink "$cfg")" "$cfg"
+      $DRY_RUN_CMD chmod 644 "$cfg"
+    fi
+  '';
+
   home.packages = with pkgs; [
     material-symbols
     nerd-fonts.caskaydia-cove
