@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+exec pre-commit run --hook-stage=pre-commit

@@ -25,6 +25,7 @@
     tinymist
 
     # Nix tools
+    nixd
     nix-du
     nix-prefetch-github
     nix-tree
