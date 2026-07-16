@@ -19,7 +19,14 @@
     ]
     ++ lib.optional (builtins.pathExists ./deploy-config.nix) ./deploy-config.nix;
 
-  networking.networkmanager.enable = true;
+  networking.networkmanager = {
+    enable = true;
+    settings.connectivity = {
+      uri = "http://nmcheck.gnome.org/check_network_status.txt";
+      response = "NetworkManager is online";
+      interval = 300;
+    };
+  };
   hardware.enableRedistributableFirmware = true;
   services.resolved = {
     enable = true;
