@@ -91,6 +91,7 @@
                   (unstablePkgs)
                   claude-code
                   codex
+                  grok-build
                   mistral-vibe
                   typst
                   typstyle

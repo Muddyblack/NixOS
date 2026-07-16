@@ -114,6 +114,7 @@
     zed-editor
     claude-code
     codex
+    grok-build
 
     # Recording & streaming
     obs-studio

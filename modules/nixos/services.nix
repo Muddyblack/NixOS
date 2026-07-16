@@ -1,4 +1,6 @@
 {...}: {
+  services.atd.enable = true;
+
   services.earlyoom = {
     enable = true;
     freeMemThreshold = 5;
