@@ -27,7 +27,9 @@
       "image/bmp" = ["org.kde.gwenview.desktop"];
       "image/tiff" = ["org.kde.gwenview.desktop"];
       "image/svg+xml" = ["org.kde.gwenview.desktop"];
-      "application/pdf" = ["zen.desktop"];
+      # Sandboxed PDF viewer (Flatpak Evince) instead of the browser —
+      # untrusted-PDF parsing is contained in bubblewrap. See features/flatpak.nix.
+      "application/pdf" = ["org.gnome.Evince.desktop"];
       "video/mp4" = ["mpv.desktop"];
       "video/x-matroska" = ["mpv.desktop"];
       "video/webm" = ["mpv.desktop"];

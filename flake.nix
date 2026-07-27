@@ -30,6 +30,8 @@
 
     impermanence.url = "github:nix-community/impermanence";
 
+    nix-flatpak.url = "github:gmodena/nix-flatpak";
+
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -79,6 +81,7 @@
           {nixpkgs.hostPlatform = "x86_64-linux";}
           disko.nixosModules.disko
           impermanence.nixosModules.impermanence
+          inputs.nix-flatpak.nixosModules.nix-flatpak
           hostModule
           home-manager.nixosModules.home-manager
           ({pkgs, ...}: {

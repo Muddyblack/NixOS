@@ -40,7 +40,7 @@
     peazip
 
     # Communication
-    discord
+    # discord — now installed sandboxed via Flatpak (features/flatpak.nix)
     google-chrome
     thunderbird
     whatsapp
