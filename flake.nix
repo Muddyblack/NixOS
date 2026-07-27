@@ -93,6 +93,7 @@
                   codex
                   grok-build
                   mistral-vibe
+                  tailscale
                   typst
                   typstyle
                   tinymist

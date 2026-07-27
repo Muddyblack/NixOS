@@ -12,7 +12,7 @@
       # Snip into satty editor: annotate/crop, Ctrl+C copies, Ctrl+S saves, Esc discards
       "$screenshotEdit" = toString (pkgs.writeShellScript "screenshot-edit" ''
         mkdir -p "$HOME/Pictures/Screenshots"
-        hyprshot -m "$1" --raw | satty --filename - \
+        hyprshot -m "$1" -z --raw | satty --filename - \
           --output-filename "$HOME/Pictures/Screenshots/%Y-%m-%d_%H%M%S_satty.png" \
           --early-exit --copy-command wl-copy --disable-notifications
       '');
