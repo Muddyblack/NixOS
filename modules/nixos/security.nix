@@ -3,7 +3,44 @@
   pkgs,
   username,
   ...
-}: {
+}: let
+  # Reusable systemd sandbox baseline. Applied to the custom background
+  # services below (clamav). Deliberately conservative so it does not break
+  # a JIT/bytecode scanner or a DBus notifier; per-service overrides tighten
+  # or relax individual keys. Does NOT set ProtectHome (clamav-scan must read
+  # $HOME) or MemoryDenyWriteExecute (clamav bytecode / GTK may need W+X).
+  hardenBase = {
+    NoNewPrivileges = true;
+    ProtectSystem = "strict";
+    PrivateTmp = true;
+    ProtectKernelTunables = true;
+    ProtectKernelModules = true;
+    ProtectKernelLogs = true;
+    ProtectControlGroups = true;
+    ProtectClock = true;
+    ProtectHostname = true;
+    ProtectProc = "invisible";
+    ProcSubset = "pid";
+    RestrictNamespaces = true;
+    RestrictRealtime = true;
+    RestrictSUIDSGID = true;
+    LockPersonality = true;
+    # Runs as an unprivileged user; no capabilities are needed at all.
+    CapabilityBoundingSet = "";
+    # AF_UNIX only: NSS lookups, syslog and the user DBus session socket.
+    # No AF_INET — these services do not touch the network.
+    RestrictAddressFamilies = ["AF_UNIX"];
+    SystemCallArchitectures = "native";
+    SystemCallFilter = ["@system-service"];
+    SystemCallErrorNumber = "EPERM";
+    UMask = "0077";
+  };
+in {
+  # AppArmor stays enabled, but we deliberately do NOT pull in the upstream
+  # profile bundle (pkgs.apparmor-profiles): those profiles attach by absolute
+  # path (/usr/bin/*, /opt/*) and so don't bind to this host's /nix/store
+  # binaries — they'd be non-functional clutter that misrepresents the actual
+  # confinement. Real desktop-app isolation is done via Flatpak/bubblewrap.
   security.apparmor.enable = true;
   security.rtkit.enable = true;
 
@@ -84,53 +121,59 @@
   systemd.services.clamav-scan = {
     description = "ClamAV daily home scan";
     onFailure = ["clamav-alert.service"];
-    serviceConfig = {
-      Type = "oneshot";
-      RuntimeMaxSec = "2h";
-      ExecStart = lib.concatStringsSep " " [
-        "${pkgs.clamav}/bin/clamscan"
-        "--recursive"
-        "--infected"
-        "--max-scantime=30000"
-        # Nix — immutable, content-addressed
-        "--exclude-dir=^\\.nix-profile$"
-        # VCS and editor caches
-        "--exclude-dir=\\.git$"
-        "--exclude-dir=\\.cache$"
-        # Package manager caches
-        "--exclude-dir=^node_modules$"
-        "--exclude-dir=^\\.npm$"
-        "--exclude-dir=^\\.cargo$"
-        "--exclude-dir=^\\.gradle$"
-        "--exclude-dir=^\\.m2$"
-        "--exclude-dir=^__pycache__$"
-        "--exclude-dir=^\\.venv$"
-        # Build outputs
-        "--exclude-dir=^target$"
-        "--exclude-dir=^dist$"
-        "--exclude-dir=^build$"
-        "--exclude-dir=^\\.next$"
-        # Large binary stores
-        "--exclude-dir=^Steam$"
-        "--exclude-dir=^containers$"
-        "--exclude-dir=^\\.docker$"
-        "/home/${username}"
-      ];
-      User = username;
-      Nice = 19;
-      IOSchedulingClass = "idle";
-    };
+    # ProtectSystem=strict is safe here: clamscan only READS $HOME, never writes.
+    serviceConfig =
+      hardenBase
+      // {
+        Type = "oneshot";
+        RuntimeMaxSec = "2h";
+        ExecStart = lib.concatStringsSep " " [
+          "${pkgs.clamav}/bin/clamscan"
+          "--recursive"
+          "--infected"
+          "--max-scantime=30000"
+          # Nix — immutable, content-addressed
+          "--exclude-dir=^\\.nix-profile$"
+          # VCS and editor caches
+          "--exclude-dir=\\.git$"
+          "--exclude-dir=\\.cache$"
+          # Package manager caches
+          "--exclude-dir=^node_modules$"
+          "--exclude-dir=^\\.npm$"
+          "--exclude-dir=^\\.cargo$"
+          "--exclude-dir=^\\.gradle$"
+          "--exclude-dir=^\\.m2$"
+          "--exclude-dir=^__pycache__$"
+          "--exclude-dir=^\\.venv$"
+          # Build outputs
+          "--exclude-dir=^target$"
+          "--exclude-dir=^dist$"
+          "--exclude-dir=^build$"
+          "--exclude-dir=^\\.next$"
+          # Large binary stores
+          "--exclude-dir=^Steam$"
+          "--exclude-dir=^containers$"
+          "--exclude-dir=^\\.docker$"
+          "/home/${username}"
+        ];
+        User = username;
+        Nice = 19;
+        IOSchedulingClass = "idle";
+      };
   };
 
   # clamscan exits 1 on findings, 2 on errors — both trigger this alert
   systemd.services.clamav-alert = {
     description = "Desktop notification for ClamAV findings";
-    serviceConfig = {
-      Type = "oneshot";
-      User = username;
-      Environment = "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus";
-      ExecStart = "${pkgs.libnotify}/bin/notify-send --urgency=critical 'ClamAV' 'Scan failed or found infected files. Check: journalctl -u clamav-scan'";
-    };
+    # AF_UNIX in the baseline keeps the user DBus session socket reachable.
+    serviceConfig =
+      hardenBase
+      // {
+        Type = "oneshot";
+        User = username;
+        Environment = "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus";
+        ExecStart = "${pkgs.libnotify}/bin/notify-send --urgency=critical 'ClamAV' 'Scan failed or found infected files. Check: journalctl -u clamav-scan'";
+      };
   };
 
   # Nix security settings
