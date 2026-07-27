@@ -126,6 +126,7 @@ In the first few weeks, I managed to like break the system three times a day and
 | | |
 |:--|:--|
 | **OS** | NixOS 26.05 |
+| **Kernel** | Linux CachyOS |
 | **WM** | Hyprland · KDE Plasma 6 |
 | **Shell** | Zsh · Powerlevel10k |
 | **Terminal** | Ghostty |
@@ -317,7 +318,7 @@ gcnix         # garbage collect (keeps last 5 generations)
 | `Ctrl + Shift + Esc` | System monitor |
 | `Print` / `Meta + Shift + S` | Screenshot (full / region) |
 
-> **Note:** Some shortcuts are powered by KWin scripts (`move-follow`, `toggle-bottom-panel`) and the `Meta`-tap is a modifier-only shortcut. These are armed by KWin at startup — after editing them in [`plasma-settings.nix`](modules/home-manager/plasma-settings.nix), **log out and back in** for the keyboard bindings to take effect.
+> **Note:** Some shortcuts are powered by KWin scripts (`move-follow`, `toggle-bottom-panel`), and the `Meta`-tap is a real modifier-only global shortcut — a bare `Meta` key added to KRunner's launch binding. Plasma 6.1+ handles lone modifiers via kglobalaccel, **not** the old `kwinrc [ModifierOnlyShortcuts]` block (that is silently ignored now). After editing these in [`plasma-settings.nix`](modules/home-manager/plasma-settings.nix), **log out and back in** for the keyboard bindings to take effect.
 
 </details>
 

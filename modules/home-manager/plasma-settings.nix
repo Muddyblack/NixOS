@@ -403,7 +403,12 @@ in {
       plasmashell."activate task manager entry 8" = "none";
       plasmashell."activate task manager entry 9" = "none";
       plasmashell."activate task manager entry 10" = "none";
-      "services/org.kde.krunner.desktop"._launch = ["Meta+Space" "Search"];
+      # KRunner: Meta+Space, the "Search" key, AND a bare Meta tap. The lone
+      # "Meta" is a real modifier-only global shortcut — since Plasma 6.1 these
+      # live in kglobalaccel/kglobalshortcutsrc (the old kwinrc
+      # [ModifierOnlyShortcuts] block is ignored). Tapping Meta alone toggles
+      # KRunner; Meta+<key> combos are unaffected. Log out/in to (re)arm.
+      "services/org.kde.krunner.desktop"._launch = ["Meta+Space" "Search" "Meta"];
       "services/org.kde.systemmonitor.desktop"._launch = "none";
       "caelestia-monitor.desktop"."_launch" = "Ctrl+Shift+Esc";
       "services/com.mitchellh.ghostty.desktop"._launch = "Ctrl+Alt+T";
@@ -479,7 +484,8 @@ in {
       # Enable the custom "move window to desktop N and follow" KWin script.
       kwinrc.Plugins."move-followEnabled" = true;
       kwinrc.Plugins."toggle-bottom-panelEnabled" = true;
-      kwinrc.ModifierOnlyShortcuts.Meta = "org.kde.krunner,/App,,toggleDisplay";
+      # NOTE: kwinrc [ModifierOnlyShortcuts] has been dead since Plasma 6.1.
+      # The bare-Meta tap is bound via the krunner "_launch" shortcut above.
 
       # Global settings
       kdeglobals.General.BrowserApplication = "zen.desktop";

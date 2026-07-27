@@ -44,6 +44,7 @@
       session = {
         commands = {
           logout = ["hyprctl" "dispatch" "exit"];
+          hibernate = ["systemctl" "suspend"];
         };
       };
     };
