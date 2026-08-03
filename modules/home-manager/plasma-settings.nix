@@ -355,6 +355,22 @@ in {
       (makeBottomPanel "all")
     ];
 
+    # PowerDevil drives power-profiles-daemon over DBus, so this is what
+    # actually picks /sys/firmware/acpi/platform_profile (the EC fan curve) on
+    # top of the CPU governor/EPP. Selecting it here means the choice survives
+    # reboots instead of depending on clicking the battery applet.
+    #
+    # AC is pinned to "performance" deliberately: on this chassis the EC's
+    # "balanced" fan curve thermally clamps the package to ~10W, against ~19W on
+    # "performance" (measured 2026-08-03). That is a workaround for a degraded
+    # heatsink -- once it is cleaned and repasted, "balanced" is the saner
+    # default here and should be restored.
+    powerdevil = {
+      AC.powerProfile = "performance";
+      battery.powerProfile = "balanced";
+      lowBattery.powerProfile = "powerSaving";
+    };
+
     shortcuts = {
       ksmserver."Lock Session" = ["Meta+L" "Screensaver"];
       ksmserver."Log Out" = "Ctrl+Alt+Del";
