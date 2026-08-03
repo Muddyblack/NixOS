@@ -20,6 +20,12 @@
     user = null;
   };
   services.desktopManager.plasma6.enable = true;
+  environment.systemPackages = [
+    (pkgs.writeShellScriptBin "kde-plasma" ''
+      exec ${pkgs.kdePackages.plasma-workspace}/libexec/plasma-dbus-run-session-if-needed \
+        ${pkgs.kdePackages.plasma-workspace}/bin/startplasma-wayland "$@"
+    '')
+  ];
   xdg.portal = {
     enable = true;
     extraPortals = [pkgs.xdg-desktop-portal-gtk];
