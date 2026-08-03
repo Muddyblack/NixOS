@@ -127,6 +127,7 @@ These are active shell aliases/overrides. Always use the right-hand side when su
 | `sops` | `secrets` | SOPS wrapper with configured keys |
 | `termdown` | `timer` | |
 | `clock-rs -s` | `stopwatch` | |
+| `startplasma-wayland` | `kde-plasma` | Start Plasma (Wayland) from TTY, like `Hyprland` |
 | `claude` | `cc-gemini` | Claude Code with Gemini backend |
 | `claude` (models) | `cc-models` | List available models on OpenRouter |
 
