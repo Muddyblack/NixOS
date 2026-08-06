@@ -45,7 +45,22 @@
       "application/x-gpx" = ["guitar-pro.desktop"];
       "audio/midi" = ["guitar-pro.desktop"];
       "audio/x-midi" = ["guitar-pro.desktop"];
+      "x-scheme-handler/termius" = ["termius-app.desktop"];
     };
+  };
+
+  # The termius-app.desktop shipped by nixpkgs has neither %U nor a MimeType,
+  # so nothing claims the termius:// scheme and the SSO callback
+  # (termius://app/continue-sso?...) lands in KIO as "Could not read file".
+  # ~/.local/share/applications wins over the profile entry, so this shadows it.
+  xdg.desktopEntries."termius-app" = {
+    name = "Termius";
+    genericName = "Cross-platform SSH client";
+    comment = "The SSH client that works on Desktop and Mobile";
+    exec = "termius-app %U";
+    icon = "termius-app";
+    categories = ["Network"];
+    mimeType = ["x-scheme-handler/termius"];
   };
 
   xdg.dataFile."mime/packages/guitar-pro.xml".text = ''
@@ -301,8 +316,13 @@
   };
 
   # Refresh KDE application cache on rebuild to prevent apps from disappearing from launchers
+  #
+  # The DBus guard must use :- (or [[ -v ]], as home-manager's own generated
+  # activate script does): the activation script runs under `set -eu`, so with
+  # no session bus the bare "$DBUS_SESSION_BUS_ADDRESS" aborted on expansion
+  # before -n could ever test it — taking every later activation step with it.
   home.activation.refreshKdeAppCache = inputs.home-manager.lib.hm.dag.entryAfter ["writeBoundary"] ''
-    if [ -n "$DBUS_SESSION_BUS_ADDRESS" ]; then
+    if [ -n "''${DBUS_SESSION_BUS_ADDRESS:-}" ]; then
       $DRY_RUN_CMD ${pkgs.kdePackages.kservice}/bin/kbuildsycoca6 --noincremental || true
     fi
   '';

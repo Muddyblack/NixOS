@@ -10,8 +10,8 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "HimDek";
     repo = "Overview-Widget-for-Plasma";
-    rev = "master";
-    sha256 = "18qfd0nwm44381zzcpwkyc4zb8dnign0szdvf8n16bgggq6x12ky";
+    rev = "030224751ad7114e695297c9f0822b668baee5f9";
+    hash = "sha256-forQDX7vLRMscrt9DeyLtqH1CfOTX/Z/QIOQyi1oDqM=";
   };
 
   dontBuild = true;

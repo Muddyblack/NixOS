@@ -1,6 +1,7 @@
 {
   pkgs,
   lib,
+  config,
   username,
   ...
 }: {
@@ -174,6 +175,19 @@
     algorithm = "zstd";
     memoryPercent = 50;
   };
+
+  # zswap is a compressed cache in front of a swap *device*. With zram as the
+  # only swap device that device is already compressed RAM, so a page gets
+  # zstd-compressed by zswap, held in RAM, and then zstd-compressed a second
+  # time on writeback into zram — the second pass buys nothing and costs CPU.
+  # Pick one: zram-swap, or zswap in front of real disk swap. Never stacked.
+  #
+  # This is tied to zramSwap rather than to the kernel because zram is the
+  # actual precondition. It surfaced on the CachyOS kernel, which ships
+  # CONFIG_ZSWAP_DEFAULT_ON=y where stock NixOS defaults to off, but keying on
+  # the kernel would silently stop applying the day that changes. The parameter
+  # is valid on any kernel and is simply a no-op where zswap is already off.
+  boot.kernelParams = lib.mkIf config.zramSwap.enable ["zswap.enabled=0"];
   boot.tmp.cleanOnBoot = true;
 
   systemd.tmpfiles.rules = [
