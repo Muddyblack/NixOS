@@ -7,7 +7,15 @@
 
   config = lib.mkIf config.features.snapshots.enable {
     services.btrbk.instances.default = {
-      onCalendar = "*:0/3"; # every 3 hours
+      # Hourly, to match snapshot_preserve below: its finest retention bucket is
+      # hourly, so anything more frequent is created only to be pruned again.
+      #
+      # This used to read "*:0/3" with a "# every 3 hours" comment, but systemd
+      # calendar syntax is HOUR:MINUTE — that ran every 3 MINUTES (~480x/day).
+      # Each run snapshots three subvolumes and then prunes, and on LUKS+btrfs
+      # the async subvolume cleanup showed up as permanent btrfs-endio and
+      # kcryptd kworker load. (Every 3 hours would have been "0/3:00".)
+      onCalendar = "*:00"; # hourly
       settings = {
         timestamp_format = "long";
         snapshot_preserve_min = "3h";

@@ -5,13 +5,13 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "advanced-weather-widget";
-  version = "1.5.2";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "pnedyalkov91";
     repo = "advanced-weather-widget";
-    rev = "e6cf1e926dc23debc9069b1cf40c2598ad250701";
-    hash = "sha256-xQ8nN4406b+gJ3ZZMQ3lT4YrzVHVNZclaTcpMpH8lQY=";
+    rev = version;
+    hash = "sha256-KasBVXW24TnhW/1LqXHViO4y/MvPKpbNU8i/uMCnuL4=";
   };
 
   dontBuild = true;

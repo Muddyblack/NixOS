@@ -10,8 +10,8 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "prayag2";
     repo = "kde_modernclock";
-    rev = "main";
-    sha256 = "108hvwvl3sc343diaazsdjpv4krc5w274pwpxmv7ln8vscsr6npq";
+    rev = "5c86f0f23d2646be7e9872fc5e769bdce259af92";
+    hash = "sha256-+FqTNdMbWXp27ZdfcgQvLE+yr2z6KxXbIIPpQTffEIE=";
   };
 
   dontBuild = true;
