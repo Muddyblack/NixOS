@@ -1,17 +1,30 @@
-final: _prev: {
+inputs: final: _prev: let
+  # Own widgets ship their own flake. Take the package from there instead of
+  # re-deriving the install phase here: upstream's is where NixOS-specific
+  # fixes land (ai-usage pins the Python interpreter, without which
+  # plasmashell — whose PATH carries no python3 — renders "python3 missing"),
+  # and a local copy silently misses them.
+  upstreamWidget = input: input.packages.${final.stdenv.hostPlatform.system}.default;
+in {
   # ═══════════════════════════════════════════════════════════════════════════
   # WIDGETS - KDE Plasma widgets
   # ═══════════════════════════════════════════════════════════════════════════
+  # Not upstreamWidget: its flake installs into a directory that does not match
+  # metadata.json's KPlugin.Id, so Plasma would not find the plasmoid.
   plasma-audio-visualizer = final.callPackage ./widgets/plasma-audio-visualizer.nix {};
   kde-modern-clock = final.callPackage ./widgets/modern-clock.nix {};
   kde-overview-widget = final.callPackage ./widgets/overview-widget.nix {};
-  ai-usage-widget = final.callPackage ./widgets/ai-usage-widget.nix {};
-  ai-usage-hyprland = final.callPackage ./widgets/ai-usage-hyprland.nix {};
+  ai-usage-widget = upstreamWidget inputs.ai-usage;
+  # Upstream only exports the tray helper, so the full Quickshell frontend is
+  # still assembled here — from the same input, so the two cannot drift.
+  ai-usage-hyprland = final.callPackage ./widgets/ai-usage-hyprland.nix {
+    aiUsageSrc = inputs.ai-usage;
+  };
   kde-powerchart = final.callPackage ./widgets/powerchart-widget.nix {};
   advanced-weather-widget = final.callPackage ./widgets/advanced-weather-widget.nix {};
-  kde-nixdatifier = final.callPackage ./widgets/nixdatifier.nix {};
-  glassy-system-monitor = final.callPackage ./widgets/glassy-system-monitor.nix {};
-  tagesschau-widget = final.callPackage ./widgets/tagesschau-widget.nix {};
+  kde-nixdatifier = upstreamWidget inputs.nixdatifier;
+  glassy-system-monitor = upstreamWidget inputs.glassy-system-monitor;
+  tagesschau-widget = upstreamWidget inputs.tagesschau-widget;
 
   # ═══════════════════════════════════════════════════════════════════════════
   # THEMES - Plasma themes, look-and-feel, kvantum
