@@ -7,11 +7,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1786131899,
-        "narHash": "sha256-rRLsmNYxIkRx9HamYSaC1mJ/pSGowW4l111JZLd8nLU=",
+        "lastModified": 1786135520,
+        "narHash": "sha256-cVLp1E/9WZc/UD5lYHD8pDIE01IQ89msZhZ8mMxTQ+Y=",
         "owner": "Muddyblack",
         "repo": "kde-ai-usage",
-        "rev": "09dd3d99f4dc20b35fff80890d361e3707b69cca",
+        "rev": "16ba7a73e56e33f4923431eb8a16c64bb79ac406",
         "type": "github"
       },
       "original": {
@@ -449,6 +449,26 @@
         "type": "github"
       }
     },
+    "plasma-audio-visualizer": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1786136481,
+        "narHash": "sha256-yUHNqUWMGkrIzvMQaQik41zo978e2X3z7EYrCwJbgl8=",
+        "owner": "Muddyblack",
+        "repo": "kde-audio-visualizer",
+        "rev": "fc565599925c94c58864b6a7c8b06bd66bed10d7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Muddyblack",
+        "repo": "kde-audio-visualizer",
+        "type": "github"
+      }
+    },
     "plasma-manager": {
       "inputs": {
         "home-manager": [
@@ -508,6 +528,7 @@
         "nixpkgs": "nixpkgs_3",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nur": "nur",
+        "plasma-audio-visualizer": "plasma-audio-visualizer",
         "plasma-manager": "plasma-manager",
         "sops-nix": "sops-nix",
         "tagesschau-widget": "tagesschau-widget",
