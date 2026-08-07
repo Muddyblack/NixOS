@@ -1,7 +1,26 @@
-{pkgs, ...}: {
+{
+  lib,
+  pkgs,
+  ...
+}: {
   # Hyprland frontend of the AI usage widget; ships the org.quickshell desktop
   # entry the portal daemon needs to resolve the shell's windows.
   home.packages = [pkgs.ai-usage-hyprland];
+
+  # Seed the widget's own settings file with the same provider defaults the
+  # Plasma widget ships (claude/antigravity/openai/kiro/grok on; mistral and
+  # openrouter off — see package/contents/config/main.xml upstream), plus a
+  # pill on every monitor, revealed on hover. Only when the file does not
+  # exist yet: the settings page writes to this same path, and a `home.file`/
+  # `xdg.configFile` declaration would overwrite the user's later in-app
+  # changes on every `home-manager switch`.
+  home.activation.aiUsageDefaults = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    cfg="$HOME/.config/ai-usage-widget/hyprland-settings.json"
+    if [ ! -e "$cfg" ]; then
+      $DRY_RUN_CMD mkdir -p "$(dirname "$cfg")"
+      $DRY_RUN_CMD printf '%s' '{"providers":{"mistral":false,"openrouter":false},"keys":{},"pollSec":300,"showChart":true,"pillMode":"hover","position":"top-right","monitor":"all","pythonPath":""}' > "$cfg"
+    fi
+  '';
 
   wayland.windowManager.hyprland = {
     enable = true;
