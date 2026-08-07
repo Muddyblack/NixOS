@@ -404,11 +404,18 @@ in {
         # register the callbacks, but their own registerShortcut() key requests
         # are NOT reliably grabbed under plasma-manager. Declare the bindings
         # here so plasma-manager owns them — same path as every working shortcut.
-        "MoveFollowDesktop1" = "Meta+Shift+1";
-        "MoveFollowDesktop2" = "Meta+Shift+2";
-        "MoveFollowDesktop3" = "Meta+Shift+3";
-        "MoveFollowDesktop4" = "Meta+Shift+4";
-        "MoveFollowDesktop5" = "Meta+Shift+5";
+        #
+        # NOTE: bound to the shifted symbol (Exclam/At/...), not "Shift+<digit>".
+        # KDE bug 341959: Shift+<digit> global shortcuts are never grabbed because
+        # Shift+1 produces a different keysym (exclam) rather than an uppercased
+        # variant of "1", so KWin's shift-consumption matching (fixed for letters
+        # in 5.8.2) doesn't apply to the number row. Binding the produced symbol
+        # directly is the standard workaround — same physical keys (Meta+Shift+1).
+        "MoveFollowDesktop1" = "Meta+Exclam";
+        "MoveFollowDesktop2" = "Meta+At";
+        "MoveFollowDesktop3" = "Meta+NumberSign";
+        "MoveFollowDesktop4" = "Meta+Dollar";
+        "MoveFollowDesktop5" = "Meta+Percent";
         "ToggleBottomPanel" = "Meta+B";
       };
       # Disable default Activities shortcut to free up Meta+Q
@@ -620,12 +627,16 @@ in {
   };
 
   xdg.dataFile."kwin/scripts/move-follow/contents/code/main.js".text = ''
+    // Bound to the shifted symbol, not "Meta+Shift+<digit>": KDE bug 341959
+    // means Shift+<digit> global shortcuts are never grabbed by KWin (see the
+    // home.keyboard.shortcuts.kwin comment above for the full explanation).
+    var followSymbols = ["Exclam", "At", "NumberSign", "Dollar", "Percent"];
     function registerForDesktop(n) {
-      var key = (n === 10) ? "0" : ("" + n);
+      var key = followSymbols[n - 1];
       registerShortcut(
         "MoveFollowDesktop" + n,
         "Move Window to Desktop " + n + " and Follow",
-        "Meta+Shift+" + key,
+        "Meta+" + key,
         function () {
           print("MoveFollowDesktop callback triggered for desktop " + n);
           var w = workspace.activeWindow;

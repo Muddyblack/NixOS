@@ -3,6 +3,7 @@
   lib,
   stdenv,
   ai-usage-widget,
+  aiUsageSrc,
   bash,
   cmake,
   coreutils,
@@ -24,7 +25,8 @@
 in
   stdenv.mkDerivation {
     pname = "ai-usage-hyprland";
-    inherit (ai-usage-widget) version src;
+    inherit (ai-usage-widget) version;
+    src = aiUsageSrc;
 
     nativeBuildInputs = [cmake ninja qt6.wrapQtAppsHook];
     buildInputs = [qt6.qtbase qt6.qtwayland];

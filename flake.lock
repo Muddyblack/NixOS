@@ -1,5 +1,25 @@
 {
   "nodes": {
+    "ai-usage": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1786117431,
+        "narHash": "sha256-glD21mEAYi+NRoZb58g/wJqNEltQYX1Zi+/+fPrqJRM=",
+        "owner": "Muddyblack",
+        "repo": "kde-ai-usage",
+        "rev": "051e205ba2820c1ca219ff661705d4ab3ae98442",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Muddyblack",
+        "repo": "kde-ai-usage",
+        "type": "github"
+      }
+    },
     "antigravity-nix": {
       "inputs": {
         "flake-utils": "flake-utils",
@@ -161,6 +181,26 @@
         "type": "github"
       }
     },
+    "glassy-system-monitor": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1785956292,
+        "narHash": "sha256-Y8XdLNtlse2MGdk9Gk4x27RQq4lQJYfbJGy1Ff/0OmE=",
+        "owner": "Muddyblack",
+        "repo": "kde-glassy-system-monitor",
+        "rev": "cbc3f47bc8d6113efbf72dc447d5da109246b6cc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Muddyblack",
+        "repo": "kde-glassy-system-monitor",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -272,6 +312,26 @@
       "original": {
         "owner": "gmodena",
         "repo": "nix-flatpak",
+        "type": "github"
+      }
+    },
+    "nixdatifier": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1785775687,
+        "narHash": "sha256-3l46vFqUfO5q1hvLJLQ5HieVHexmRm3Nh0pxCAGnPdw=",
+        "owner": "Muddyblack",
+        "repo": "kde-nixdatifier",
+        "rev": "a335677347b69d6336ca969aafb3302fe8d7963e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Muddyblack",
+        "repo": "kde-nixdatifier",
         "type": "github"
       }
     },
@@ -435,18 +495,22 @@
     },
     "root": {
       "inputs": {
+        "ai-usage": "ai-usage",
         "antigravity-nix": "antigravity-nix",
         "caelestia-shell": "caelestia-shell",
         "disko": "disko",
+        "glassy-system-monitor": "glassy-system-monitor",
         "home-manager": "home-manager",
         "impermanence": "impermanence",
         "nix-cachyos-kernel": "nix-cachyos-kernel",
         "nix-flatpak": "nix-flatpak",
+        "nixdatifier": "nixdatifier",
         "nixpkgs": "nixpkgs_3",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nur": "nur",
         "plasma-manager": "plasma-manager",
         "sops-nix": "sops-nix",
+        "tagesschau-widget": "tagesschau-widget",
         "zen-browser": "zen-browser"
       }
     },
@@ -482,6 +546,26 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "tagesschau-widget": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1785775685,
+        "narHash": "sha256-MugOriuRoNTttdLFJ1+tWQzyI4PK7CO3gugpELtVDV0=",
+        "owner": "Muddyblack",
+        "repo": "kde-tagesschau-rss-widget",
+        "rev": "734cb2e1926afdf9d0caf2a27b667ab9753365b9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Muddyblack",
+        "repo": "kde-tagesschau-rss-widget",
         "type": "github"
       }
     },

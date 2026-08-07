@@ -42,6 +42,30 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Own widgets, tracking their default branch rather than a tag: a tag-pinned
+    # input never moves, so `nix flake update` is a no-op on it and the
+    # Nixdatifier widget (which ls-remotes each root input's ref) would report
+    # it as "unchanged" forever.
+    ai-usage = {
+      url = "github:Muddyblack/kde-ai-usage";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    glassy-system-monitor = {
+      url = "github:Muddyblack/kde-glassy-system-monitor";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nixdatifier = {
+      url = "github:Muddyblack/kde-nixdatifier";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    tagesschau-widget = {
+      url = "github:Muddyblack/kde-tagesschau-rss-widget";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     antigravity-nix = {
       url = "github:jacopone/antigravity-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -86,7 +110,7 @@
           home-manager.nixosModules.home-manager
           ({pkgs, ...}: {
             nixpkgs.overlays = [
-              (import ./pkgs)
+              (import ./pkgs inputs)
               inputs.nur.overlays.default
               inputs.nix-cachyos-kernel.overlays.pinned
               (_final: prev: {
@@ -140,7 +164,7 @@
         pkgs = import nixpkgs {
           inherit system;
           overlays = [
-            (import ./pkgs)
+            (import ./pkgs inputs)
             (_final: _prev: {
               inherit (unstablePkgs) typst typstyle tinymist;
             })
