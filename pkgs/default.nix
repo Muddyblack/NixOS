@@ -6,6 +6,7 @@ final: _prev: {
   kde-modern-clock = final.callPackage ./widgets/modern-clock.nix {};
   kde-overview-widget = final.callPackage ./widgets/overview-widget.nix {};
   ai-usage-widget = final.callPackage ./widgets/ai-usage-widget.nix {};
+  ai-usage-hyprland = final.callPackage ./widgets/ai-usage-hyprland.nix {};
   kde-powerchart = final.callPackage ./widgets/powerchart-widget.nix {};
   advanced-weather-widget = final.callPackage ./widgets/advanced-weather-widget.nix {};
   kde-nixdatifier = final.callPackage ./widgets/nixdatifier.nix {};
