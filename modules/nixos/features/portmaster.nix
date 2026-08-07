@@ -373,5 +373,59 @@ in {
       allowedTCPPorts = [717];
       allowedUDPPorts = [717];
     };
+
+    # ── Captive portal workaround ────────────────────────────────────────────
+    # Portmaster routes all DNS through its own resolver (DNS-over-TLS), which
+    # is unreachable from behind an unauthenticated captive portal — the login
+    # page's hostname never resolves, so the portal looks "blocked".  Known
+    # upstream limitation (safing/portmaster#1765) with no settings-level fix;
+    # the only reliable remedy is stopping Portmaster until the portal is
+    # passed.  NetworkManager can automate that: Portmaster exempts a fixed set
+    # of connectivity-check domains from its resolver and sends them as plain
+    # DNS to the network-assigned one (netenv.ConnectivityDomains).  That list
+    # includes nmcheck.gnome.org — the URI configured in hosts/common.nix — so
+    # NM's portal detection keeps working even while Portmaster is running.
+    networking.networkmanager.dispatcherScripts = [
+      {
+        type = "basic";
+        source = pkgs.writeShellScript "portmaster-captive-portal" ''
+          set -euo pipefail
+
+          # Set by NetworkManager for connectivity-change events only.
+          # Values: UNKNOWN, NONE, PORTAL, LIMITED, FULL.
+          [ -n "''${CONNECTIVITY_STATE:-}" ] || exit 0
+
+          # Records that *we* paused Portmaster, so one stopped by hand is never
+          # silently resurrected.  /run is cleared on reboot, which is the right
+          # lifetime for a pause.
+          marker=/run/portmaster-captive-portal.paused
+
+          systemctl=${pkgs.systemd}/bin/systemctl
+
+          case "$CONNECTIVITY_STATE" in
+            PORTAL)
+              # --no-block: dispatcher scripts are killed if they run too long,
+              # and stopping Portmaster costs up to TimeoutStopSec plus the
+              # iptables recovery in ExecStopPost.  Queue it and return.
+              if "$systemctl" is-active --quiet portmaster.service; then
+                touch "$marker"
+                "$systemctl" stop --no-block portmaster.service
+              fi
+              ;;
+            FULL)
+              # Resume only what we paused.  NM re-emits FULL on every periodic
+              # re-check, and the unit's StartLimitBurst counts manual starts
+              # too — starting unconditionally would eventually wedge the unit
+              # in a failed state, leaving the firewall silently off.
+              if [ -e "$marker" ]; then
+                rm -f "$marker"
+                "$systemctl" reset-failed portmaster.service || true
+                "$systemctl" start --no-block portmaster.service
+              fi
+              ;;
+          esac
+        '';
+      }
+    ];
   };
 }
