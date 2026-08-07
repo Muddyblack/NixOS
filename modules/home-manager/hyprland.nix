@@ -1,4 +1,8 @@
 {pkgs, ...}: {
+  # Hyprland frontend of the AI usage widget; ships the org.quickshell desktop
+  # entry the portal daemon needs to resolve the shell's windows.
+  home.packages = [pkgs.ai-usage-hyprland];
+
   wayland.windowManager.hyprland = {
     enable = true;
     configType = "hyprlang"; # explicit: suppress 26.05 default→lua warning (stateVersion < 26.05)
@@ -28,6 +32,7 @@
         "wl-paste --type text --watch cliphist store"
         "wl-paste --type image --watch cliphist store"
         "nwg-dock-hyprland -d -p bottom -l overlay -a center -i 48"
+        "${pkgs.ai-usage-hyprland}/bin/ai-usage-hyprland"
       ];
 
       env = [
@@ -277,8 +282,8 @@
         "ignore_alpha 0.5, match:namespace launcher"
         "blur on, match:namespace nwg-dock"
         "ignore_alpha 0.5, match:namespace nwg-dock"
-        "blur on, match:namespace org.quickshell"
-        "ignore_alpha 0.5, match:namespace org.quickshell"
+        "blur on, match:namespace quickshell"
+        "ignore_alpha 0.5, match:namespace quickshell"
         "blur on, match:namespace sidebar"
         "ignore_alpha 0.5, match:namespace sidebar"
       ];
