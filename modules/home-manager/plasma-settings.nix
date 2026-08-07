@@ -336,7 +336,12 @@ in {
 
     workspace = {
       clickItemTo = "select";
-      lookAndFeel = "Vivid-Dark-Global-6";
+      # NOTE: deliberately no `lookAndFeel`. plasma-manager applies it with
+      # `plasma-apply-lookandfeel` from an XDG-autostart script that runs *after*
+      # plasmashell has started, which clobbers the config home-manager just wrote
+      # (it empties plasmarc and strips kwinrc's [org.kde.kdecoration2]), leaving
+      # one broken session until the next login. Every key Vivid-Dark-Global-6 set
+      # is overridden below anyway, so it only ever cost us a session.
       cursor.theme = "Sweet-cursors";
       iconTheme = "Slot-Dark-Icons";
       wallpaper = wallpaper;
