@@ -92,6 +92,33 @@ final: prev: {
 - Imports go at top of `home.nix`
 - No inline package lists in `home.nix` - use `packages.nix`
 
+### Plasma Global Shortcuts (two traps)
+
+1. **Changes don't apply until relogin.** Under Wayland, KWin — not
+   `plasma-kglobalaccel.service` (which exits immediately) — owns the
+   `org.kde.kglobalaccel` D-Bus service, and it reads `~/.config/kglobalshortcutsrc`
+   only at startup. After a rebuild the file is correct but the running KWin still
+   holds the old binding, so the shortcut appears broken. Verify what is *actually*
+   live, never trust the file:
+   ```bash
+   busctl --user call org.kde.kglobalaccel /kglobalaccel org.kde.KGlobalAccel \
+     shortcut as 4 kwin "<ActionName>" "" ""      # returns Qt keycode int
+   ```
+   Apply without relogin (`u` flag 6 = SetPresent|NoAutoloading; KWin persists it back):
+   ```bash
+   busctl --user call org.kde.kglobalaccel /kglobalaccel org.kde.KGlobalAccel \
+     setShortcutKeys "asa(ai)u" 4 kwin "<ActionName>" "" "" 1 4 <keycode> 0 0 0 6
+   ```
+   Qt keycode = `0x10000000` Meta | `0x04000000` Ctrl | `0x08000000` Alt | `0x02000000` Shift | keysym.
+
+2. **`Shift+<digit>` must be written as the produced character.** KWin removes Shift
+   from the modifier mask when xkb marks it consumed producing the keysym, so
+   `Meta+Shift+1` arrives as `Meta+!` and a literal `"Meta+Shift+1"` entry never
+   matches. `Meta+Shift+<letter>` is unaffected. Layout is **German** (`de`, set in
+   `hosts/common.nix` `console.keyMap` + `modules/nixos/desktop.nix` `xkb.layout`),
+   so the shifted number row is `! " § $ % & / ( ) =` — NOT the US `! @ # $ % ^ & * ( )`.
+
+
 ## Tool Replacements & Aliases
 
 These are active shell aliases/overrides. Always use the right-hand side when suggesting commands to the user.

@@ -405,17 +405,21 @@ in {
         # are NOT reliably grabbed under plasma-manager. Declare the bindings
         # here so plasma-manager owns them — same path as every working shortcut.
         #
-        # NOTE: bound to the shifted symbol (Exclam/At/...), not "Shift+<digit>".
-        # KDE bug 341959: Shift+<digit> global shortcuts are never grabbed because
-        # Shift+1 produces a different keysym (exclam) rather than an uppercased
-        # variant of "1", so KWin's shift-consumption matching (fixed for letters
-        # in 5.8.2) doesn't apply to the number row. Binding the produced symbol
-        # directly is the standard workaround — same physical keys (Meta+Shift+1).
-        "MoveFollowDesktop1" = "Meta+Exclam";
-        "MoveFollowDesktop2" = "Meta+At";
-        "MoveFollowDesktop3" = "Meta+NumberSign";
-        "MoveFollowDesktop4" = "Meta+Dollar";
-        "MoveFollowDesktop5" = "Meta+Percent";
+        # These are still pressed as Meta+Shift+<digit>. They must be *written*
+        # as the produced character, because KWin drops Shift from the modifier
+        # mask when xkb reports it as "consumed" producing the keysym
+        # (Xkb::modifiersRelevantForGlobalShortcuts). Meta+Shift+1 therefore
+        # arrives as Meta + Key_Exclam, and a literal "Meta+Shift+1" entry can
+        # never match. Meta+Shift+<letter> is unaffected (Shift is not consumed
+        # there), which is why Meta+Shift+S works but Meta+Shift+1 did not.
+        #
+        # Layout is German (hosts/common.nix console.keyMap + desktop.nix xkb),
+        # so the shifted number row is  ! " § $ %  — NOT the US  ! @ # $ % .
+        "MoveFollowDesktop1" = "Meta+!";
+        "MoveFollowDesktop2" = "Meta+\"";
+        "MoveFollowDesktop3" = "Meta+§";
+        "MoveFollowDesktop4" = "Meta+$";
+        "MoveFollowDesktop5" = "Meta+%";
         "ToggleBottomPanel" = "Meta+B";
       };
       # Disable default Activities shortcut to free up Meta+Q
@@ -627,10 +631,11 @@ in {
   };
 
   xdg.dataFile."kwin/scripts/move-follow/contents/code/main.js".text = ''
-    // Bound to the shifted symbol, not "Meta+Shift+<digit>": KDE bug 341959
-    // means Shift+<digit> global shortcuts are never grabbed by KWin (see the
-    // home.keyboard.shortcuts.kwin comment above for the full explanation).
-    var followSymbols = ["Exclam", "At", "NumberSign", "Dollar", "Percent"];
+    // Pressed as Meta+Shift+<digit>, but written as the produced character:
+    // KWin drops the consumed Shift, so Meta+Shift+1 arrives as Meta+"!".
+    // German number row ("de" layout) — see the kwin shortcuts block in
+    // plasma-settings.nix for the full explanation. Keep both in sync.
+    var followSymbols = ["!", "\"", "§", "$", "%"];
     function registerForDesktop(n) {
       var key = followSymbols[n - 1];
       registerShortcut(
