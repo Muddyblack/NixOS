@@ -9,9 +9,6 @@ in {
   # ═══════════════════════════════════════════════════════════════════════════
   # WIDGETS - KDE Plasma widgets
   # ═══════════════════════════════════════════════════════════════════════════
-  # Not upstreamWidget: its flake installs into a directory that does not match
-  # metadata.json's KPlugin.Id, so Plasma would not find the plasmoid.
-  plasma-audio-visualizer = final.callPackage ./widgets/plasma-audio-visualizer.nix {};
   kde-modern-clock = final.callPackage ./widgets/modern-clock.nix {};
   kde-overview-widget = final.callPackage ./widgets/overview-widget.nix {};
   ai-usage-widget = upstreamWidget inputs.ai-usage;
@@ -25,6 +22,7 @@ in {
   kde-nixdatifier = upstreamWidget inputs.nixdatifier;
   glassy-system-monitor = upstreamWidget inputs.glassy-system-monitor;
   tagesschau-widget = upstreamWidget inputs.tagesschau-widget;
+  plasma-audio-visualizer = upstreamWidget inputs.plasma-audio-visualizer;
 
   # ═══════════════════════════════════════════════════════════════════════════
   # THEMES - Plasma themes, look-and-feel, kvantum
