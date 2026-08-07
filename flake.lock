@@ -7,11 +7,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1786117431,
-        "narHash": "sha256-glD21mEAYi+NRoZb58g/wJqNEltQYX1Zi+/+fPrqJRM=",
+        "lastModified": 1786131899,
+        "narHash": "sha256-rRLsmNYxIkRx9HamYSaC1mJ/pSGowW4l111JZLd8nLU=",
         "owner": "Muddyblack",
         "repo": "kde-ai-usage",
-        "rev": "051e205ba2820c1ca219ff661705d4ab3ae98442",
+        "rev": "09dd3d99f4dc20b35fff80890d361e3707b69cca",
         "type": "github"
       },
       "original": {
