@@ -32,6 +32,13 @@
   # LLMNR is a legacy fallback name-resolution protocol, spoofable on hostile networks
   services.resolved.settings.Resolve.LLMNR = false;
 
+  # mDNS (.local) is handled by avahi — see services.avahi with nssmdns4 in
+  # modules/nixos/services.nix. resolved must not also answer mDNS: it binds the
+  # IPv4 port 5353 socket first, leaving avahi able to see only IPv6. `.local`
+  # names then resolve to a scopeless fe80:: address and ssh fails with
+  # "Device or resource busy". One mDNS responder, not two.
+  services.resolved.settings.Resolve.MulticastDNS = false;
+
   services.openssh = {
     enable = true;
     ports = [22];
