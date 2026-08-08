@@ -254,6 +254,7 @@
       })
       ++ (lib.optional cfg.gitpulse.enable {
         name = "org.muddyblack.gitpulse";
+        config.General.useGhCli = "true";
       })
       ++ [
         {
