@@ -23,6 +23,10 @@ in {
   glassy-system-monitor = upstreamWidget inputs.glassy-system-monitor;
   tagesschau-widget = upstreamWidget inputs.tagesschau-widget;
   plasma-audio-visualizer = upstreamWidget inputs.plasma-audio-visualizer;
+  kde-gitpulse = upstreamWidget inputs.gitpulse;
+  gitpulse-hyprland = final.callPackage ./widgets/gitpulse-hyprland.nix {
+    gitpulseSrc = inputs.gitpulse;
+  };
 
   # ═══════════════════════════════════════════════════════════════════════════
   # THEMES - Plasma themes, look-and-feel, kvantum

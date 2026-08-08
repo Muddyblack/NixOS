@@ -71,6 +71,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    gitpulse = {
+      url = "github:Muddyblack/kde-gitpulse";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     antigravity-nix = {
       url = "github:jacopone/antigravity-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -141,7 +146,7 @@
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
-              backupCommand = "${pkgs.coreutils}/bin/rm -f";
+              backupCommand = "${pkgs.coreutils}/bin/rm -rf";
               users.${username} = import ./modules/home-manager/home.nix;
               extraSpecialArgs = {inherit inputs username;};
 

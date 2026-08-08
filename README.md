@@ -339,6 +339,7 @@ Our environment features a suite of highly-polished custom and third-party widge
 - **[Glassy System Monitor](https://github.com/Muddyblack/kde-glassy-system-monitor)** — Real-time CPU, RAM, and network traffic monitor with clean glass visual aesthetics and an interface selector popup.
 - **[AI Usage Widget](https://github.com/Muddyblack/kde-ai-usage)** — Track your Claude Code session and weekly API token usage directly on the panel.
 - **[Nixdatifier](https://github.com/Muddyblack/kde-nixdatifier)** — Interactive widget for managing NixOS generations, displaying package diffs, performing updates, and configuring secrets.
+- **[GitPulse](https://github.com/Muddyblack/kde-gitpulse)** — GitHub activity, notifications, profile stats & Copilot usage monitoring widget for KDE Plasma.
 - **[Plasma Audio Visualizer](https://github.com/Muddyblack/plasma-audio-visualizer)** — Smooth, GPU-friendly visualizer powered by `cava` to show audio waveform feedback.
 - **[Advanced Weather Widget](https://github.com/pnedyalkov91/advanced-weather-widget)** — Advanced weather forecast widget with radar and detailed popup tracking.
 - **[Powerchart Widget](https://github.com/jboero/kde-plasmoid-powerchart)** — Real-time power consumption and battery statistics graphing.
@@ -460,6 +461,7 @@ Adding a new secret:
 | [Advanced Weather Widget](https://github.com/pnedyalkov91/advanced-weather-widget) | pnedyalkov91 |
 | [Powerchart Widget](https://github.com/jboero/kde-plasmoid-powerchart) | jboero |
 | [Plasma Audio Visualizer](https://github.com/Muddyblack/plasma-audio-visualizer) | muddyblack |
+| [GitPulse](https://github.com/Muddyblack/kde-gitpulse) | muddyblack |
 | [Audio Wave Widget](https://github.com/zayronxio/Audio-Wave-Widget) | zayronxio (inspiration) |
 | [Grub2 Themes](https://github.com/vinceliuice/grub2-themes) | vinceliuice |
 | [rEFInd Theme](https://github.com/evanpurkhiser/rEFInd-minimal) | evanpurkhiser |

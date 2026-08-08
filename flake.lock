@@ -181,6 +181,26 @@
         "type": "github"
       }
     },
+    "gitpulse": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1786179846,
+        "narHash": "sha256-xlItUMhI2nuzx1Rcb+qZScv0rTmJ4tV26X90mzT26hc=",
+        "owner": "Muddyblack",
+        "repo": "kde-gitpulse",
+        "rev": "e8a313b64342a9216e4dcd4bb37d3bf7540d15c9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Muddyblack",
+        "repo": "kde-gitpulse",
+        "type": "github"
+      }
+    },
     "glassy-system-monitor": {
       "inputs": {
         "nixpkgs": [
@@ -519,6 +539,7 @@
         "antigravity-nix": "antigravity-nix",
         "caelestia-shell": "caelestia-shell",
         "disko": "disko",
+        "gitpulse": "gitpulse",
         "glassy-system-monitor": "glassy-system-monitor",
         "home-manager": "home-manager",
         "impermanence": "impermanence",

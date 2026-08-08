@@ -17,6 +17,7 @@ in {
     aiUsage.enable = lib.mkEnableOption "AI Usage monitor widget" // {default = true;};
     tagesschau.enable = lib.mkEnableOption "Tagesschau news widget" // {default = true;};
     nixosGenerationExplorer.enable = lib.mkEnableOption "NixOS Generation Explorer widget" // {default = true;};
+    gitpulse.enable = lib.mkEnableOption "GitPulse GitHub activity widget" // {default = true;};
   };
 
   config = {
@@ -29,7 +30,8 @@ in {
       ++ (lib.optional cfg.tagesschau.enable pkgs.tagesschau-widget)
       ++ (lib.optional cfg.aiUsage.enable pkgs.ai-usage-widget)
       ++ (lib.optional cfg.weather.enable pkgs.advanced-weather-widget)
-      ++ (lib.optional cfg.nixosGenerationExplorer.enable pkgs.kde-nixdatifier);
+      ++ (lib.optional cfg.nixosGenerationExplorer.enable pkgs.kde-nixdatifier)
+      ++ (lib.optional cfg.gitpulse.enable pkgs.kde-gitpulse);
 
     xdg.dataFile =
       (lib.optionalAttrs cfg.powerchart.enable {
@@ -83,6 +85,12 @@ in {
       // (lib.optionalAttrs cfg.nixosGenerationExplorer.enable {
         "plasma/plasmoids/org.muddyblack.nixosGenerationExplorer" = {
           source = "${pkgs.kde-nixdatifier}/share/plasma/plasmoids/org.muddyblack.nixosGenerationExplorer";
+          force = true;
+        };
+      })
+      // (lib.optionalAttrs cfg.gitpulse.enable {
+        "plasma/plasmoids/org.muddyblack.gitpulse" = {
+          source = "${pkgs.kde-gitpulse}/share/plasma/plasmoids/org.muddyblack.gitpulse";
           force = true;
         };
       });
