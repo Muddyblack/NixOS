@@ -252,6 +252,9 @@
           bgColor = "#990a0c14";
         };
       })
+      ++ (lib.optional cfg.gitpulse.enable {
+        name = "org.muddyblack.gitpulse";
+      })
       ++ [
         {
           systemTray = {

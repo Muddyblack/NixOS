@@ -5,7 +5,10 @@
 }: {
   # Hyprland frontend of the AI usage widget; ships the org.quickshell desktop
   # entry the portal daemon needs to resolve the shell's windows.
-  home.packages = [pkgs.ai-usage-hyprland];
+  home.packages = [
+    pkgs.ai-usage-hyprland
+    pkgs.gitpulse-hyprland
+  ];
 
   # Seed the widget's own settings file with the same provider defaults the
   # Plasma widget ships (claude/antigravity/openai/kiro/grok on; mistral and
@@ -52,6 +55,7 @@
         "wl-paste --type image --watch cliphist store"
         "nwg-dock-hyprland -d -p bottom -l overlay -a center -i 48"
         "${pkgs.ai-usage-hyprland}/bin/ai-usage-hyprland"
+        "${pkgs.gitpulse-hyprland}/bin/gitpulse-hyprland"
       ];
 
       env = [
