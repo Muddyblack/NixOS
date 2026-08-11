@@ -140,7 +140,13 @@
                   ;
                 google-antigravity = inputs.antigravity-nix.packages.${prev.stdenv.hostPlatform.system}.google-antigravity;
                 google-antigravity-cli = inputs.antigravity-nix.packages.${prev.stdenv.hostPlatform.system}.google-antigravity-cli;
-                google-antigravity-ide = inputs.antigravity-nix.packages.${prev.stdenv.hostPlatform.system}.google-antigravity-ide;
+                # The default FHS/bwrap variant nests Electron's own Chromium
+                # sandbox inside bwrap's "no new privileges" environment,
+                # which crash-loops the GPU process (coredumps + forced
+                # software-WebGL rendering, burning CPU). The flake ships a
+                # no-fhs variant using autoPatchelfHook instead of bwrap,
+                # avoiding the nested-sandbox conflict entirely.
+                google-antigravity-ide = inputs.antigravity-nix.packages.${prev.stdenv.hostPlatform.system}.google-antigravity-ide-no-fhs;
               })
             ];
             home-manager = {
