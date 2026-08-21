@@ -46,8 +46,10 @@
         "/var/lib/vnstat"
         # Configured printers/queues.
         "/var/lib/cups"
-        # Stirling-PDF's container volumes (configs + downloaded tessdata).
-        "/var/lib/stirling-pdf"
+        # Stirling-PDF's settings and per-user data. Under /var/lib/private
+        # because the service runs with DynamicUser, so systemd puts the
+        # StateDirectory there and symlinks /var/lib/stirling-pdf at it.
+        "/var/lib/private/stirling-pdf"
         # Device firmware cache and per-device update history.
         "/var/lib/fwupd"
         # Remembers the profile (performance/balanced/power-saver) per power state.

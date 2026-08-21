@@ -1,51 +1,69 @@
+# Stirling-PDF: local PDF manipulation toolbox.
+#
+# Native nixpkgs service, not the upstream container: services.stirling-pdf
+# runs the same 2.14.3 release straight from the store, with its helper tools
+# (libreoffice, ocrmypdf, qpdf, ghostscript, tesseract…) supplied as a systemd
+# `path` instead of baked into a 2 GB "fat" image. That removes the podman
+# dependency, the image pull, and the hand-rolled volume directories.
+#
+# On demand, like Paperless-ngx and Open WebUI — nothing autostarts at boot.
+# The launcher entry (pkgs/apps/stirling-pdf.nix) starts the unit and shows its
+# journal while it comes up.
 {
   lib,
   config,
   ...
 }: {
-  options.features.stirling-pdf.enable = lib.mkEnableOption "Stirling-PDF (Docker fat image)";
+  options.features.stirling-pdf.enable = lib.mkEnableOption "Stirling-PDF";
 
   config = lib.mkIf config.features.stirling-pdf.enable {
-    virtualisation.oci-containers.containers.stirling-pdf = {
-      image = "stirlingtools/stirling-pdf:2.14.3-fat@sha256:444c2a995e5266e585cbc22d9613d5b4c11c8ea6ac486a9a05869b55d1775f6a";
-      ports = ["127.0.0.1:8080:8080"];
-      volumes = [
-        "/var/lib/stirling-pdf/configs:/configs"
-        "/var/lib/stirling-pdf/logs:/logs"
-        "/var/lib/stirling-pdf/customFiles:/customFiles"
-        "/var/lib/stirling-pdf/trainingData:/usr/share/tessdata"
-      ];
+    services.stirling-pdf = {
+      enable = true;
       environment = {
-        DOCKER_ENABLE_SECURITY = "false";
-        SECURITY_ENABLELOGIN = "false";
-        SECURITY_CSRFDISABLED = "true";
-        INSTALL_BOOK_AND_ADVANCED_HTML_OPS = "false";
+        # Spring relaxed binding: server.address / server.port. Keeps the
+        # listener on loopback, matching what the container's port mapping did.
+        SERVER_ADDRESS = "127.0.0.1";
+        SERVER_PORT = 8080;
+        SECURITY_ENABLELOGIN = false;
+        SECURITY_CSRFDISABLED = true;
         LANGS = "de_DE,en_GB";
       };
     };
 
-    systemd.services.podman-stirling-pdf = {
+    # On demand: nothing autostarts at boot.
+    systemd.services.stirling-pdf = {
       wantedBy = lib.mkForce [];
-      serviceConfig.TimeoutStartSec = lib.mkForce "10min";
+      # LibreOffice and the OCR pipeline make the first start slow.
+      serviceConfig.TimeoutStartSec = lib.mkForce "5min";
     };
+
+    # Clean up the pre-native layout. The podman version kept its volumes in a
+    # real /var/lib/stirling-pdf; the native service runs with DynamicUser, so
+    # systemd needs that path to be a symlink into /var/lib/private and aborts
+    # with 238/STATE_DIRECTORY ("File exists") while the old directory sits
+    # there. rmdir only ever removes empty directories, so a tree that somehow
+    # still holds data is left alone and the failure stays visible.
+    system.activationScripts.stirling-pdf-legacy-statedir = ''
+      if [ -d /var/lib/stirling-pdf ] && [ ! -L /var/lib/stirling-pdf ]; then
+        rmdir /var/lib/stirling-pdf/configs \
+              /var/lib/stirling-pdf/customFiles \
+              /var/lib/stirling-pdf/logs \
+              /var/lib/stirling-pdf/trainingData \
+              /var/lib/stirling-pdf 2>/dev/null || true
+      fi
+      rmdir /persist/var/lib/stirling-pdf 2>/dev/null || true
+    '';
 
     security.polkit.extraConfig = ''
       polkit.addRule(function(action, subject) {
         if (action.id == "org.freedesktop.systemd1.manage-units" &&
             subject.isInGroup("wheel")) {
           var unit = action.lookup("unit");
-          if (unit == "podman-stirling-pdf.service") {
+          if (unit == "stirling-pdf.service") {
             return polkit.Result.YES;
           }
         }
       });
     '';
-
-    systemd.tmpfiles.rules = [
-      "d /var/lib/stirling-pdf/configs 0755 root root -"
-      "d /var/lib/stirling-pdf/logs 0755 root root -"
-      "d /var/lib/stirling-pdf/customFiles 0755 root root -"
-      "d /var/lib/stirling-pdf/trainingData 0755 root root -"
-    ];
   };
 }
