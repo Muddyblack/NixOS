@@ -60,6 +60,16 @@
       });
     '';
 
+    # The upstream module only declares /var/lib/paperless itself. Spelling out
+    # the log dir too gives systemd-tmpfiles-setup a rule that changes whenever
+    # this module does, so a rebuild restarts it and re-creates these *inside*
+    # the impermanence bind mount — the earlier failure was tmpfiles having run
+    # before the mount, leaving its dirs shadowed and the mount root-owned.
+    systemd.tmpfiles.rules = [
+      "d /var/lib/paperless 0755 paperless paperless -"
+      "d /var/lib/paperless/log 0750 paperless paperless -"
+    ];
+
     # Ownership has to be spelled out: impermanence creates the bind-mount
     # source under /persist itself, and a root-owned /var/lib/paperless leaves
     # the units failing in ExecStartPre on "Permission denied: .../log".
