@@ -27,7 +27,7 @@ in
     src = gitpulseSrc;
 
     nativeBuildInputs = [cmake ninja qt6.wrapQtAppsHook];
-    buildInputs = [qt6.qtbase];
+    buildInputs = [qt6.qtbase qt6.qtsvg];
     cmakeDir = "../hyprland/tray";
 
     postInstall = ''

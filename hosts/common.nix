@@ -80,8 +80,8 @@
   nix.settings = {
     auto-optimise-store = true;
     experimental-features = ["nix-command" "flakes"];
-    max-jobs = 4;
-    cores = 4;
+    max-jobs = "auto";
+    cores = 0;
     min-free = 5 * 1024 * 1024 * 1024;
     max-free = 15 * 1024 * 1024 * 1024;
     substituters = [

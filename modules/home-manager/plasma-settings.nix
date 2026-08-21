@@ -369,13 +369,14 @@ in {
     # top of the CPU governor/EPP. Selecting it here means the choice survives
     # reboots instead of depending on clicking the battery applet.
     #
-    # AC is pinned to "performance" deliberately: on this chassis the EC's
-    # "balanced" fan curve thermally clamps the package to ~10W, against ~19W on
-    # "performance" (measured 2026-08-03). That is a workaround for a degraded
-    # heatsink -- once it is cleaned and repasted, "balanced" is the saner
-    # default here and should be restored.
+    # AC defaults to "balanced" -- performance is a manual, user-driven choice
+    # (e.g. via the battery applet), not something plugging in should force.
+    # Note: on this chassis the EC's "balanced" fan curve thermally clamps the
+    # package to ~10W, against ~19W on "performance" (measured 2026-08-03),
+    # a side effect of a degraded heatsink. Switch to "performance" manually
+    # when more power is needed until the cooler is serviced.
     powerdevil = {
-      AC.powerProfile = "performance";
+      AC.powerProfile = "balanced";
       battery.powerProfile = "balanced";
       lowBattery.powerProfile = "powerSaving";
     };
