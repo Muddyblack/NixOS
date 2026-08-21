@@ -4,12 +4,30 @@
   ...
 }: {
   # Display & Desktop
+  #
+  # The greeter runs as a Wayland compositor now (wayland.enable), not on Xorg.
+  # That is what fixes cursor size and fractional scaling on the login screen,
+  # and it means no X server is started at boot — both sessions (Plasma 6 and
+  # Hyprland) have been Wayland all along, so Xorg only ever existed to paint
+  # the greeter.
+  #
+  # services.xserver.enable stays TRUE on purpose, and is not the same thing as
+  # "run an X server". It is NixOS's plumbing switch: it generates
+  # /etc/X11/xorg.conf.d/00-keyboard.conf from services.xserver.xkb, which is
+  # what systemd-localed — and therefore the kwin_wayland greeter and XWayland
+  # clients — read the German layout from. Turning it off silently drops the
+  # layout back to us, which you would discover while typing your password at
+  # a login screen. The X server binary is simply never launched.
   services.xserver.enable = true;
   services.xserver.desktopManager.xterm.enable = false;
   services.xserver.excludePackages = [pkgs.xterm];
   services.displayManager.sddm = {
     enable = true;
-    wayland.enable = false;
+    wayland.enable = true;
+    # No `package` here on purpose: the Wayland greeter needs the Qt6 build,
+    # and services.desktopManager.plasma6 now defines sddm.package as
+    # kdePackages.sddm itself. Setting it again — even to that same
+    # derivation — breaks eval, because the option takes a unique definition.
     theme = "Sonomatic";
     autoLogin.relogin = false;
     settings.General.InputMethod = "";

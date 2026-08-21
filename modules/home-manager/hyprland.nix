@@ -10,6 +10,38 @@
     pkgs.gitpulse-hyprland
   ];
 
+  # Klipper equivalent for Hyprland. The two `wl-paste --watch cliphist store`
+  # lines in exec-once were already recording every copy, but nothing ever read
+  # the database back — this is the missing front end. fuzzel is the picker
+  # (wayland-native, dmenu mode); it doubles as a fallback launcher when the
+  # caelestia shell is not running.
+  programs.fuzzel = {
+    enable = true;
+    settings = {
+      main = {
+        font = "JetBrainsMono Nerd Font:size=11";
+        lines = 12;
+        width = 70;
+        horizontal-pad = 20;
+        vertical-pad = 14;
+        inner-pad = 8;
+      };
+      border = {
+        radius = 14;
+        width = 2;
+      };
+      colors = {
+        background = "1e1e2edd";
+        text = "cdd6f4ff";
+        match = "cba6f7ff";
+        selection = "313244ff";
+        selection-text = "cdd6f4ff";
+        selection-match = "89b4faff";
+        border = "89b4faff";
+      };
+    };
+  };
+
   # Seed the widget's own settings file with the same provider defaults the
   # Plasma widget ships (claude/antigravity/openai/kiro/grok on; mistral and
   # openrouter off — see package/contents/config/main.xml upstream), plus a
@@ -35,6 +67,18 @@
       "$terminal" = "ghostty";
       "$fileManager" = "dolphin";
       "$menu" = "caelestia shell drawers toggle launcher";
+      # cliphist stores raw entries as "<id>\t<preview>"; decode turns the
+      # selected line back into the original payload (images included).
+      "$clipboard" = toString (pkgs.writeShellScript "clipboard-picker" ''
+        pkill fuzzel && exit 0
+        cliphist list \
+          | fuzzel --dmenu --prompt "clip> " --width 90 --lines 16 \
+          | cliphist decode \
+          | wl-copy
+      '');
+      "$clipboardClear" = toString (pkgs.writeShellScript "clipboard-clear" ''
+        cliphist wipe && notify-send "Clipboard" "History cleared"
+      '');
       # Snip into satty editor: annotate/crop, Ctrl+C copies, Ctrl+S saves, Esc discards
       "$screenshotEdit" = toString (pkgs.writeShellScript "screenshot-edit" ''
         mkdir -p "$HOME/Pictures/Screenshots"
@@ -43,14 +87,23 @@
           --early-exit --copy-command wl-copy --disable-notifications
       '');
 
+      # Scale stays pinned at 1. `auto` derives a scale from the panel's
+      # physical size and picks 1.5x on this laptop's eDP-1, which blows up
+      # every client. Try `auto` again only behind a per-output line, after
+      # checking `hyprctl monitors` for what it actually chose.
       monitor = [",preferred,auto,1"];
 
       exec-once = [
         "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_MENU_PREFIX"
         # Rebuild KService cache with this session's env so KDE app lists are populated
         "${pkgs.kdePackages.kservice}/bin/kbuildsycoca6"
-        "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
+        "${pkgs.hyprpolkitagent}/libexec/hyprpolkitagent"
         "${pkgs.networkmanagerapplet}/bin/nm-applet --indicator"
+        # Wayland has no clipboard manager in the compositor: the *source*
+        # client owns the data, so closing the app you copied from empties the
+        # clipboard. wl-clip-persist takes ownership of the selection so the
+        # content outlives the process that produced it.
+        "${pkgs.wl-clip-persist}/bin/wl-clip-persist --clipboard regular"
         "wl-paste --type text --watch cliphist store"
         "wl-paste --type image --watch cliphist store"
         "nwg-dock-hyprland -d -p bottom -l overlay -a center -i 48"
@@ -165,9 +218,17 @@
         };
       };
 
-      # gestures = {
-      #   workspace_swipe = true;
-      # };
+      # Touchpad gestures. These were commented out as
+      # `gestures { workspace_swipe = true }`, which Hyprland 0.51 replaced
+      # with a generic `gesture` list of FINGERS, DIRECTION, ACTION — so the
+      # old form would not have parsed even if it had been uncommented.
+      # If Hyprland reports "unknown keyword gesture", the build predates 0.51
+      # and the old syntax is the one to use.
+      gesture = [
+        "3, horizontal, workspace"
+        "4, up, fullscreen"
+        "4, down, close"
+      ];
 
       bind = [
         "$mod, Return, exec, $terminal"
@@ -175,6 +236,8 @@
         "$mod SHIFT, E, exec, loginctl terminate-session $XDG_SESSION_ID"
         "$mod, E, exec, $fileManager"
         "$mod, V, togglefloating"
+        "$mod SHIFT, V, exec, $clipboard"
+        "$mod ALT, V, exec, $clipboardClear"
         "$mod, Space, exec, $menu"
         "$mod, P, pseudo"
         "$mod, J, layoutmsg, togglesplit"
@@ -309,6 +372,8 @@
         "ignore_alpha 0.5, match:namespace quickshell"
         "blur on, match:namespace sidebar"
         "ignore_alpha 0.5, match:namespace sidebar"
+        "blur on, match:namespace fuzzel"
+        "ignore_alpha 0.5, match:namespace fuzzel"
       ];
     };
   };

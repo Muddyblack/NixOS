@@ -18,7 +18,9 @@
     du = "dust";
     ps = "procs --tree";
     h = "history 1 -1";
-    hs = "history 1 -1 | rg";
+    # atuin owns history search now (Ctrl+R interactive, `hs <term>` one-shot)
+    hs = "atuin search";
+    hstats = "atuin stats";
     vim = "nvim";
     vi = "nvim";
     clock = "tty-clock -scC 4";
@@ -43,6 +45,6 @@
     gd = "git diff";
     gl = "git log --oneline --graph --decorate";
 
-    histbackups = "ll ~/.local/share/zsh-history-backups";
+    dig = "doggo";
   };
 }

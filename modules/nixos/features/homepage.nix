@@ -142,10 +142,10 @@ in {
               href = "http://localhost:8083";
               description = "Personal finance and spending tracker";
             })
-            (mkService "Netdata" {
-              icon = "netdata.svg";
-              href = "http://localhost:19999";
-              description = "System monitoring";
+            (mkService "Paperless" {
+              icon = "paperless-ngx.svg";
+              href = "http://localhost:28981";
+              description = "OCR document archive (start with `paperless`)";
             })
           ];
         }

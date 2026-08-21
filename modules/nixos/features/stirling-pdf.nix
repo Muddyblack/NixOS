@@ -7,7 +7,7 @@
 
   config = lib.mkIf config.features.stirling-pdf.enable {
     virtualisation.oci-containers.containers.stirling-pdf = {
-      image = "stirlingtools/stirling-pdf:latest-fat";
+      image = "stirlingtools/stirling-pdf:2.14.3-fat@sha256:444c2a995e5266e585cbc22d9613d5b4c11c8ea6ac486a9a05869b55d1775f6a";
       ports = ["127.0.0.1:8080:8080"];
       volumes = [
         "/var/lib/stirling-pdf/configs:/configs"

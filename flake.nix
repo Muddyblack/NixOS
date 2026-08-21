@@ -26,10 +26,23 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nur.url = "github:nix-community/NUR";
+    nur = {
+      url = "github:nix-community/NUR";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
-    impermanence.url = "github:nix-community/impermanence";
+    # Without the follows, impermanence dragged in its own nixpkgs (locked
+    # ~7 months behind ours) *and* a second home-manager, both evaluated for
+    # nothing. Its module only needs lib.
+    impermanence = {
+      url = "github:nix-community/impermanence";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
 
+    # No inputs.nixpkgs.follows here: nix-flatpak is a module-only flake and
+    # declares no nixpkgs input, so a follows on it is what triggers the
+    # "override for a non-existent input" warning on every evaluation.
     nix-flatpak.url = "github:gmodena/nix-flatpak";
 
     sops-nix = {
@@ -85,11 +98,12 @@
   };
 
   # Service ports reference:
-  #   Netdata      → http://localhost:19999
   #   Ollama       → http://localhost:11434
   #   Open WebUI   → http://localhost:8765
   #   Homepage     → http://localhost:8082
   #   Firefly III  → http://localhost:8083
+  #   Stirling-PDF → http://localhost:8080
+  #   Paperless    → http://localhost:28981
 
   outputs = {
     nixpkgs,

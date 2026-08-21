@@ -104,6 +104,41 @@
     enableZshIntegration = true;
   };
 
+  # Replaces the hand-rolled hourly zsh-history-backup timer: atuin keeps every
+  # command in a SQLite database at ~/.local/share/atuin (already covered by the
+  # .local/share persistence entry) together with its exit code, duration, cwd
+  # and session, and never truncates.
+  #
+  # --disable-up-arrow is deliberate: Up/Down stay bound to
+  # zsh-history-substring-search (see initContent below), so only Ctrl+R changes
+  # behaviour. Sync is off — enabling it would mean shipping shell history to a
+  # server, which is an explicit decision, not a default. Turn it on with
+  # `atuin register` + `atuin sync` if ever wanted.
+  programs.atuin = {
+    enable = true;
+    enableZshIntegration = true;
+    flags = ["--disable-up-arrow"];
+    settings = {
+      auto_sync = false;
+      update_check = false;
+      style = "compact";
+      inline_height = 20;
+      search_mode = "fuzzy";
+      filter_mode = "global";
+      filter_mode_shell_up_key_binding = "session";
+      show_preview = true;
+      enter_accept = false;
+      # Never record secrets typed on a command line.
+      secrets_filter =
+        # television's binary is already `tv`; no alias needed for it.
+        true;
+      history_filter = [
+        "^ "
+        "^curl .*(api[_-]?key|token|password)"
+      ];
+    };
+  };
+
   programs.zsh = {
     enable = true;
     enableCompletion = true;
@@ -176,31 +211,5 @@
 
       [[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
     '';
-  };
-
-  systemd.user.services.zsh-history-backup = {
-    Unit.Description = "Back up zsh history";
-    Service = {
-      Type = "oneshot";
-      ExecStart = toString (pkgs.writeShellScript "zsh-history-backup" ''
-        set -euo pipefail
-        src="$HOME/.zsh_history"
-        dir="$HOME/.local/share/zsh-history-backups"
-        [ -f "$src" ] || exit 0
-        ${pkgs.coreutils}/bin/mkdir -p "$dir"
-        ${pkgs.coreutils}/bin/cp "$src" "$dir/zsh_history-$(${pkgs.coreutils}/bin/date +%Y%m%d-%H%M%S)"
-        ${pkgs.coreutils}/bin/ls -1t "$dir"/zsh_history-* | ${pkgs.coreutils}/bin/tail -n +31 | ${pkgs.findutils}/bin/xargs -r ${pkgs.coreutils}/bin/rm --
-      '');
-    };
-  };
-
-  systemd.user.timers.zsh-history-backup = {
-    Unit.Description = "Hourly zsh history backup";
-    Timer = {
-      OnBootSec = "5min";
-      OnUnitActiveSec = "24h";
-      Persistent = true;
-    };
-    Install.WantedBy = ["timers.target"];
   };
 }

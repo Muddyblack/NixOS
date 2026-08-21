@@ -21,6 +21,10 @@
         "/var/lib/bluetooth"
         "/var/lib/nixos"
         "/var/lib/systemd/coredump"
+        # systemd stamps the last-run time of Persistent=true timers here.
+        # Without it every persistent timer (btrbk, fstrim, fwupd-refresh)
+        # believes it has never run and fires once on every boot.
+        "/var/lib/systemd/timers"
         "/etc/NetworkManager/system-connections"
         "/var/lib/upower"
         "/var/lib/sops-nix"
@@ -32,6 +36,26 @@
         "/var/lib/portmaster"
         "/var/lib/docker"
         "/var/lib/containers"
+        # Node identity + auth state. Without this the machine drops out of the
+        # tailnet and needs a fresh `tailscale up` login after every boot.
+        "/var/lib/tailscale"
+        # VM definitions, NVRAM and storage pools for libvirtd.
+        "/var/lib/libvirt"
+        # services.vnstat's traffic database — the whole point of the service is
+        # a long-running history, which a wipe on every boot makes impossible.
+        "/var/lib/vnstat"
+        # Configured printers/queues.
+        "/var/lib/cups"
+        # Stirling-PDF's container volumes (configs + downloaded tessdata).
+        "/var/lib/stirling-pdf"
+        # Device firmware cache and per-device update history.
+        "/var/lib/fwupd"
+        # Remembers the profile (performance/balanced/power-saver) per power state.
+        "/var/lib/power-profiles-daemon"
+        # Ban database — a reboot otherwise clears every active ban.
+        "/var/lib/fail2ban"
+        # btrbk's transaction log; keeps its view of snapshot lineage consistent.
+        "/var/lib/btrbk"
         {
           directory = "/var/lib/colord";
           user = "colord";
@@ -66,10 +90,7 @@
           ".docker"
           ".gemini"
           ".antigravity-ide"
-          ".local/share/keyrings"
-          ".local/share/Steam"
           ".pki"
-          ".oh-my-zsh"
           ".steam"
           ".vmware"
           ".wine"
