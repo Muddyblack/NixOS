@@ -1,4 +1,16 @@
 {lib, ...}: {
+  # Electron's utility/node subprocesses inherit --render-node-override and
+  # crash (SIGSEGV/SIGTRAP) in the Intel UHD DRI driver under Wayland. The
+  # argv.json "disable-hardware-acceleration" only affects the main window;
+  # these flags propagate to every subprocess.
+  home.file.".config/antigravity-ide-flags.conf".text = ''
+    --disable-gpu
+    --ozone-platform-hint=auto
+  '';
+  home.file.".config/code-flags.conf".text = ''
+    --disable-gpu
+    --ozone-platform-hint=auto
+  '';
   home.activation.syncVscodeForkSettings = lib.hm.dag.entryAfter ["writeBoundary"] ''
     code_user_dir="$HOME/.config/Code/User"
     mkdir -p "$code_user_dir"
