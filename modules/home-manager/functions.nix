@@ -1,7 +1,9 @@
 {...}: {
   programs.zsh.initContent = ''
+    # `command curl` throughout: curl is aliased to xh, and zsh expands aliases
+    # when the function body is *parsed*, so a bare `curl -s` becomes `xh -s`.
     cht() {
-      curl -s "cht.sh/$(echo "$@" | tr ' ' '+')"
+      command curl -s "cht.sh/$(echo "$@" | tr ' ' '+')"
     }
 
     mkcd() {
@@ -22,27 +24,52 @@
       xdg-open http://localhost:8082
     }
 
+    # Paperless-ngx is on-demand (see modules/nixos/features/paperless.nix).
+    # Drop scans into /var/lib/paperless/consume while it runs.
+    paperless() {
+      local units=(paperless-web paperless-consumer paperless-scheduler paperless-task-queue)
+      for unit in "''${units[@]}"; do
+        systemctl is-active --quiet "$unit" || sudo systemctl start "$unit"
+      done
+      echo "Waiting for Paperless..."
+      for i in $(seq 1 60); do
+        if command curl -s http://localhost:28981 &>/dev/null; then
+          break
+        fi
+        sleep 1
+      done
+      xdg-open http://localhost:28981
+    }
+
+    paperless-stop() {
+      sudo systemctl stop paperless-web paperless-consumer paperless-scheduler paperless-task-queue
+      echo "Paperless stopped."
+    }
+
+    # ouch sniffs the format from magic bytes rather than the extension, so it
+    # also handles the cases the old per-suffix case statement got wrong
+    # (mislabelled files, .tar.lz4, nested archives). unrar stays the fallback
+    # because ouch has no RAR support.
     extract() {
-      if [[ -f "$1" ]]; then
-        case "$1" in
-          *.tar.bz2)   tar xjf "$1"    ;;
-          *.tar.gz)    tar xzf "$1"    ;;
-          *.tar.xz)    tar xJf "$1"    ;;
-          *.bz2)       bunzip2 "$1"    ;;
-          *.rar)       unrar x "$1"    ;;
-          *.gz)        gunzip "$1"     ;;
-          *.tar)       tar xf "$1"     ;;
-          *.tbz2)      tar xjf "$1"    ;;
-          *.tgz)       tar xzf "$1"    ;;
-          *.zip)       unzip "$1"      ;;
-          *.Z)         uncompress "$1" ;;
-          *.7z)        7z x "$1"       ;;
-          *.zst)       unzstd "$1"     ;;
-          *)           echo "Unknown archive format: $1" ;;
-        esac
-      else
+      if [[ ! -f "$1" ]]; then
         echo "'$1' is not a valid file"
+        return 1
       fi
+      case "$1" in
+        *.rar) unrar x "$1" ;;
+        *)     ouch decompress "$@" ;;
+      esac
+    }
+
+    # Inverse of extract(): `pack out.tar.zst file1 dir2 ...`
+    pack() {
+      if [[ $# -lt 2 ]]; then
+        echo "Usage: pack <archive.ext> <files...>"
+        return 1
+      fi
+      local out="$1"
+      shift
+      ouch compress "$@" "$out"
     }
 
     _play_sound() {
@@ -145,15 +172,38 @@
       fi
     }
 
+    # Default local model, shared with opencode (modules/home-manager/ai.nix).
+    # gemma4:e4b — "Efficient 4B", ~9.6 GB, function calling — is about the
+    # ceiling here: this host has an Intel iGPU and no dedicated VRAM, so
+    # anything larger falls back to CPU at single-digit tokens/s. No Kimi model
+    # runs locally at any size (see cc-kimi below).
+    export OLLAMA_DEFAULT_MODEL="''${OLLAMA_DEFAULT_MODEL:-gemma4:e4b}"
+
     cc-gemini() {
       ANTHROPIC_BASE_URL="https://generativelanguage.googleapis.com/v1beta/openai" \
       ANTHROPIC_API_KEY="''${GEMINI_API_KEY:?Set GEMINI_API_KEY}" \
-      CLAUDE_MODEL="''${1:-gemini-2.5-pro-preview-05-06}" \
+      CLAUDE_MODEL="''${1:-gemini-2.5-pro}" \
+      claude "''${@:2}"
+    }
+
+    # Kimi, over an API — no generation of it runs on this hardware. K3
+    # (2026-07-16) is 2.8T parameters with 104B active; even the 1-bit GGUF has
+    # a ~650 GB combined RAM+VRAM floor, and K2.7 Code is 1T/32B active needing
+    # 2x A100 80GB at INT4. There is no Air/Mini/Flash variant in any release.
+    #
+    # Routed through OpenRouter by default because that endpoint is known to
+    # serve moonshotai/kimi-k3 and reuses the key cc-openrouter already needs.
+    # For Moonshot direct, set KIMI_BASE_URL (their OpenAI-compatible endpoint
+    # is https://api.moonshot.ai/v1) plus KIMI_API_KEY.
+    cc-kimi() {
+      ANTHROPIC_BASE_URL="''${KIMI_BASE_URL:-https://openrouter.ai/api/v1}" \
+      ANTHROPIC_API_KEY="''${KIMI_API_KEY:-''${OPENROUTER_API_KEY:?Set OPENROUTER_API_KEY, or KIMI_API_KEY + KIMI_BASE_URL}}" \
+      CLAUDE_MODEL="''${1:-moonshotai/kimi-k3}" \
       claude "''${@:2}"
     }
 
     cc-openrouter() {
-      local model="''${1:-google/gemini-2.5-pro}"
+      local model="''${1:-moonshotai/kimi-k3}"
       ANTHROPIC_BASE_URL="https://openrouter.ai/api/v1" \
       ANTHROPIC_API_KEY="''${OPENROUTER_API_KEY:?Set OPENROUTER_API_KEY}" \
       CLAUDE_MODEL="$model" \
@@ -161,7 +211,7 @@
     }
 
     cc-ollama() {
-      local model="''${1:-gemma4:e4b}"
+      local model="''${1:-$OLLAMA_DEFAULT_MODEL}"
       if ! systemctl is-active --quiet ollama; then
         echo "Starting Ollama..."
         sudo systemctl start ollama
@@ -173,7 +223,7 @@
     }
 
     ai-pull() {
-      local model="''${1:-gemma4:e4b}"
+      local model="''${1:-$OLLAMA_DEFAULT_MODEL}"
       if ! systemctl is-active --quiet ollama; then
         echo "Starting Ollama..."
         sudo systemctl start ollama
@@ -197,9 +247,9 @@
         echo "Starting Ollama..."
         sudo systemctl start ollama
       fi
-      if ! systemctl is-active --quiet podman-open-webui; then
+      if ! systemctl is-active --quiet open-webui; then
         echo "Starting Open WebUI (first start can take a minute)..."
-        sudo systemctl start podman-open-webui
+        sudo systemctl start open-webui
       fi
       for i in $(seq 1 60); do
         if command curl -s http://localhost:8765 &>/dev/null; then
@@ -211,12 +261,12 @@
     }
 
     ai-webui-stop() {
-      sudo systemctl stop podman-open-webui
+      sudo systemctl stop open-webui
       echo "Open WebUI stopped."
     }
 
     cc-models() {
-      curl -s https://openrouter.ai/api/v1/models \
+      command curl -s https://openrouter.ai/api/v1/models \
         -H "Authorization: Bearer ''${OPENROUTER_API_KEY}" \
         | jq -r '.data[].id' | sort
     }

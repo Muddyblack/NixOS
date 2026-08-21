@@ -17,6 +17,7 @@
       ../modules/nixos/features/sops.nix
       ../modules/nixos/features/snapshots.nix
       ../modules/nixos/features/power.nix
+      ../modules/nixos/features/hibernate.nix
       ../modules/nixos/features/flatpak.nix
     ]
     ++ lib.optional (builtins.pathExists ./deploy-config.nix) ./deploy-config.nix;
@@ -127,6 +128,9 @@
     description = "Muddy Black";
     extraGroups = ["networkmanager" "wheel" "libvirtd" "docker" "video" "render" "input"];
     shell = pkgs.zsh;
+    # Install-time bootstrap only — ignored once the account exists, and
+    # overridden entirely when features.sops.userPassword.enable is on
+    # (modules/nixos/features/sops.nix).
     initialPassword = "nixos";
   };
 

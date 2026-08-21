@@ -766,4 +766,70 @@ in {
     };
     Install.WantedBy = ["graphical-session.target"];
   };
+
+  # Heavy: full containment rebuild. Run MANUALLY after deploy.sh when widget
+  # positions drift. Backs up appletsrc, restarts plasmashell, re-applies layout.
+  # Usage: systemctl --user start plasma-layout-rebuild
+  systemd.user.services.plasma-layout-rebuild = {
+    Unit = {
+      Description = "Rebuild Plasma desktop layout from plasma-manager config";
+    };
+    Service = {
+      Type = "oneshot";
+      ExecStart = toString (pkgs.writeShellScript "plasma-layout-rebuild" ''
+        set -u
+        cfg=${config.home.homeDirectory}/.config
+        cache=${config.home.homeDirectory}/.cache/plasmashell
+        pm=${config.home.homeDirectory}/.local/share/plasma-manager
+        ts=$(${pkgs.coreutils}/bin/date +%Y%m%d-%H%M%S)
+        backup=$cfg/plasma-backup-$ts
+        ${pkgs.coreutils}/bin/mkdir -p "$backup"
+
+        # Back up files we're about to wipe
+        for f in plasma-org.kde.plasma.desktop-appletsrc plasmashellrc; do
+          [ -f "$cfg/$f" ] && ${pkgs.coreutils}/bin/cp "$cfg/$f" "$backup/$f" || true
+        done
+        echo "layout rebuild: backup at $backup"
+
+        # Clear plasma-manager idempotency markers so scripts re-run
+        rm -f "$pm/last_run_desktop_script_panels"
+        rm -f "$pm/last_run_desktop_script_set_desktop_widgets"
+        rm -f "$pm/last_run_desktop_script_wallpaper_picture"
+
+        # Stop plasmashell via its own service (clean) then wait
+        ${pkgs.systemd}/bin/systemctl --user stop plasma-plasmashell.service || true
+        ${pkgs.procps}/bin/pkill -x plasmashell || true
+        for i in $(seq 1 30); do
+          ${pkgs.procps}/bin/pgrep -x plasmashell >/dev/null || break
+          sleep 0.1
+        done
+
+        # Wipe cached containment state
+        rm -f "$cfg/plasma-org.kde.plasma.desktop-appletsrc"
+        rm -f "$cfg/plasmashellrc"
+        rm -rf "$cache"
+
+        # Bring plasmashell back via its service (survives this unit exiting)
+        ${pkgs.systemd}/bin/systemctl --user start plasma-plasmashell.service || \
+          ${pkgs.systemd}/bin/systemd-run --user --scope ${pkgs.kdePackages.plasma-workspace}/bin/plasmashell &
+
+        # Wait for plasmashell DBus to be ready
+        for i in $(seq 1 100); do
+          ${pkgs.kdePackages.qttools}/bin/qdbus org.kde.plasmashell / >/dev/null 2>&1 && break
+          sleep 0.1
+        done
+
+        # Re-apply plasma-manager layout against the fresh shell
+        ${pkgs.bash}/bin/bash "$pm/run_all.sh" || {
+          echo "run_all.sh failed; restoring backup" >&2
+          ${pkgs.coreutils}/bin/cp -f "$backup/plasma-org.kde.plasma.desktop-appletsrc" "$cfg/" 2>/dev/null || true
+          ${pkgs.coreutils}/bin/cp -f "$backup/plasmashellrc" "$cfg/" 2>/dev/null || true
+          ${pkgs.procps}/bin/pkill -x plasmashell || true
+          ${pkgs.systemd}/bin/systemctl --user start plasma-plasmashell.service || true
+          exit 1
+        }
+        echo "layout rebuild: ok"
+      '');
+    };
+  };
 }

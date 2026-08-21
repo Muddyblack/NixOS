@@ -30,7 +30,11 @@
     pavucontrol
     libnotify
     networkmanagerapplet
-    polkit_gnome
+    # Hyprland's own polkit agent, replacing polkit_gnome: Qt/Wayland-native,
+    # so authentication dialogs match the rest of the session instead of
+    # rendering as an unthemed GTK window. Started from exec-once in
+    # modules/home-manager/hyprland.nix.
+    hyprpolkitagent
   ];
 
   services.gnome.gnome-keyring.enable = true;

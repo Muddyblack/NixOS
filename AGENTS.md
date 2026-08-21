@@ -149,7 +149,11 @@ These are active shell aliases/overrides. Always use the right-hand side when su
 | `nix flake update` | `update` | |
 | `nh os list` | `gen` | List NixOS generations |
 | `nh clean all` | `clean` / `gcnix` | Garbage collection wrapper |
-| `history \| grep` | `hs "term"` | Alias: `history 1 -1 \| rg` |
+| `history \| grep` | `hs "term"` / `Ctrl+R` | Alias: `atuin search`; Ctrl+R is atuin's TUI. Up/Down stay on zsh-history-substring-search |
+| `tar`/`unzip`/`7z` | `ouch` | Backs `extract` / `pack`; RAR still goes through `unrar` |
+| `dig` | `doggo` | Aliased: `dig` → `doggo` |
+| `tmux` | `zellij` | No tmux installed |
+| `git` (advanced) | `jj` | jujutsu, git-compatible; the git CLI still works on the same repos |
 | `mkdir foo && cd foo` | `mkcd foo` | Shell function |
 | `sops` | `secrets` | SOPS wrapper with configured keys |
 | `termdown` | `timer` | |
@@ -162,15 +166,28 @@ These are active shell aliases/overrides. Always use the right-hand side when su
 
 - `upnix` — rebuild NixOS (calls `deploy.sh switch` if present)
 - `devnew <template>` — init a dev shell from `dev-shells/` templates (tab-completable)
-- `extract <archive>` — universal archive extractor
+- `extract <archive>` — universal archive extractor (ouch; unrar for `.rar`)
+- `pack <archive.ext> <files...>` — inverse of `extract`
 - `mkcd <dir>` — mkdir + cd in one
 - `cat <file>.log` — auto-uses `tspin` for log files
 - `cht <query>` — interactive cheat sheet (`cht.sh`)
 - `dashboard` — start and open Homepage (localhost:8082)
+- `paperless` / `paperless-stop` — start/stop the on-demand Paperless-ngx stack (localhost:28981)
+- `ai-webui` / `ai-webui-stop` — start/stop the on-demand Open WebUI (localhost:8765)
 - `gcnix <keep>` — clean nix garbage (default: keep 5 generations)
 - `rollback <N>` — switch to generation N (`gen` to list)
-- `cc-gemini`, `cc-openrouter`, `cc-ollama` — Claude Code integrations
+- `cc-gemini`, `cc-kimi`, `cc-openrouter`, `cc-ollama` — Claude Code backends
 - `update-claude` — update the Claude Code derivation to latest version
+
+Any function that calls `curl` must write `command curl`: `curl` is aliased to
+`xh`, and zsh expands aliases when the function body is *parsed*.
+
+Local models must stay small — this host has an Intel iGPU and no dedicated
+VRAM, so ~4B (`gemma4:e4b`) is the practical ceiling. `OLLAMA_DEFAULT_MODEL`
+(functions.nix) and `localModel` (modules/home-manager/ai.nix) are the two
+places to keep in sync. Frontier models are reached over an API, never locally:
+Kimi K3 is 2.8T parameters (104B active) and ships no small variant, so
+`cc-kimi` is an API wrapper by necessity, not by preference.
 
 ## Security Hardening — Known Tradeoffs
 

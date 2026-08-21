@@ -7,8 +7,6 @@
     kdePackages.plasma-systemmonitor
     kdePackages.ksystemstats
     kdePackages.kscreen
-    kdePackages.xdg-desktop-portal-kde
-    xdg-desktop-portal-gtk
     kdePackages.ocean-sound-theme
     kdePackages.qtstyleplugin-kvantum
 

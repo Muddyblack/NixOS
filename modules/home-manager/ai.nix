@@ -1,7 +1,9 @@
-{pkgs, ...}: {
+{pkgs, ...}: let
+  localModel = "gemma4:e4b";
+in {
   home.file.".config/opencode/config.json".text = builtins.toJSON {
     "$schema" = "${pkgs.opencode}/share/opencode/config.json";
-    model = "ollama/gemma4:e4b";
+    model = "ollama/${localModel}";
     provider = {
       ollama = {
         npm = "@ai-sdk/openai-compatible";
@@ -11,8 +13,8 @@
           baseURL = "http://localhost:11434/v1";
         };
         models = {
-          "gemma4:e4b" = {
-            name = "Gemma 4 e4b";
+          ${localModel} = {
+            name = "Gemma 4 E4B";
           };
         };
       };

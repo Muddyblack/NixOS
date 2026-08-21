@@ -44,7 +44,11 @@
       session = {
         commands = {
           logout = ["hyprctl" "dispatch" "exit"];
-          hibernate = ["systemctl" "suspend"];
+          # Real suspend-to-disk. This only works once
+          # features.hibernate is enabled and its resumeOffset pinned —
+          # see modules/nixos/features/hibernate.nix. Until then logind
+          # refuses the call rather than silently suspending instead.
+          hibernate = ["systemctl" "hibernate"];
         };
       };
     };
@@ -69,7 +73,25 @@
     fi
   '';
 
+  # Bound to Ctrl+Shift+Esc in both sessions: Plasma gets its own system
+  # monitor, Hyprland falls back to btop in a terminal.
+  xdg.dataFile."applications/caelestia-monitor.desktop".text = ''
+    [Desktop Entry]
+    Name=System Monitor
+    Exec=caelestia-monitor
+    Type=Application
+    NoDisplay=true
+  '';
+
   home.packages = with pkgs; [
+    (writeShellScriptBin "caelestia-monitor" ''
+      if [[ "''${XDG_CURRENT_DESKTOP:-}" == *"KDE"* ]] && command -v plasma-systemmonitor &>/dev/null; then
+          exec plasma-systemmonitor
+      else
+          exec ghostty -e btop
+      fi
+    '')
+
     material-symbols
     nerd-fonts.caskaydia-cove
     libqalculate

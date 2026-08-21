@@ -20,6 +20,11 @@
     hyperfine
     grex
     trippy
+    ouch # universal (de)compressor — backs the extract() function
+    doggo # modern dig; aliased over `dig`
+    television # fuzzy-finder TUI over pluggable "channels"
+    zellij # terminal multiplexer
+    jujutsu # git-compatible VCS (`jj`)
     typst
     typstyle
     tinymist
