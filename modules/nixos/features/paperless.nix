@@ -60,8 +60,18 @@
       });
     '';
 
+    # Ownership has to be spelled out: impermanence creates the bind-mount
+    # source under /persist itself, and a root-owned /var/lib/paperless leaves
+    # the units failing in ExecStartPre on "Permission denied: .../log".
     environment.persistence = lib.mkIf config.features.impermanence.enable {
-      "/persist".directories = ["/var/lib/paperless"];
+      "/persist".directories = [
+        {
+          directory = "/var/lib/paperless";
+          user = "paperless";
+          group = "paperless";
+          mode = "u=rwx,g=rx,o=rx";
+        }
+      ];
     };
   };
 }

@@ -53,6 +53,7 @@
     portfolio
     stirling-pdf-ui
     firefly-iii-app
+    paperless-ngx-ui
 
     # Networking
     motrix

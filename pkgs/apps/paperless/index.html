@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Paperless-ngx</title>
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body { height: 100%; }
+      body {
+        background: #0a0f0a;
+        color: #c8d8c8;
+        font-family: "Inter", system-ui, -apple-system, sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+      .card {
+        background: #0f180f;
+        border: 1px solid #1e2e1e;
+        border-radius: 16px;
+        padding: 26px 30px;
+        width: 760px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        box-shadow: 0 24px 64px rgba(0, 0, 0, 0.7);
+      }
+      .hdr { display: flex; align-items: center; gap: 14px; }
+      .ring {
+        width: 30px; height: 30px;
+        border: 3px solid #1e2e1e;
+        border-top: 3px solid #4caf50;
+        border-radius: 50%;
+        animation: spin 0.85s linear infinite;
+        flex-shrink: 0;
+      }
+      .ring.done {
+        border-top-color: #3ad47a;
+        animation: none;
+      }
+      @keyframes spin { to { transform: rotate(360deg); } }
+      .title { font-size: 1.15rem; font-weight: 700; color: #fff; }
+      .title em { color: #4caf50; font-style: normal; }
+      .hint { font-size: 0.78rem; color: #6b886b; margin-top: 3px; }
+      #status {
+        font-size: 0.72rem;
+        color: #88aa88;
+        font-family: "JetBrains Mono", "Courier New", monospace;
+        min-height: 1em;
+      }
+      .term {
+        background: #060b06;
+        border: 1px solid #182618;
+        border-radius: 10px;
+        font-family: "JetBrains Mono", "Courier New", monospace;
+        font-size: 0.72rem;
+        line-height: 1.5;
+        color: #aac0aa;
+        padding: 12px 14px;
+        height: 320px;
+        overflow-y: auto;
+        white-space: pre-wrap;
+        word-break: break-all;
+        margin: 0;
+      }
+      .term::-webkit-scrollbar { width: 6px; }
+      .term::-webkit-scrollbar-track { background: transparent; }
+      .term::-webkit-scrollbar-thumb { background: #1e2e1e; border-radius: 3px; }
+      .err .ring { border-top-color: #e05555; animation: none; }
+      .err .hint { color: #f0a080; }
+    </style>
+  </head>
+  <body>
+    <div class="card" id="card">
+      <div class="hdr">
+        <div class="ring" id="ring"></div>
+        <div>
+          <div class="title">Paperless<em>-ngx</em></div>
+          <div class="hint" id="hint">Preparing&hellip;</div>
+        </div>
+      </div>
+      <div id="status"></div>
+      <pre class="term" id="term"></pre>
+    </div>
+    <script>
+      const term   = document.getElementById("term");
+      const hint   = document.getElementById("hint");
+      const status = document.getElementById("status");
+      const card   = document.getElementById("card");
+      const ring   = document.getElementById("ring");
+
+      const ANSI = /\x1b\[[0-9;?]*[a-zA-Z]/g;
+
+      let buffer = "";
+      let activeStart = 0;
+
+      function render() {
+        term.textContent = buffer;
+        term.scrollTop = term.scrollHeight;
+      }
+
+      function appendChunk(text) {
+        text = text.replace(ANSI, "").replace(/\r\n/g, "\n");
+        for (let i = 0; i < text.length; i++) {
+          const ch = text[i];
+          if (ch === "\n") {
+            buffer += "\n";
+            activeStart = buffer.length;
+          } else if (ch === "\r") {
+            buffer = buffer.slice(0, activeStart);
+          } else {
+            buffer += ch;
+          }
+        }
+        if (buffer.length > 32768) {
+          const cut = buffer.length - 24576;
+          buffer = buffer.slice(cut);
+          activeStart = Math.max(0, activeStart - cut);
+        }
+        render();
+      }
+
+      if (window.api) {
+        window.api.onHint((msg)   => { hint.textContent = msg; });
+        window.api.onStatus((msg) => { status.textContent = msg; });
+        window.api.onOutput((c)   => appendChunk(c));
+        window.api.onDone(() => {
+          ring.classList.add("done");
+          hint.textContent = "Ready.";
+        });
+        window.api.onError((msg) => {
+          card.classList.add("err");
+          hint.textContent = "Something went wrong";
+          status.textContent = msg;
+        });
+        window.api.ready();
+      }
+    </script>
+  </body>
+</html>
