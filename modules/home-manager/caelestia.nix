@@ -1,6 +1,7 @@
 {
   pkgs,
   lib,
+  osConfig,
   ...
 }: {
   programs.caelestia = {
@@ -44,11 +45,16 @@
       session = {
         commands = {
           logout = ["hyprctl" "dispatch" "exit"];
-          # Real suspend-to-disk. This only works once
-          # features.hibernate is enabled and its resumeOffset pinned —
-          # see modules/nixos/features/hibernate.nix. Until then logind
+          # The menu's hibernate-labeled button. Which command it actually
+          # runs is controlled by features.hibernate.sessionButtonAction
+          # (modules/nixos/features/hibernate.nix) — "sleep" by default.
+          # Switching it to "hibernate" only works once features.hibernate
+          # is enabled and its resumeOffset pinned; until then logind
           # refuses the call rather than silently suspending instead.
-          hibernate = ["systemctl" "hibernate"];
+          hibernate =
+            if osConfig.features.hibernate.sessionButtonAction == "hibernate"
+            then ["systemctl" "hibernate"]
+            else ["systemctl" "suspend"];
         };
       };
     };

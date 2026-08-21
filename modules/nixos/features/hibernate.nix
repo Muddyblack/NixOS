@@ -52,6 +52,18 @@ in {
         Until this is set, the swapfile is created but hibernation stays off.
       '';
     };
+
+    sessionButtonAction = lib.mkOption {
+      type = lib.types.enum ["sleep" "hibernate"];
+      default = "sleep";
+      description = ''
+        What the Caelestia session menu's hibernate-labeled button actually
+        runs. Independent of `enable`/`resumeOffset` above, so you can flip
+        this back to "sleep" any time even after hibernation is fully wired
+        up — e.g. because resume-from-hibernate is slower or you just prefer
+        sleep day-to-day.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
