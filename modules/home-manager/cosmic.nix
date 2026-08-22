@@ -167,6 +167,10 @@ in {
           action = spawn "ghostty";
         }
         {
+          key = "Ctrl+Alt+T";
+          action = spawn "ghostty";
+        }
+        {
           key = "Super+E";
           action = spawn "dolphin";
         }

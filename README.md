@@ -1,7 +1,7 @@
 <h1 align="center">
    <img src="assets/nix_icon_animated.svg" width="100px" alt="NixOS Logo" /> 
    <br>
-      <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=18&pause=3000&color=A855F7&center=true&vCenter=true&width=500&lines=muddyblack%27s+NixOS+configuration;Hyprland+%2B+KDE+Plasma+6;Btrfs+%2B+LUKS+%2B+Impermanence;Flakes+%2B+Home+Manager+%2B+Disko;Zsh+%2B+Powerlevel10k" alt="Muddyblack's NixOS configuration features: Hyprland, KDE Plasma 6, Btrfs, LUKS, Impermanence, Flakes, Home Manager, Disko, Zsh, and Powerlevel10k" />
+      <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=18&pause=3000&color=A855F7&center=true&vCenter=true&width=500&lines=muddyblack%27s+NixOS+configuration;Hyprland+%2B+KDE+%2B+COSMIC+%2B+GNOME;Btrfs+%2B+LUKS+%2B+Impermanence;Flakes+%2B+Home+Manager+%2B+Disko;Zsh+%2B+Powerlevel10k" alt="Muddyblack's NixOS configuration features: Hyprland, KDE Plasma 6, COSMIC, GNOME, Btrfs, LUKS, Impermanence, Flakes, Home Manager, Disko, Zsh, and Powerlevel10k" />
    <br>
       <img src="assets/readme/gradient.svg" width="100%" alt="Decorative gradient separator" /><br>
    <div align="center">
@@ -127,7 +127,7 @@ In the first few weeks, I managed to like break the system three times a day and
 |:--|:--|
 | **OS** | NixOS 26.05 |
 | **Kernel** | Linux CachyOS · sched_ext (scx_lavd) |
-| **WM** | Hyprland · KDE Plasma 6 |
+| **WM** | Hyprland · KDE Plasma 6 · COSMIC · GNOME (independently toggleable, any combo) |
 | **Shell** | Zsh · Powerlevel10k |
 | **Terminal** | Ghostty |
 | **Bar** | Caelestia Shell |
@@ -212,12 +212,22 @@ bash deploy.sh fresh --remote root@<ip> --device /dev/sda
 upnix
 ```
 
-**KDE only or Hyprland only:** Both WMs are configured by default and switchable at the login screen. Remove the one you don't want from [`modules/home-manager/home.nix`](modules/home-manager/home.nix):
+**Pick your sessions:** `deploy.sh fresh`/`install` asks which desktop sessions to enable
+(Hyprland, KDE Plasma 6, COSMIC, GNOME — any combination) as part of the interactive setup, or
+skip the prompt with `--desktops hyprland,plasma,cosmic` (comma-separated, no spaces). The answer
+is written to `hosts/deploy-config.nix` — nothing is hardcoded per-fork, and nobody has to edit
+Nix to leave GNOME off or run KDE-only.
 
-```nix
-./plasma-settings.nix   # KDE Plasma
-./hyprland.nix          # Hyprland
+```bash
+bash deploy.sh fresh --desktops hyprland,cosmic   # e.g. skip KDE and GNOME entirely
 ```
+
+To change your mind later, edit `features.desktops.<name>.enable` in `hosts/deploy-config.nix`
+directly and rebuild — no need to re-run the installer. Each flag independently enables/disables
+both the system session and its matching home-manager config (shortcuts, wallpaper, theme,
+touchpad) — defaults live in [`modules/nixos/features/desktops.nix`](modules/nixos/features/desktops.nix)
+(Hyprland/Plasma/COSMIC on, GNOME off) for anyone who calls `nixos-rebuild` directly instead of
+through `deploy.sh`.
 
 ---
 
@@ -319,6 +329,49 @@ gcnix         # garbage collect (keeps last 5 generations)
 | `Print` / `Meta + Shift + S` | Screenshot (full / region) |
 
 > **Note:** Some shortcuts are powered by KWin scripts (`move-follow`, `toggle-bottom-panel`), and the `Meta`-tap is a real modifier-only global shortcut — a bare `Meta` key added to KRunner's launch binding. Plasma 6.1+ handles lone modifiers via kglobalaccel, **not** the old `kwinrc [ModifierOnlyShortcuts]` block (that is silently ignored now). After editing these in [`plasma-settings.nix`](modules/home-manager/plasma-settings.nix), **log out and back in** for the keyboard bindings to take effect.
+
+</details>
+
+<details>
+<summary>Keybindings (COSMIC)</summary>
+
+| Shortcut | Action |
+|:--|:--|
+| `Super + Return` / `Ctrl + Alt + T` | Terminal (Ghostty) |
+| `Super + E` | File manager (Dolphin) |
+| `Super + Q` | Close window |
+| `Super + F` | Fullscreen |
+| `Super + V` | Toggle window floating |
+| `Super + W` | Workspace overview |
+| `Alt + Tab` / `Alt + Shift + Tab` | Window switcher (forward / backward) |
+| `Super + Left/Right/Up/Down` | Focus window |
+| `Super + Shift + Left/Right/Up/Down` | Move window |
+| `Super + 1-9/0` | Switch workspace |
+| `Super + Shift + 1-9/0` | Send window to workspace |
+| `Super + L` | Lock session |
+| `Ctrl + Alt + Delete` | Log out |
+| `Print` / `Super + Shift + S` | Screenshot |
+
+Configured declaratively via [`cosmic-manager`](https://github.com/HeitorAugustoLN/cosmic-manager) in [`modules/home-manager/cosmic.nix`](modules/home-manager/cosmic.nix).
+
+</details>
+
+<details>
+<summary>Keybindings (GNOME)</summary>
+
+| Shortcut | Action |
+|:--|:--|
+| `Super + Return` / `Ctrl + Alt + T` | Terminal (Ghostty) |
+| `Super + E` | File manager (Dolphin) |
+| `Super + Q` | Close window |
+| `Super + F` | Fullscreen |
+| `Super + 1-9/0` | Switch workspace |
+| `Super + Shift + 1-9/0` | Move window to workspace |
+| `Super + L` | Lock session |
+| `Print` | Screenshot (native GNOME screenshot UI) |
+| `Super + Shift + S` | Screenshot |
+
+Configured via `dconf.settings` in [`modules/home-manager/gnome.nix`](modules/home-manager/gnome.nix). Workspaces are pinned to a static 10 (`dynamic-workspaces = false`) to match Hyprland/COSMIC instead of GNOME's default dynamic workspace behavior.
 
 </details>
 
