@@ -1,8 +1,41 @@
 # NixOS Config Guidelines for AI Assistants
 
 When working with this NixOS configuration, follow these rules strictly.
-Follow the rules in AI_GUIDELINES.md in this repo. Do not add verbose comments, duplicate packages, or break the established structure.
+Do not add verbose comments, duplicate packages, or break the established structure.
 
+
+## Commands
+
+`justfile` is the entry point for everything CI checks:
+
+```bash
+just fmt        # alejandra .            — formatter
+just check      # nix flake check --show-trace
+just dead       # deadnix .
+just deploy     # ./deploy.sh switch     — rebuild the running system
+just update     # nix flake update
+just gen        # nh os list
+just clean 5    # nh clean all --keep 5
+```
+
+CI (`.github/workflows/check.yml`) runs exactly three gates: `nix flake check --no-build`,
+`alejandra --check .`, `deadnix --fail .`. Run all three locally before calling a change done —
+there is no test suite.
+
+Check a change without switching the running system:
+
+```bash
+nix eval .#nixosConfigurations.muddyblack.config.system.build.toplevel --show-trace   # eval only
+nixos-rebuild build --flake .#muddyblack                                              # build only
+nix build .#nixosConfigurations.muddyblack-lite.config.system.build.vm && ./result/bin/run-muddyblack-lite-vm
+```
+
+`deploy.sh` is the real deployment surface (`bash deploy.sh help` for all flags): `fresh`
+(disko partition + install; `--remote` goes through nixos-anywhere), `install`, `switch`
+(`--offline`, `--remote <host>`, `--nh`, `--profile <host>`), `sops-setup`, `secrets-edit`,
+`secrets-rotate`. `upnix` calls `deploy.sh switch` and plays `assets/sounds/{success,error}.wav`.
+
+`nix develop` gives nix, git, just, sops, age, alejandra, deadnix.
 
 ## Structure
 
@@ -38,6 +71,50 @@ nixos-config/
 │   └── <package>.nix            # One file per package
 └── dev-shells/                  # Development environment templates
 ```
+
+## Architecture
+
+**Two hosts, one builder.** `flake.nix` defines `mkHost` and applies it to
+`hosts/muddyblack/configuration.nix` (full desktop) and `hosts/muddyblack-lite/configuration.nix`
+(light / VM). Both get disko, impermanence, nix-flatpak and home-manager (with plasma-manager +
+caelestia-shell as `sharedModules`) plus the `./pkgs` overlay. `username` arrives via `specialArgs`
+— thread it through, never hardcode `muddyblack`.
+
+**Feature flags.** Each `modules/nixos/features/*.nix` declares `options.features.<name>.enable`
+and wraps its config in `lib.mkIf`. `hosts/common.nix` enables the always-on ones (impermanence,
+flatpak); `hosts/muddyblack/configuration.nix` enables the rest. New optional system functionality
+goes into a feature module with an enable option, never unconditionally into `common.nix`.
+
+**Install-time config is generated.** `hosts/deploy-config.nix` (disk device, dual-boot,
+bootloader, plymouth theme) is written by `deploy.sh`, imported via
+`lib.optional (builtins.pathExists ...)`, and overrides the `lib.mkDefault`s in `common.nix`.
+`bootloader` is deliberately unset in `common.nix` — its only sources are deploy-config.nix and the
+option default in `modules/nixos/hardware.nix`. There is no `hardware-configuration.nix`; disko
+owns partitioning.
+
+**Two nixpkgs channels.** Everything tracks `nixos-26.05`; an explicit `inherit (unstablePkgs) ...`
+list in the flake overlay pulls specific packages (caelestia-*, claude-code, codex, vscode,
+zed-editor, tailscale, typst toolchain, …) from unstable. When a package just needs to be newer,
+add it to that list rather than adding a flake input. Inputs `follows` nixpkgs/home-manager — the
+comments in `flake.nix` explain each exception, don't "fix" them.
+
+**Overlay.** `pkgs/default.nix` takes `inputs`, grouped widgets / themes / icons-cursors / boot /
+apps. Own KDE widgets come from their upstream flakes via `upstreamWidget input` — never re-derive
+them locally, NixOS-specific fixes land upstream. Third-party ones are
+`callPackage ./widgets/<name>.nix`.
+
+**Home-manager.** `home.nix` is imports plus mimeapps/desktop-entry glue only; every sibling module
+is single-purpose. Plasma (`plasma-settings.nix`) and Hyprland (`hyprland.nix`) are both configured
+and picked at the login screen — a desktop change usually has to be considered for both.
+
+**Impermanence.** `/` is wiped on boot. Anything that must survive belongs in
+`modules/nixos/features/impermanence.nix` (`environment.persistence."/persist"` for system, the
+nested `users.<name>` block for home). A new stateful service is not done until its state directory
+is persisted.
+
+**Secrets.** sops-nix with `secrets/secrets.yaml` and age keys in `.sops.yaml`, gated behind
+`features.sops.enable` so forks build without it. Edit via `deploy.sh secrets-edit` (alias
+`secrets`).
 
 ## Rules
 
