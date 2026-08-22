@@ -21,7 +21,12 @@
 
   networking.hostName = "muddyblack";
 
-  boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
+  features.kernel.cachyos.enable = true;
+  features.kernel.cachyos.lto = true;
+  features.kernel.scx.enable = true;
+  # cachyos.march is deliberately not set here: it is a property of the CPU this
+  # config is installed on, not of the profile. deploy.sh detects it and writes
+  # it into hosts/deploy-config.nix, so setting it here too would collide.
 
   features.ai.enable = true;
   features.gaming.enable = true;

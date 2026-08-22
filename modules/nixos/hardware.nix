@@ -214,6 +214,12 @@
       ACTION=="add", SUBSYSTEM=="rfkill", ATTR{type}=="bluetooth", ATTR{soft}="0"
       ACTION=="add", SUBSYSTEM=="bluetooth", ATTR{type}=="1", ATTR{idle_timeout}="0"
       SUBSYSTEM=="powercap", ACTION=="add", RUN+="${pkgs.coreutils}/bin/chmod a+r /sys/%p/energy_uj"
+
+      # I/O schedulers, matching CachyOS-Settings' own 60-ioschedulers.rules.
+      # NixOS otherwise leaves NVMe on "none".
+      ACTION=="add|change", KERNEL=="nvme[0-9]*n[0-9]*", ATTR{queue/rotational}=="0", ATTR{queue/scheduler}="kyber"
+      ACTION=="add|change", KERNEL=="sd[a-z]*|mmcblk[0-9]*", ATTR{queue/rotational}=="0", ATTR{queue/scheduler}="mq-deadline"
+      ACTION=="add|change", KERNEL=="sd[a-z]*", ATTR{queue/rotational}=="1", ATTR{queue/scheduler}="bfq"
     '';
 
     hardware.graphics = {

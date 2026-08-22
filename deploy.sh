@@ -92,11 +92,70 @@ EOF
 }
 
 
+# Best x86-64 psABI level this CPU can run. v4 is deliberately not a possible
+# answer: the kernel builds with -mno-avx, so no AVX-512 reaches kernel code and
+# a v4 build is a v3 build with a narrower CPU requirement. Read from
+# /proc/cpuinfo rather than `ld.so --help` because the loader on PATH is nix-ld's
+# shim here, and cpuinfo answers the same CPUID bits over SSH just as well.
+detect_march() {
+  local host="${1:-}"
+  local cpuinfo flags vendor f
+
+  if [[ -n "$host" ]]; then
+    cpuinfo="$(ssh -o StrictHostKeyChecking=no "$host" 'cat /proc/cpuinfo' 2>/dev/null)" || return 1
+  else
+    cpuinfo="$(cat /proc/cpuinfo 2>/dev/null)" || return 1
+  fi
+
+  flags=" $(printf '%s\n' "$cpuinfo" | sed -n 's/^flags[[:space:]]*: //p' | head -1) "
+  vendor="$(printf '%s\n' "$cpuinfo" | sed -n 's/^vendor_id[[:space:]]*: //p' | head -1)"
+  [[ -n "${flags// /}" ]] || return 1
+
+  for f in avx avx2 bmi1 bmi2 f16c fma movbe xsave popcnt sse4_1 sse4_2 ssse3 cx16 lahf_lm; do
+    [[ "$flags" == *" $f "* ]] || { echo "generic"; return 0; }
+  done
+
+  # Zen 4/5 are the AMD parts with AVX-512, and the one cached variant tuned for
+  # a microarchitecture instead of a psABI level.
+  if [[ "$vendor" == "AuthenticAMD" && "$flags" == *" avx512f "* ]]; then
+    echo "zen4"
+    return 0
+  fi
+
+  echo "x86_64-v3"
+}
+
+# Keep the detected level in deploy-config.nix. Nix cannot probe the CPU itself:
+# flake evaluation is pure, so reading /proc/cpuinfo at eval time would need
+# --impure and would break `nix flake check` and every remote build. Detecting
+# once at deploy time and writing the answer down keeps evaluation reproducible.
+sync_deploy_march() {
+  local host="${1:-}"
+  local out="$FLAKE_DIR/hosts/deploy-config.nix"
+  local march
+
+  [[ -f "$out" ]] || return 0
+
+  if ! march="$(detect_march "$host")"; then
+    echo "CPU detection failed — leaving features.kernel.cachyos.march unchanged."
+    return 0
+  fi
+
+  if grep -q 'features\.kernel\.cachyos\.march' "$out"; then
+    grep -q "features\.kernel\.cachyos\.march = \"${march}\";" "$out" && return 0
+    sed -i "s|features\.kernel\.cachyos\.march = \".*\";|features.kernel.cachyos.march = \"${march}\";|" "$out"
+  else
+    sed -i "\$i\\  features.kernel.cachyos.march = \"${march}\";" "$out"
+  fi
+  echo "Detected CPU level: ${march} (hosts/deploy-config.nix updated)"
+}
+
 write_deploy_config() {
   local device="$1"
   local bl="$2"
   local dual_boot="$3"
   local theme="$4"
+  local march="${5:-generic}"
   local out="$FLAKE_DIR/hosts/deploy-config.nix"
 
   if [[ ! "$device" =~ ^/dev/ ]]; then
@@ -124,9 +183,10 @@ write_deploy_config() {
   diskLayout.withDualBoot = ${dual_boot};
   bootloader = "${bl}";
   plymouthTheme = "${theme}";
+  features.kernel.cachyos.march = "${march}";
 }
 EOF
-  echo "Wrote deploy config: hosts/deploy-config.nix (device=${device}, bootloader=${bl}, dualBoot=${dual_boot}, plymouth=${theme})"
+  echo "Wrote deploy config: hosts/deploy-config.nix (device=${device}, bootloader=${bl}, dualBoot=${dual_boot}, plymouth=${theme}, march=${march})"
 }
 
 prompt_interactive_setup() {
@@ -305,7 +365,8 @@ cmd_fresh() {
   done
 
   prompt_interactive_setup bootloader dual_boot device plymouth_theme
-  write_deploy_config "$device" "$bootloader" "$dual_boot" "$plymouth_theme"
+  write_deploy_config "$device" "$bootloader" "$dual_boot" "$plymouth_theme" \
+    "$(detect_march "$host" || echo generic)"
 
   if [[ -z "$host" ]]; then
     # LOCAL: booted from live ISO
@@ -392,7 +453,8 @@ cmd_install() {
 
   if [[ -z "$skip_setup" ]]; then
     prompt_interactive_setup bootloader dual_boot device plymouth_theme
-    write_deploy_config "$device" "$bootloader" "$dual_boot" "$plymouth_theme"
+    write_deploy_config "$device" "$bootloader" "$dual_boot" "$plymouth_theme" \
+      "$(detect_march || echo generic)"
   fi
 
   echo "Running nixos-install (disk must already be partitioned/mounted)..."
@@ -453,6 +515,8 @@ cmd_switch() {
   done
 
   [[ -n "$profile_explicit" ]] && save_profile "$FLAKE_TARGET"
+
+  sync_deploy_march "$host"
 
   if [[ -z "$host" ]]; then
     ensure_symlink "$FLAKE_DIR"

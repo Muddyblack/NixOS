@@ -239,6 +239,11 @@
     }
 
     ai-models() {
+      if ! systemctl is-active --quiet ollama; then
+        echo "Starting Ollama..."
+        sudo systemctl start ollama
+        sleep 1
+      fi
       ollama list
     }
 

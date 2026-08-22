@@ -42,6 +42,32 @@ in {
       }
     ];
 
+    # On demand, like Paperless-ngx and Stirling-PDF. nginx serves nothing but
+    # Firefly on this host, so it waits too. Starting nginx is enough to bring
+    # the whole stack up: nginx now wants the PHP-FPM pool, and the pool already
+    # pulls firefly-iii-setup in via the upstream module's requiredBy. Without
+    # the ordering, nginx would answer 502 until the pool's socket appears.
+    # firefly-iii-cron keeps its timer — it runs artisan directly and never
+    # touches nginx or the pool.
+    systemd.services.phpfpm-firefly-iii.wantedBy = lib.mkForce [];
+    systemd.services.nginx = {
+      wantedBy = lib.mkForce [];
+      wants = ["phpfpm-firefly-iii.service"];
+      after = ["phpfpm-firefly-iii.service"];
+    };
+
+    security.polkit.extraConfig = ''
+      polkit.addRule(function(action, subject) {
+        if (action.id == "org.freedesktop.systemd1.manage-units" &&
+            subject.isInGroup("wheel")) {
+          var unit = action.lookup("unit");
+          if (unit == "nginx.service" || unit == "phpfpm-firefly-iii.service") {
+            return polkit.Result.YES;
+          }
+        }
+      });
+    '';
+
     # Impermanence bind-mounts dataDir *after* the global systemd-tmpfiles pass,
     # so the storage tree gets created on the ephemeral root and is then hidden
     # by the mount, leaving an empty dir. firefly-iii-setup already orders after
