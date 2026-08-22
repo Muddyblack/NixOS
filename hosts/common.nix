@@ -79,7 +79,6 @@
   ];
 
   nix.settings = {
-    auto-optimise-store = true;
     experimental-features = ["nix-command" "flakes"];
     max-jobs = "auto";
     cores = 0;
@@ -97,7 +96,6 @@
       "zen-browser.cachix.org-1:s1nHwe9zLAHRZOTMA/3qdVaRvbhBTAHAOW/dEhPsZvQ="
       "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
     ];
-    narinfo-cache-negative-ttl = 0;
     always-allow-substitutes = true;
     fallback = true;
     connect-timeout = 5;
@@ -106,6 +104,11 @@
     warn-dirty = false;
     flake-registry = "";
   };
+
+  # Hardlinking duplicate store files off the rebuild path: auto-optimise-store
+  # hashed every newly built path inline, taxing every switch. The timer does
+  # the same dedup weekly instead.
+  nix.optimise.automatic = true;
 
   # Keep the laptop responsive during rebuilds: bounded parallelism (above) plus
   # build jobs that yield CPU/IO to interactive processes.

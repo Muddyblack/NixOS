@@ -6,8 +6,12 @@
 }: {
   programs.caelestia = {
     enable = true;
+    # Both from nixpkgs-unstable via the overlay: the module's own defaults
+    # build the upstream flake, which recompiles quickshell from git.
+    package = pkgs.caelestia-shell;
     systemd.enable = true;
     cli.enable = true;
+    cli.package = pkgs.caelestia-cli;
     settings = {
       bar.status = {
         showAudio = true;
