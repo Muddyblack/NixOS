@@ -157,6 +157,7 @@
     ./ai.nix
     ./plasma-settings.nix
     ./hyprland.nix
+    ./cosmic.nix
     ./caelestia.nix
     ./vscode.nix
     ./vscode-forks.nix

@@ -13,6 +13,7 @@
       ../modules/nixos/services.nix
       ../modules/nixos/desktop.nix
       ../modules/nixos/hyprland.nix
+      ../modules/nixos/cosmic.nix
       ../modules/nixos/features/impermanence.nix
       ../modules/nixos/features/sops.nix
       ../modules/nixos/features/snapshots.nix

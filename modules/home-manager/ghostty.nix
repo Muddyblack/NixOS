@@ -36,7 +36,7 @@
       window-decoration = "server";
 
       # Transparency + Blur
-      background-opacity = 0.4;
+      background-opacity = 0.75;
       background-blur = 1;
 
       window-padding-x = 16;
