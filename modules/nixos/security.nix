@@ -10,6 +10,8 @@
   boot.kernel.sysctl = {
     "kernel.kptr_restrict" = 2;
     "kernel.dmesg_restrict" = 1;
+    # SysRq: REISUB safe subset (4 + 16 + 32 + 64 + 128)
+    "kernel.sysrq" = 244;
     # "kernel.yama.ptrace_scope" = 1;
     "kernel.unprivileged_bpf_disabled" = 1;
     "net.core.bpf_jit_harden" = 2;

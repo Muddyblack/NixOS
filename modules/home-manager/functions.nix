@@ -317,6 +317,17 @@
     }
     compdef _devnew devnew
 
+    # Clean desktop session exit from non-login shells
+    logout() {
+      if [[ "''${XDG_CURRENT_DESKTOP:-}" == *KDE* ]]; then
+        busctl --user call org.kde.Shutdown /Shutdown org.kde.Shutdown logout
+      elif [[ -n "''${HYPRLAND_INSTANCE_SIGNATURE:-}" ]]; then
+        hyprctl dispatch exit
+      else
+        builtin logout "$@"
+      fi
+    }
+
     # Timer and Stopwatch
     alias timer='termdown'
     alias stopwatch='clock-rs -s'
