@@ -1,4 +1,10 @@
-{pkgs, ...}: {
+{pkgs, ...}: let
+  kdePortalPreference = ''
+    [preferred]
+    default=kde;gtk
+    org.freedesktop.impl.portal.Settings=kde
+  '';
+in {
   home.packages = with pkgs; [
     # KDE Plasma addons
     kdePackages.plasma-pa
@@ -32,11 +38,13 @@
     style.name = "kvantum";
   };
 
-  xdg.configFile."xdg-desktop-portal/portals.conf".text = ''
-    [preferred]
-    default=kde;gtk
-    org.freedesktop.impl.portal.Settings=kde
-  '';
+  # Route GTK apps at the KDE portal so they pick up the Plasma colour scheme --
+  # but only in sessions that actually run that portal.  A generic
+  # ~/.config/xdg-desktop-portal/portals.conf shadows the system's
+  # <desktop>-portals.conf in *every* session, so COSMIC/GNOME would ask for a
+  # kde backend that isn't running and screenshots fail with PortalNotFound.
+  xdg.configFile."xdg-desktop-portal/kde-portals.conf".text = kdePortalPreference;
+  xdg.configFile."xdg-desktop-portal/hyprland-portals.conf".text = kdePortalPreference;
 
   xdg.desktopEntries.vmware = {
     name = "VMware Workstation";
