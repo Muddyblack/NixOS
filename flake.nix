@@ -50,9 +50,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Only the home-manager module is used from here; the packages come from
+    # nixpkgs-unstable (see the overlay below). quickshell is nulled out because
+    # the flake would otherwise build it from git master - hours of clang, with
+    # no public cache carrying that derivation.
     caelestia-shell = {
       url = "github:caelestia-dots/shell";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.quickshell.follows = "";
     };
 
     # Own widgets, tracking their default branch rather than a tag: a tag-pinned
@@ -138,8 +143,15 @@
               inputs.nur.overlays.default
               inputs.nix-cachyos-kernel.overlays.pinned
               (_final: prev: {
+                # caelestia-shell/-cli exist only in unstable, and only there are
+                # they - plus their quickshell dependency - prebuilt on cache.nixos.org.
+                # Building caelestia-shell.homeManagerModules default instead compiles
+                # quickshell from git on every input bump: hours of clang, since no
+                # public cache carries those derivations.
                 inherit
                   (unstablePkgs)
+                  caelestia-cli
+                  caelestia-shell
                   claude-code
                   codex
                   grok-build

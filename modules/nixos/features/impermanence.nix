@@ -66,6 +66,11 @@
         }
       ];
       files = [
+        # systemd's local credential key. libvirt's secrets-encryption-key under
+        # /var/lib/libvirt is persisted and encrypted against this key, so wiping
+        # it on boot leaves a blob nothing can decrypt and libvirtd.service dies
+        # at step CREDENTIALS (status=243).
+        "/var/lib/systemd/credential.secret"
         "/etc/machine-id"
         "/etc/adjtime"
         "/etc/ssh/ssh_host_rsa_key"
