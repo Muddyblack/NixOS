@@ -126,7 +126,7 @@ In the first few weeks, I managed to like break the system three times a day and
 | | |
 |:--|:--|
 | **OS** | NixOS 26.05 |
-| **Kernel** | Linux CachyOS |
+| **Kernel** | Linux CachyOS · sched_ext (scx_lavd) |
 | **WM** | Hyprland · KDE Plasma 6 |
 | **Shell** | Zsh · Powerlevel10k |
 | **Terminal** | Ghostty |

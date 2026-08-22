@@ -53,6 +53,10 @@ in {
                   passwordFile = "/tmp/luks.key";
                   settings = {
                     allowDiscards = true;
+                    # Everything on this machine lives behind this container, and
+                    # dm-crypt pushes every read and write through an internal workqueue
+                    # line reverts it on the next boot. Needs Linux 5.9+.
+                    bypassWorkqueues = true;
                   };
                   content = {
                     type = "btrfs";
@@ -60,31 +64,31 @@ in {
                     subvolumes = {
                       "/@root" = {
                         mountpoint = "/";
-                        mountOptions = ["compress=zstd" "noatime"];
+                        mountOptions = ["compress=zstd:1" "noatime"];
                       };
                       "/@persist" = {
                         mountpoint = "/persist";
-                        mountOptions = ["compress=zstd" "noatime"];
+                        mountOptions = ["compress=zstd:1" "noatime"];
                       };
                       "/@home" = {
                         mountpoint = "/home";
-                        mountOptions = ["compress=zstd" "noatime"];
+                        mountOptions = ["compress=zstd:1" "noatime"];
                       };
                       "/@nix" = {
                         mountpoint = "/nix";
-                        mountOptions = ["compress=zstd" "noatime"];
+                        mountOptions = ["compress=zstd:1" "noatime"];
                       };
                       "/@log" = {
                         mountpoint = "/var/log";
-                        mountOptions = ["compress=zstd" "noatime"];
+                        mountOptions = ["compress=zstd:1" "noatime"];
                       };
                       "/@data" = {
                         mountpoint = "/mnt/data";
-                        mountOptions = ["compress=zstd" "noatime" "noauto" "nofail"];
+                        mountOptions = ["compress=zstd:1" "noatime" "noauto" "nofail"];
                       };
                       "/@projects" = {
                         mountpoint = "/mnt/projects";
-                        mountOptions = ["compress=zstd" "noatime" "nofail"];
+                        mountOptions = ["compress=zstd:1" "noatime" "nofail"];
                       };
                     };
                   };

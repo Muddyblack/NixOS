@@ -274,7 +274,7 @@ When suggesting kernel sysctl hardening for `modules/nixos/security.nix`, be awa
 |--------|------|--------|
 | `kernel.yama.ptrace_scope = 1` | **Breaks Proton/Steam games & debugger attach** | Proton uses ptrace internally; attaching gdb/strace to running processes also breaks. Do NOT add this — gaming is enabled on this host. |
 | `kernel.unprivileged_bpf_disabled = 1` | Monitoring tools need sudo | Tools like `bpftrace`, some `btop` features, `bandwhich` require elevated privileges. Acceptable tradeoff but warn the user. |
-| `net.core.bpf_jit_harden = 2` | Pairs with BPF above | Low daily impact, fine to keep. |
+| `net.core.bpf_jit_harden = 2` | Pairs with BPF above | Low daily impact, fine to keep. Note it also blinds constants in the sched_ext scheduler's own BPF program (`features.kernel.scx`), so it is not free on the scheduling hot path; drop to `1` if scx latency ever needs the headroom. |
 
 Default safe set (already in security.nix): `kptr_restrict`, `dmesg_restrict`, `rp_filter`, `tcp_syncookies`, redirect/accept blocks, `bpf_jit_harden`. Skip `ptrace_scope` and be cautious with `unprivileged_bpf_disabled`.
 

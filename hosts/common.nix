@@ -17,6 +17,7 @@
       ../modules/nixos/features/sops.nix
       ../modules/nixos/features/snapshots.nix
       ../modules/nixos/features/power.nix
+      ../modules/nixos/features/kernel.nix
       ../modules/nixos/features/hibernate.nix
       ../modules/nixos/features/flatpak.nix
     ]
@@ -84,6 +85,7 @@
     cores = 0;
     min-free = 5 * 1024 * 1024 * 1024;
     max-free = 15 * 1024 * 1024 * 1024;
+    # attic.xuyh0120.win/lantian carries the prebuilt CachyOS kernels.
     substituters = [
       "https://cache.nixos.org"
       "https://nix-community.cachix.org"

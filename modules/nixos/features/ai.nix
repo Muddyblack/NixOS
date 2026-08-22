@@ -28,6 +28,12 @@
       };
     };
 
-    systemd.services.open-webui.wantedBy = lib.mkForce [];
+    # On demand: neither the model server nor its UI belongs in multi-user.target.
+    systemd.services.ollama.wantedBy = lib.mkForce [];
+    systemd.services.open-webui = {
+      wantedBy = lib.mkForce [];
+      wants = ["ollama.service"];
+      after = ["ollama.service"];
+    };
   };
 }
