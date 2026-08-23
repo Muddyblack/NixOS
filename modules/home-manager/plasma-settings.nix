@@ -617,7 +617,7 @@ in {
     [Desktop Action openWithAntigravityIDE]
     Name=Open with Antigravity IDE
     Icon=antigravity-ide
-    Exec=antigravity-ide %f
+    Exec=antigravity-ide --disable-gpu %f
 
     [Desktop Action openWithZed]
     Name=Open with Zed
