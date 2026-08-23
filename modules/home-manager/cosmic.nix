@@ -105,7 +105,7 @@ in {
           };
           natural_scroll = {
             __type = "optional";
-            value = true;
+            value = false;
           };
           scroll_button = {
             __type = "optional";
