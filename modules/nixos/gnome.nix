@@ -11,10 +11,11 @@ lib.mkIf config.features.desktops.gnome.enable {
     epiphany # GNOME Web
     geary # Mail
     totem # Videos
+    showtime # Videos (GNOME 46+ replacement for Totem)
     gnome-music
     gnome-weather
     gnome-contacts
-    # gnome-calendar
+    gnome-calendar
     # gnome-clocks
     gnome-characters
     gnome-connections
