@@ -337,10 +337,18 @@
         hyprctl dispatch exit
       elif [[ "''${XDG_CURRENT_DESKTOP:-}" == *GNOME* ]]; then
         gnome-session-quit --logout --no-prompt
+      elif [[ "''${XDG_CURRENT_DESKTOP:-}" == *COSMIC* ]]; then
+        # What the COSMIC panel's own "Log Out" button calls. Do NOT fall
+        # through to loginctl terminate-session here: that SIGTERMs
+        # sddm-helper directly, so SDDM sees the helper exit 1 ("Process
+        # crashed") instead of a session that ended cleanly, and never
+        # respawns a greeter — the screen just goes black with no way back
+        # except a hard power cycle.
+        busctl --user call com.system76.CosmicSession /com/system76/CosmicSession com.system76.CosmicSession Exit
       elif [[ -n "''${XDG_SESSION_ID:-}" && "''${XDG_SESSION_TYPE:-}" == wayland ]]; then
-        # COSMIC and any other Wayland session without its own dedicated
-        # IPC exit: ending the logind session is the universal clean
-        # shutdown, same as Hyprland's own Super+Shift+E bind.
+        # Any other Wayland session without its own dedicated IPC exit:
+        # ending the logind session is the universal clean shutdown, same
+        # as Hyprland's own Super+Shift+E bind.
         loginctl terminate-session "$XDG_SESSION_ID"
       else
         builtin logout "$@"
