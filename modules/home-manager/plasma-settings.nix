@@ -482,6 +482,13 @@ in {
       kscreenlockerrc."Greeter/Wallpaper/org.kde.image/General".PreviewImage = "${config.home.homeDirectory}/.local/share/wallpapers/lockscreen.png";
       kscreenlockerrc.Daemon.Timeout = 10;
 
+      # Let KWin launch fcitx5 itself (System Settings -> Virtual Keyboard);
+      # without this the Wayland IM frontend never gets a socket under Plasma.
+      kwinrc.Wayland.InputMethod = {
+        value = "/run/current-system/sw/share/applications/fcitx5-wayland-launcher.desktop";
+        shellExpand = true;
+      };
+
       ksplashrc.KSplash.Theme = "Illusion";
       plasmarc.Theme.name = "Iridescent-round";
 

@@ -58,6 +58,13 @@ in {
     config.gtk.default = "gtk";
   };
 
+  # NIX_XDG_DESKTOP_PORTAL_DIR gates which portal backends the frontend can
+  # even see; it was defaulting to the per-user profile (hyprland.portal
+  # only), so cosmic/gnome/kde sessions got PortalNotFound for Screenshot and
+  # Settings. Point it at the system profile, which has every backend.
+  systemd.user.services.xdg-desktop-portal.environment.NIX_XDG_DESKTOP_PORTAL_DIR =
+    lib.mkForce "/run/current-system/sw/share/xdg-desktop-portal/portals";
+
   # User avatar for SDDM
   services.accounts-daemon.enable = true;
   system.activationScripts.sddm-avatar = ''
@@ -78,6 +85,10 @@ in {
   i18n.inputMethod = {
     enable = true;
     type = "fcitx5";
+    # Wayland input-method frontend (text-input-v3) instead of the
+    # GTK_IM_MODULE/QT_IM_MODULE shims — every session here is Wayland, and
+    # KWin only feeds fcitx5 through the Wayland frontend.
+    fcitx5.waylandFrontend = true;
     fcitx5.addons = with pkgs; [fcitx5-gtk kdePackages.fcitx5-qt kdePackages.fcitx5-configtool];
   };
 
