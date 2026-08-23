@@ -123,15 +123,19 @@ in {
       {
         name = "Panel";
         anchor = enumVariant "Top";
-        anchor_gap = true;
-        background = enumVariant "Dark";
+        anchor_gap = false;
+        background = enumVariant "ThemeDefault";
+        border_radius = 0;
         expand_to_edges = true;
-        margin = 4;
+        margin = 0;
+        opacity = 0.9;
+        padding = 4;
+        spacing = 4;
         # "All", never a hardcoded output name — laptop with a variable
         # external-monitor setup. "Active" reserves the exclusive zone but
         # never draws the panel.
         output = enumVariant "All";
-        size = enumVariant "M";
+        size = enumVariant "S";
         plugins_center = {
           __type = "optional";
           value = ["com.system76.CosmicAppletTime"];
@@ -156,6 +160,37 @@ in {
                 "com.system76.CosmicAppletPower"
               ]
             ];
+          };
+        };
+      }
+      {
+        name = "Dock";
+        anchor = enumVariant "Bottom";
+        anchor_gap = false;
+        background = enumVariant "ThemeDefault";
+        border_radius = 0;
+        expand_to_edges = true;
+        margin = 0;
+        opacity = 0.9;
+        padding = 4;
+        spacing = 4;
+        output = enumVariant "All";
+        size = enumVariant "M";
+        plugins_center = {
+          __type = "optional";
+          value = [
+            "com.system76.CosmicPanelLauncherButton"
+            "com.system76.CosmicPanelWorkspacesButton"
+            "com.system76.CosmicPanelAppButton"
+            "com.system76.CosmicAppList"
+            "com.system76.CosmicAppletMinimize"
+          ];
+        };
+        plugins_wings = {
+          __type = "optional";
+          value = {
+            __type = "tuple";
+            value = [[] []];
           };
         };
       }
