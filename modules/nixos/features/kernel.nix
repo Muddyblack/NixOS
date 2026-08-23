@@ -104,9 +104,13 @@ in {
 
     # The CachyOS kernel ships CONFIG_SCHED_CLASS_EXT but no userspace
     # scheduler, so without this it runs plain EEVDF. rustscheds instead of
-    # scx.full keeps the C example schedulers out of the closure. If the
-    # scheduler cannot attach, systemd gives up after two tries and the kernel
-    # stays on EEVDF - the desktop never hangs on it. Note security.nix sets
+    # scx.full keeps the C example schedulers out of the closure. Attach failure
+    # is the safe case: systemd gives up after two tries and the kernel stays on
+    # EEVDF. Runtime failure is not - a scheduler that attaches and then exits on
+    # "runnable task stall" gets restarted forever, and every cycle starves some
+    # task for tens of seconds. That looks like general desktop slowness rather
+    # than a service fault, so check `journalctl -b | grep "task stall"` before
+    # believing the hardware. Note security.nix sets
     # net.core.bpf_jit_harden = 2, which blinds constants in this scheduler's
     # own BPF program too.
     (lib.mkIf cfg.scx.enable {
