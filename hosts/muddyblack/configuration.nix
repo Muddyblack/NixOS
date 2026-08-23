@@ -23,7 +23,15 @@
 
   features.kernel.cachyos.enable = true;
   features.kernel.cachyos.lto = true;
-  features.kernel.scx.enable = true;
+  # Disabled 2026-08-23: scx_lavd attaches fine on linux-cachyos 7.2, then dies
+  # at runtime with "runnable task stall" roughly once a minute, each time after
+  # starving some random runnable task for 30-45s (systemd-udevd, ripgrep,
+  # Electron thread pools). systemd restarts it, so it is a permanent
+  # crash-restart loop that reads as a machine-wide stutter. Cause looks like an
+  # API skew: scx_rustscheds 1.1.3 expects lavd_ops members this kernel does not
+  # export (sub_caps_updated, init_cids, rescue_quantum_us, ...), and libbpf
+  # zeroes them instead of failing. Re-enable once the two versions line up.
+  features.kernel.scx.enable = false;
   # cachyos.march is deliberately not set here: it is a property of the CPU this
   # config is installed on, not of the profile. deploy.sh detects it and writes
   # it into hosts/deploy-config.nix, so setting it here too would collide.
