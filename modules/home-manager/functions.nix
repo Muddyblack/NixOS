@@ -335,10 +335,12 @@
         busctl --user call org.kde.Shutdown /Shutdown org.kde.Shutdown logout
       elif [[ -n "''${HYPRLAND_INSTANCE_SIGNATURE:-}" ]]; then
         hyprctl dispatch exit
+      elif [[ "''${XDG_CURRENT_DESKTOP:-}" == *GNOME* ]]; then
+        gnome-session-quit --logout --no-prompt
       elif [[ -n "''${XDG_SESSION_ID:-}" && "''${XDG_SESSION_TYPE:-}" == wayland ]]; then
-        # COSMIC, GNOME, and any other Wayland session without its own
-        # dedicated IPC exit: ending the logind session is the universal
-        # clean shutdown, same as Hyprland's own Super+Shift+E bind.
+        # COSMIC and any other Wayland session without its own dedicated
+        # IPC exit: ending the logind session is the universal clean
+        # shutdown, same as Hyprland's own Super+Shift+E bind.
         loginctl terminate-session "$XDG_SESSION_ID"
       else
         builtin logout "$@"
