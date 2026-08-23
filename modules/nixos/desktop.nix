@@ -72,6 +72,15 @@ in {
     variant = "";
   };
 
+  # Fcitx5's built-in Unicode/emoji typing goes through the actual IME input
+  # channel (not clipboard+paste), so selecting an emoji types it directly
+  # into whatever field has focus — in any toolkit, on any desktop session.
+  i18n.inputMethod = {
+    enable = true;
+    type = "fcitx5";
+    fcitx5.addons = with pkgs; [fcitx5-gtk kdePackages.fcitx5-qt kdePackages.fcitx5-configtool];
+  };
+
   # Touchpad
   services.libinput = {
     enable = true;
