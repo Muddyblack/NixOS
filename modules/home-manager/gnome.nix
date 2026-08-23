@@ -1,7 +1,32 @@
-{config, ...}: let
+{
+  config,
+  pkgs,
+  ...
+}: let
   wallpaper = "file://${config.home.homeDirectory}/.local/share/wallpapers/desktop.png";
 in {
+  home.packages = [pkgs.gnomeExtensions.blur-my-shell];
+
   dconf.settings = {
+    "org/gnome/shell".enabled-extensions = ["blur-my-shell@aunetx"];
+
+    "org/gnome/shell/extensions/blur-my-shell/panel" = {
+      blur = true;
+      brightness = 0.6;
+      sigma = 30;
+    };
+
+    "org/gnome/shell/extensions/blur-my-shell/overview" = {
+      blur = true;
+      pipeline = "pipeline_default";
+    };
+
+    "org/gnome/shell/extensions/blur-my-shell/dash-to-dock" = {
+      blur = true;
+      brightness = 0.6;
+      sigma = 30;
+    };
+
     "org/gnome/desktop/background" = {
       picture-uri = wallpaper;
       picture-uri-dark = wallpaper;
@@ -50,6 +75,15 @@ in {
     "org/gnome/shell/keybindings" = {
       show-screenshot-ui = ["Print"];
       screenshot = ["<Super><Shift>s"];
+      switch-to-application-1 = [];
+      switch-to-application-2 = [];
+      switch-to-application-3 = [];
+      switch-to-application-4 = [];
+      switch-to-application-5 = [];
+      switch-to-application-6 = [];
+      switch-to-application-7 = [];
+      switch-to-application-8 = [];
+      switch-to-application-9 = [];
     };
 
     "org/gnome/settings-daemon/plugins/media-keys" = {
