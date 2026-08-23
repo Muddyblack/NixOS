@@ -73,8 +73,8 @@ in {
     };
 
     "org/gnome/shell/keybindings" = {
-      show-screenshot-ui = ["Print"];
-      screenshot = ["<Super><Shift>s"];
+      show-screenshot-ui = ["Print" "<Super><Shift>s"];
+      screenshot = [];
       switch-to-application-1 = [];
       switch-to-application-2 = [];
       switch-to-application-3 = [];
