@@ -127,9 +127,10 @@ in {
         background = enumVariant "Dark";
         expand_to_edges = true;
         margin = 4;
-        # "Active" (primary output), never a hardcoded output name — laptop
-        # with a variable external-monitor setup.
-        output = enumVariant "Active";
+        # "All", never a hardcoded output name — laptop with a variable
+        # external-monitor setup. "Active" reserves the exclusive zone but
+        # never draws the panel.
+        output = enumVariant "All";
         size = enumVariant "M";
         plugins_center = {
           __type = "optional";
