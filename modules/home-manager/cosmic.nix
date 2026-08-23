@@ -119,11 +119,23 @@ in {
       };
     };
 
+    applets.app-list.settings.favorites = [
+      "com.mitchellh.ghostty"
+      "zen"
+      "antigravity-ide"
+      "code"
+      "org.kde.dolphin"
+    ];
+
     panels = [
       {
         name = "Panel";
         anchor = enumVariant "Top";
         anchor_gap = false;
+        autohide = {
+          __type = "optional";
+          value = null;
+        };
         background = enumVariant "ThemeDefault";
         border_radius = 0;
         expand_to_edges = true;
@@ -147,10 +159,10 @@ in {
             value = [
               [
                 "com.system76.CosmicPanelWorkspacesButton"
-                "com.system76.CosmicPanelAppButton"
                 "com.system76.CosmicAppletWorkspaces"
               ]
               [
+                "com.system76.CosmicAppletTiling"
                 "com.system76.CosmicAppletInputSources"
                 "com.system76.CosmicAppletAudio"
                 "com.system76.CosmicAppletNetwork"
@@ -166,12 +178,25 @@ in {
       {
         name = "Dock";
         anchor = enumVariant "Bottom";
-        anchor_gap = false;
+        anchor_gap = true;
+        # KDE-style auto-hide: slides away, reappears on hover at the edge.
+        autohide = {
+          __type = "optional";
+          value = {
+            handle_size = 4;
+            transition_time = 200;
+            wait_time = 1000;
+          };
+        };
+        autohover_delay_ms = {
+          __type = "optional";
+          value = 200;
+        };
         background = enumVariant "ThemeDefault";
-        border_radius = 0;
-        expand_to_edges = true;
-        margin = 0;
-        opacity = 0.9;
+        border_radius = 24;
+        expand_to_edges = false;
+        margin = 8;
+        opacity = 0.85;
         padding = 4;
         spacing = 4;
         output = enumVariant "All";
@@ -179,8 +204,6 @@ in {
         plugins_center = {
           __type = "optional";
           value = [
-            "com.system76.CosmicPanelLauncherButton"
-            "com.system76.CosmicPanelWorkspacesButton"
             "com.system76.CosmicPanelAppButton"
             "com.system76.CosmicAppList"
             "com.system76.CosmicAppletMinimize"
