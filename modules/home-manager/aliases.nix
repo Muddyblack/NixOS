@@ -29,7 +29,6 @@
     rebuild = "upnix";
     gen = "nh os list";
     clean = "nh clean all";
-    update = "nix flake update";
     secrets = "SOPS_AGE_KEY_FILE=$HOME/.config/sops/age/keys.txt sops";
     oc = "opencode";
 

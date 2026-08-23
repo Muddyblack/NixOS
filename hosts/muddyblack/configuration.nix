@@ -55,6 +55,5 @@
   home-manager.users.${username} = {
     imports = [./home-packages.nix];
     programs.gimp-photogim.enable = true;
-    desktop.widgets.glassySystemMonitor.enable = false;
   };
 }

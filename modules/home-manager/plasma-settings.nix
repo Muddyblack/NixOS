@@ -397,6 +397,7 @@ in {
         "Show Desktop" = "Meta+D";
         "Overview" = "Meta+W";
         "Toggle Night Color" = ["Meta+Shift+N"];
+        "Cube" = "Meta+C";
 
         # Hyprland-style desktop switching: Meta+1..5.
         "Switch to Desktop 1" = "Meta+1";
@@ -509,6 +510,11 @@ in {
       kwinrc.Plugins.dimscreenEnabled = false;
       kwinrc.Plugins.slidebackEnabled = false;
       kwinrc.Plugins.wobblywindowsEnabled = false;
+
+      # Desktop Cube (kdeplasma-addons): toggled with Meta+C, arranges the
+      # virtual desktops on the faces of a 3D cube. Manual overlay, not an
+      # automatic replacement for the Meta+1..5 instant desktop switching.
+      kwinrc.Plugins.cubeEnabled = true;
 
       # Night Color
       kwinrc.NightColor.Active = false;

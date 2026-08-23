@@ -21,6 +21,12 @@
       inputs.home-manager.follows = "home-manager";
     };
 
+    cosmic-manager = {
+      url = "github:HeitorAugustoLN/cosmic-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
+
     zen-browser = {
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -184,6 +190,7 @@
 
               sharedModules = [
                 plasma-manager.homeModules.plasma-manager
+                inputs.cosmic-manager.homeManagerModules.default
                 inputs.caelestia-shell.homeManagerModules.default
               ];
             };
