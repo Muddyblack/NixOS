@@ -86,8 +86,8 @@
     }
 
     upnix() {
-      local flake_path="."
-      [[ -f "flake.nix" ]] || flake_path="''${FLAKE_DIR:-.}"
+      local flake_path
+      flake_path="$(_resolve_flake_dir)" || flake_path="."
 
       if [[ -f "$flake_path/deploy.sh" ]]; then
         echo "Running deployment script (switch) from $flake_path..."
@@ -109,9 +109,16 @@
       fi
     }
 
+    update() {
+      local flake_path
+      flake_path="$(_resolve_flake_dir)" || flake_path="."
+      echo "Updating flake inputs in $flake_path..."
+      (cd "$flake_path" && nix flake update)
+    }
+
     upall() {
-      local flake_path="."
-      [[ -f "flake.nix" ]] || flake_path="''${FLAKE_DIR:-.}"
+      local flake_path
+      flake_path="$(_resolve_flake_dir)" || flake_path="."
 
       echo "Updating flake inputs..."
       (cd "$flake_path" && nix flake update)
@@ -328,6 +335,11 @@
         busctl --user call org.kde.Shutdown /Shutdown org.kde.Shutdown logout
       elif [[ -n "''${HYPRLAND_INSTANCE_SIGNATURE:-}" ]]; then
         hyprctl dispatch exit
+      elif [[ -n "''${XDG_SESSION_ID:-}" && "''${XDG_SESSION_TYPE:-}" == wayland ]]; then
+        # COSMIC, GNOME, and any other Wayland session without its own
+        # dedicated IPC exit: ending the logind session is the universal
+        # clean shutdown, same as Hyprland's own Super+Shift+E bind.
+        loginctl terminate-session "$XDG_SESSION_ID"
       else
         builtin logout "$@"
       fi

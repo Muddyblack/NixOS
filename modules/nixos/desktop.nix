@@ -1,8 +1,12 @@
 {
   pkgs,
+  lib,
+  config,
   username,
   ...
-}: {
+}: let
+  cfg = config.features.desktops;
+in {
   # Display & Desktop
   #
   # The greeter runs as a Wayland compositor now (wayland.enable), not on Xorg.
@@ -37,17 +41,20 @@
     enable = false;
     user = null;
   };
-  services.desktopManager.plasma6.enable = true;
-  environment.systemPackages = [
-    (pkgs.writeShellScriptBin "kde-plasma" ''
+  services.desktopManager.plasma6.enable = cfg.plasma.enable;
+  environment.systemPackages = lib.optional cfg.plasma.enable (
+    pkgs.writeShellScriptBin "kde-plasma" ''
       exec ${pkgs.kdePackages.plasma-workspace}/libexec/plasma-dbus-run-session-if-needed \
         ${pkgs.kdePackages.plasma-workspace}/bin/startplasma-wayland "$@"
-    '')
-  ];
+    ''
+  );
   xdg.portal = {
     enable = true;
     extraPortals = [pkgs.xdg-desktop-portal-gtk];
-    config.common.default = "kde";
+    config.common.default =
+      if cfg.plasma.enable
+      then "kde"
+      else "gtk";
     config.gtk.default = "gtk";
   };
 

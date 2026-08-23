@@ -3,6 +3,7 @@
   lib,
   inputs,
   username,
+  osConfig,
   ...
 }: {
   home.username = username;
@@ -147,29 +148,32 @@
     ${pkgs.gnused}/bin/sed -i "s|file:///etc/nixos|file://$real|g" "$PLACES"
   '';
 
-  imports = [
-    ./packages.nix
-    ./widgets.nix
-    ./theme.nix
-    ./shell.nix
-    ./cheatsheet.nix
-    ./nwg-dock.nix
-    ./ai.nix
-    ./plasma-settings.nix
-    ./hyprland.nix
-    ./caelestia.nix
-    ./vscode.nix
-    ./vscode-forks.nix
-    ./ghostty.nix
-    ./zen.nix
-    ./neovim.nix
-    ./git.nix
-    ./gimp.nix
-    ./obsidian.nix
-    ./espanso.nix
-    ./steam.nix
-    ./weather-patch.nix
-  ];
+  imports =
+    [
+      ./packages.nix
+      ./widgets.nix
+      ./theme.nix
+      ./shell.nix
+      ./cheatsheet.nix
+      ./nwg-dock.nix
+      ./ai.nix
+      ./caelestia.nix
+      ./vscode.nix
+      ./vscode-forks.nix
+      ./ghostty.nix
+      ./zen.nix
+      ./neovim.nix
+      ./git.nix
+      ./gimp.nix
+      ./obsidian.nix
+      ./espanso.nix
+      ./steam.nix
+      ./weather-patch.nix
+    ]
+    ++ lib.optional osConfig.features.desktops.hyprland.enable ./hyprland.nix
+    ++ lib.optional osConfig.features.desktops.plasma.enable ./plasma-settings.nix
+    ++ lib.optional osConfig.features.desktops.cosmic.enable ./cosmic.nix
+    ++ lib.optional osConfig.features.desktops.gnome.enable ./gnome.nix;
 
   home.sessionVariables = {
     EDITOR = lib.mkForce "${lib.getExe pkgs.neovim}";

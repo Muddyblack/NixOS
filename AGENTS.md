@@ -86,7 +86,7 @@ flatpak); `hosts/muddyblack/configuration.nix` enables the rest. New optional sy
 goes into a feature module with an enable option, never unconditionally into `common.nix`.
 
 **Install-time config is generated.** `hosts/deploy-config.nix` (disk device, dual-boot,
-bootloader, plymouth theme) is written by `deploy.sh`, imported via
+bootloader, plymouth theme, `features.desktops.*.enable`) is written by `deploy.sh`, imported via
 `lib.optional (builtins.pathExists ...)`, and overrides the `lib.mkDefault`s in `common.nix`.
 `bootloader` is deliberately unset in `common.nix` — its only sources are deploy-config.nix and the
 option default in `modules/nixos/hardware.nix`. There is no `hardware-configuration.nix`; disko

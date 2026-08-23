@@ -1,4 +1,6 @@
-{...}: {
+{osConfig, ...}: let
+  gnomeEnabled = osConfig.features.desktops.gnome.enable or false;
+in {
   programs.ghostty = {
     enable = true;
     settings = {
@@ -36,8 +38,14 @@
       window-decoration = "server";
 
       # Transparency + Blur
-      background-opacity = 0.4;
-      background-blur = 1;
+      background-opacity =
+        if gnomeEnabled
+        then 0.85
+        else 0.5;
+      background-blur-radius =
+        if gnomeEnabled
+        then 0
+        else 20;
 
       window-padding-x = 16;
       window-padding-y = 10;

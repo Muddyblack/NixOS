@@ -11,8 +11,11 @@
       ../modules/nixos/hardware.nix
       ../modules/nixos/security.nix
       ../modules/nixos/services.nix
+      ../modules/nixos/features/desktops.nix
       ../modules/nixos/desktop.nix
       ../modules/nixos/hyprland.nix
+      ../modules/nixos/cosmic.nix
+      ../modules/nixos/gnome.nix
       ../modules/nixos/features/impermanence.nix
       ../modules/nixos/features/sops.nix
       ../modules/nixos/features/snapshots.nix

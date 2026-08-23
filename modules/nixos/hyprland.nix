@@ -1,4 +1,10 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
+lib.mkIf config.features.desktops.hyprland.enable {
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
