@@ -530,8 +530,11 @@ in {
       kwinrc.Compositing.WindowsBlockCompositing = false;
 
       # Blur & transparency
-      kwinrc."Effect-blur".BlurStrength = 8;
-      kwinrc."Effect-blur".NoiseStrength = 0;
+      # BlurStrength 12 + NoiseStrength 2 is the frosted-glass look: the noise
+      # grain is what makes the blur read as glass rather than a flat smear.
+      # Do not tune these down — b16ddca did and the desktop went matte.
+      kwinrc."Effect-blur".BlurStrength = 12;
+      kwinrc."Effect-blur".NoiseStrength = 2;
       kwinrc."Effect-contrast".contrast = 20;
       kwinrc."Effect-contrast".intensity = 150;
       kwinrc."Effect-contrast".saturation = 100;
@@ -564,7 +567,10 @@ in {
       # Global settings
       kdeglobals.General.BrowserApplication = "zen.desktop";
       kdeglobals.General.soundTheme = "ocean";
-      kdeglobals.General.ColorScheme = "BreezeDark";
+      # From vivid-plasma-themes — the scheme Vivid-Dark-Global-6 used to pull in.
+      # Set by name rather than via `lookAndFeel`, because applying the global
+      # theme corrupts the session (see the workspace block above).
+      kdeglobals.General.ColorScheme = "VividCyanDarkColorscheme";
       kdeglobals.KDE.AnimationDurationFactor = 0.5;
       kdeglobals.KDE.widgetStyle = "kvantum";
 
