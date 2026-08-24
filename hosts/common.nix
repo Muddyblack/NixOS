@@ -59,7 +59,11 @@
   diskLayout.device = lib.mkDefault "/dev/sda";
   plymouthTheme = lib.mkDefault "dotted";
 
-  console.keyMap = "de";
+  # keyboardLayout (hosts/deploy-config.nix, declared in modules/nixos/hardware.nix)
+  # is an xkb layout name; for the layouts this repo targets it
+  # doubles as the console keymap (de, us, fr, ...). Layouts whose console map
+  # is spelled differently (xkb "gb" -> console "uk") need this set explicitly.
+  console.keyMap = config.keyboardLayout;
 
   time.timeZone = "Europe/Berlin";
   i18n.defaultLocale = "en_US.UTF-8";

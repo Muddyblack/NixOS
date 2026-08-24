@@ -1,11 +1,21 @@
 {
   lib,
+  osConfig,
   config,
   pkgs,
   ...
 }: let
   cfg = config.desktop.widgets;
   wallpaper = "${config.home.homeDirectory}/.local/share/wallpapers/desktop.png";
+
+  # Shifted number row per layout — the Meta+Shift+<digit> shortcuts below have
+  # to be written as the character the layout actually produces. Add an entry
+  # when forking to another layout; anything unlisted falls back to the US row.
+  shiftedNumberRows = {
+    de = ["!" "\"" "§" "$" "%"];
+    us = ["!" "@" "#" "$" "%"];
+  };
+  shiftedDigits = shiftedNumberRows.${osConfig.keyboardLayout} or shiftedNumberRows.us;
 
   desktopWidgets =
     (lib.optional cfg.modernClock.enable {
@@ -419,13 +429,14 @@ in {
         # never match. Meta+Shift+<letter> is unaffected (Shift is not consumed
         # there), which is why Meta+Shift+S works but Meta+Shift+1 did not.
         #
-        # Layout is German (hosts/common.nix console.keyMap + desktop.nix xkb),
-        # so the shifted number row is  ! " § $ %  — NOT the US  ! @ # $ % .
-        "MoveFollowDesktop1" = "Meta+!";
-        "MoveFollowDesktop2" = "Meta+\"";
-        "MoveFollowDesktop3" = "Meta+§";
-        "MoveFollowDesktop4" = "Meta+$";
-        "MoveFollowDesktop5" = "Meta+%";
+        # Which characters those are depends on the layout — German gives
+        # ! " § $ % , US gives ! @ # $ % — so they come from shiftedDigits
+        # above, keyed by the system-wide keyboardLayout option.
+        "MoveFollowDesktop1" = "Meta+${builtins.elemAt shiftedDigits 0}";
+        "MoveFollowDesktop2" = "Meta+${builtins.elemAt shiftedDigits 1}";
+        "MoveFollowDesktop3" = "Meta+${builtins.elemAt shiftedDigits 2}";
+        "MoveFollowDesktop4" = "Meta+${builtins.elemAt shiftedDigits 3}";
+        "MoveFollowDesktop5" = "Meta+${builtins.elemAt shiftedDigits 4}";
         "ToggleBottomPanel" = "Meta+B";
       };
       # Disable default Activities shortcut to free up Meta+Q
@@ -461,6 +472,10 @@ in {
         CurrentMonitorScreenShot = "none";
         _launch = "none";
       };
+      # Plasma's own emoji picker only ever copies to the clipboard. Free
+      # Meta+. for fcitx5's unicode/emoji input, which commits through the IME
+      # and types straight into the focused field (see desktop.nix).
+      "org.kde.plasma.emojier.desktop"._launch = "none";
       kmix = {
         mute = "Volume Mute";
         decrease_volume = "Volume Down";
@@ -474,6 +489,15 @@ in {
     };
 
     configFile = {
+      # Keyboard layout. services.xserver.xkb only feeds systemd-localed — the
+      # greeter and XWayland. A Plasma session reads kxkbrc, and with no
+      # LayoutList of its own KWin falls back to "us" regardless — which is why every
+      # Plasma session came up US while console and Hyprland used keyboardLayout.
+      kxkbrc.Layout.Use = true;
+      kxkbrc.Layout.LayoutList = osConfig.keyboardLayout;
+      kxkbrc.Layout.VariantList = "";
+      kxkbrc.Layout.DisplayNames = "";
+
       krunnerrc.General.FreeFloating = true;
       krunnerrc.General.historyBehavior = "ImmediateCompletion";
 

@@ -229,6 +229,25 @@ touchpad) — defaults live in [`modules/nixos/features/desktops.nix`](modules/n
 (Hyprland/Plasma/COSMIC on, GNOME off) for anyone who calls `nixos-rebuild` directly instead of
 through `deploy.sh`.
 
+**Pick your keyboard layout:** `deploy.sh fresh`/`install` asks for it too — a short list
+(de, us, gb, fr, es, it, ch) plus an *other* entry that takes any xkb layout name — or skip the
+prompt with `--keyboard us`. Like the desktop flags it lands in `hosts/deploy-config.nix`
+(`keyboardLayout = "…";`, default German), and from there one value feeds the console keymap,
+xkb/greeter, Hyprland's `kb_layout`, Plasma's `kxkbrc` and fcitx5's input-method group. Change it
+later by editing that line and rebuilding — nothing else needs touching.
+
+```bash
+bash deploy.sh fresh --keyboard us --desktops hyprland,plasma
+```
+
+Two caveats when you move off German. `console.keyMap` reuses the same string, so a layout whose
+console keymap is spelled differently (xkb `gb` → console `uk`) needs `console.keyMap` set
+explicitly in `hosts/common.nix` — the installer prints a note for that case. And the
+`Meta+Shift+<digit>` window-move shortcuts have to be written as the character the layout
+actually produces, so add your row to `shiftedNumberRows` in
+[`modules/home-manager/plasma-settings.nix`](modules/home-manager/plasma-settings.nix); unlisted
+layouts fall back to the US row.
+
 ---
 
 ## Shell & Tools
