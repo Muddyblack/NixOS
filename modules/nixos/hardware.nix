@@ -12,6 +12,18 @@
     description = "Bootloader to use: grub (BIOS+UEFI), refind (UEFI), or systemd-boot (UEFI).";
   };
 
+  # Single source of truth for the keyboard layout: an xkb layout name, asked
+  # for by deploy.sh and written to hosts/deploy-config.nix. Feeds the console
+  # keymap, xkb/greeter, Hyprland's kb_layout, Plasma's kxkbrc and fcitx5's
+  # input-method group — home-manager modules read it through osConfig.
+  options.keyboardLayout = lib.mkOption {
+    type = lib.types.str;
+    example = "us";
+    # Safety-net fallback only (used when no deploy-config.nix exists).
+    default = "de";
+    description = "xkb keyboard layout name (de, us, fr, ...) used by every session.";
+  };
+
   options.plymouthTheme = lib.mkOption {
     type = lib.types.enum ["dotted" "flower" "icy" "matrix"];
     default = "dotted";

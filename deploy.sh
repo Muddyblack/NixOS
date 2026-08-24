@@ -80,6 +80,8 @@ Options:
   --plymouth-theme <t> Plymouth boot theme (dotted, flower, icy, matrix) — prompted interactively if omitted
   --desktops <list>    Comma-separated desktop sessions to enable: hyprland,plasma,cosmic,gnome
                         — prompted interactively if omitted
+  --keyboard <layout>  xkb keyboard layout for every session (de, us, fr, ...)
+                        — prompted interactively if omitted
 
 Examples:
   $0 fresh                                             # interactive setup
@@ -159,6 +161,7 @@ write_deploy_config() {
   local theme="$4"
   local march="${5:-generic}"
   local desktops="${6:-hyprland,plasma,cosmic}"
+  local kb_layout="${7:-de}"
   local out="$FLAKE_DIR/hosts/deploy-config.nix"
 
   if [[ ! "$device" =~ ^/dev/ ]]; then
@@ -176,6 +179,11 @@ write_deploy_config() {
   fi
   if ! compgen -G "$FLAKE_DIR/assets/plymouth/$theme/*.mp4" > /dev/null; then
     echo "Error: Plymouth theme '$theme' not found in assets/plymouth/"
+    exit 1
+  fi
+
+  if [[ ! "$kb_layout" =~ ^[a-z][a-z0-9_-]*$ ]]; then
+    echo "Error: keyboard layout must be an xkb layout name like de, us, fr"
     exit 1
   fi
 
@@ -203,10 +211,11 @@ write_deploy_config() {
   diskLayout.withDualBoot = ${dual_boot};
   bootloader = "${bl}";
   plymouthTheme = "${theme}";
+  keyboardLayout = "${kb_layout}";
   features.kernel.cachyos.march = "${march}";
 ${desktop_lines}}
 EOF
-  echo "Wrote deploy config: hosts/deploy-config.nix (device=${device}, bootloader=${bl}, dualBoot=${dual_boot}, plymouth=${theme}, march=${march}, desktops=${desktops})"
+  echo "Wrote deploy config: hosts/deploy-config.nix (device=${device}, bootloader=${bl}, dualBoot=${dual_boot}, plymouth=${theme}, march=${march}, desktops=${desktops}, keyboard=${kb_layout})"
 }
 
 prompt_interactive_setup() {
@@ -215,11 +224,13 @@ prompt_interactive_setup() {
   local device_ref="$3"      # nameref
   local plymouth_theme_ref="$4"  # nameref
   local desktops_ref="$5"    # nameref
+  local kb_layout_ref="$6"   # nameref
   local -n _bootloader="$bootloader_ref"
   local -n _dual_boot="$dual_boot_ref"
   local -n _device="$device_ref"
   local -n _plymouth_theme="$plymouth_theme_ref"
   local -n _desktops="$desktops_ref"
+  local -n _kb_layout="$kb_layout_ref"
 
   echo ""
   echo "=== Interactive setup ==="
@@ -337,6 +348,39 @@ prompt_interactive_setup() {
     _desktops="$(IFS=,; echo "${chosen[*]}")"
   fi
 
+  # Keyboard layout — one xkb layout name for console, greeter, Hyprland,
+  # Plasma and fcitx5 alike (keyboardLayout in hosts/deploy-config.nix).
+  if [[ -z "$_kb_layout" ]]; then
+    echo ""
+    echo "Keyboard layout:"
+    local kb_names=(de us gb fr es it ch)
+    local kb_labels=("German" "US English" "UK English" "French (AZERTY)" "Spanish" "Italian" "Swiss")
+    for i in "${!kb_names[@]}"; do
+      echo "  $((i+1))) ${kb_names[$i]}  — ${kb_labels[$i]}"
+    done
+    echo "  $(( ${#kb_names[@]} + 1 ))) other  — type any xkb layout name"
+    read -rp "Select keyboard layout [1-$(( ${#kb_names[@]} + 1 )), default: 1]: " kb_choice
+    kb_choice="${kb_choice:-1}"
+    if [[ "$kb_choice" =~ ^[0-9]+$ ]] && [[ "$kb_choice" -ge 1 ]] && [[ "$kb_choice" -le "${#kb_names[@]}" ]]; then
+      _kb_layout="${kb_names[$((kb_choice-1))]}"
+    elif [[ "$kb_choice" == "$(( ${#kb_names[@]} + 1 ))" ]]; then
+      read -rp "  xkb layout name (see 'localectl list-x11-keymap-layouts'): " _kb_layout
+      if [[ ! "$_kb_layout" =~ ^[a-z][a-z0-9_-]*$ ]]; then
+        echo "Invalid layout name, using de"
+        _kb_layout="de"
+      fi
+    else
+      echo "Invalid choice, using de"
+      _kb_layout="de"
+    fi
+    # console.keyMap reuses this string; a handful of layouts spell their
+    # console keymap differently. Warn rather than silently install a console
+    # with no keymap.
+    case "$_kb_layout" in
+      gb) echo "  Note: xkb 'gb' has no console keymap of that name — set console.keyMap = \"uk\" in hosts/common.nix." ;;
+    esac
+  fi
+
   echo ""
   echo "  Profile:        $FLAKE_TARGET"
   echo "  Device:         $_device"
@@ -344,6 +388,7 @@ prompt_interactive_setup() {
   echo "  Dual boot:      $_dual_boot"
   echo "  Plymouth theme: $_plymouth_theme"
   echo "  Desktops:       $_desktops"
+  echo "  Keyboard:       $_kb_layout"
   echo ""
   read -rp "Proceed with these settings? [y/N]: " confirm
   [[ "$confirm" =~ ^[Yy]$ ]] || { echo "Aborted."; exit 1; }
@@ -369,6 +414,7 @@ cmd_fresh() {
   local device=""
   local plymouth_theme=""
   local desktops=""
+  local kb_layout=""
   local pw_file=""
 
   while [[ $# -gt 0 ]]; do
@@ -405,6 +451,10 @@ cmd_fresh() {
         desktops="$2"
         shift 2
         ;;
+      --keyboard)
+        kb_layout="$2"
+        shift 2
+        ;;
       *)
         if [[ ! "$1" =~ ^-- ]]; then
           host="$1"
@@ -417,9 +467,9 @@ cmd_fresh() {
     esac
   done
 
-  prompt_interactive_setup bootloader dual_boot device plymouth_theme desktops
+  prompt_interactive_setup bootloader dual_boot device plymouth_theme desktops kb_layout
   write_deploy_config "$device" "$bootloader" "$dual_boot" "$plymouth_theme" \
-    "$(detect_march "$host" || echo generic)" "$desktops"
+    "$(detect_march "$host" || echo generic)" "$desktops" "$kb_layout"
 
   if [[ -z "$host" ]]; then
     # LOCAL: booted from live ISO
@@ -466,6 +516,7 @@ cmd_install() {
   local device=""
   local plymouth_theme=""
   local desktops=""
+  local kb_layout=""
   local skip_setup=""
 
   while [[ $# -gt 0 ]]; do
@@ -498,6 +549,10 @@ cmd_install() {
         desktops="$2"
         shift 2
         ;;
+      --keyboard)
+        kb_layout="$2"
+        shift 2
+        ;;
       --skip-setup)
         skip_setup="1"
         shift
@@ -510,9 +565,9 @@ cmd_install() {
   done
 
   if [[ -z "$skip_setup" ]]; then
-    prompt_interactive_setup bootloader dual_boot device plymouth_theme desktops
+    prompt_interactive_setup bootloader dual_boot device plymouth_theme desktops kb_layout
     write_deploy_config "$device" "$bootloader" "$dual_boot" "$plymouth_theme" \
-      "$(detect_march || echo generic)" "$desktops"
+      "$(detect_march || echo generic)" "$desktops" "$kb_layout"
   fi
 
   echo "Running nixos-install (disk must already be partitioned/mounted)..."

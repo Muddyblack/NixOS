@@ -1,5 +1,6 @@
 {
   lib,
+  osConfig,
   pkgs,
   ...
 }: {
@@ -208,7 +209,7 @@
       debug.vfr = true;
 
       input = {
-        kb_layout = "de";
+        kb_layout = osConfig.keyboardLayout;
         follow_mouse = 1;
         sensitivity = 0;
         touchpad = {
