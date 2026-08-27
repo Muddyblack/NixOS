@@ -96,7 +96,6 @@
           ".vscode"
           ".docker"
           ".gemini"
-          ".antigravity-ide"
           ".pki"
           ".steam"
           ".vmware"

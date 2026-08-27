@@ -312,7 +312,7 @@
         {
           iconTasks = {
             launchers = [
-              "applications:antigravity-ide.desktop"
+              "applications:antigravity.desktop"
               "applications:code.desktop"
               "applications:zen.desktop"
             ];
@@ -638,7 +638,7 @@ in {
     Type=Service
     ServiceTypes=KonqPopupMenu/Plugin
     MimeType=inode/directory;
-    Actions=openInGhostty;openWithVSCode;openWithAntigravityIDE;openWithZed;
+    Actions=openInGhostty;openWithVSCode;openWithAntigravity;openWithZed;
     X-KDE-Priority=TopLevel
 
     [Desktop Action openInGhostty]
@@ -651,10 +651,10 @@ in {
     Icon=vscode
     Exec=code %f
 
-    [Desktop Action openWithAntigravityIDE]
-    Name=Open with Antigravity IDE
-    Icon=antigravity-ide
-    Exec=antigravity-ide --disable-gpu %f
+    [Desktop Action openWithAntigravity]
+    Name=Open with Antigravity
+    Icon=antigravity
+    Exec=antigravity %f
 
     [Desktop Action openWithZed]
     Name=Open with Zed
