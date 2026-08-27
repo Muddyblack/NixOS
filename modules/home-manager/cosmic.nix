@@ -122,7 +122,7 @@ in {
     applets.app-list.settings.favorites = [
       "com.mitchellh.ghostty"
       "zen"
-      "antigravity-ide"
+      "antigravity"
       "code"
       "org.kde.dolphin"
     ];

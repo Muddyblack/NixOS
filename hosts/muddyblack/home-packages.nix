@@ -109,8 +109,7 @@
 
     # Editors & IDEs
     kiro
-    # google-antigravitya
-    google-antigravity-ide
+    google-antigravity
     google-antigravity-cli
     zed-editor
     claude-code
