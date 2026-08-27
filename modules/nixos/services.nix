@@ -101,6 +101,9 @@
     };
   };
 
+  systemd.user.extraConfig = "DefaultTimeoutStopSec=5s";
+  systemd.settings.Manager.DefaultTimeoutStopSec = "10s";
+
   # Steam needs a stable machine-id
   systemd.tmpfiles.rules = [
     "L+ /var/lib/dbus/machine-id - - - - /etc/machine-id"

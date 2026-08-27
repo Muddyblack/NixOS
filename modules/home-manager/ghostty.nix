@@ -1,8 +1,23 @@
-{osConfig, ...}: let
-  gnomeEnabled = osConfig.features.desktops.gnome.enable or false;
-in {
+{pkgs, ...}: {
   programs.ghostty = {
     enable = true;
+    package = pkgs.symlinkJoin {
+      name = "ghostty";
+      paths = [pkgs.ghostty];
+      nativeBuildInputs = [pkgs.makeWrapper];
+      postBuild = ''
+        rm $out/bin/ghostty
+        makeWrapper ${pkgs.ghostty}/bin/ghostty $out/bin/ghostty \
+          --run '
+            case "''${XDG_CURRENT_DESKTOP:-}" in
+              *GNOME*|*COSMIC*|*cosmic*)
+                set -- --background-opacity=0.85 --background-blur=0 "$@"
+                ;;
+            esac
+          '
+      '';
+    };
+
     settings = {
       background = "#1b1e2b";
       foreground = "#a9b1d6";
@@ -34,18 +49,11 @@ in {
       font-size = 12;
 
       window-theme = "dark";
-
       window-decoration = "server";
 
-      # Transparency + Blur
-      background-opacity =
-        if gnomeEnabled
-        then 0.85
-        else 0.5;
-      background-blur-radius =
-        if gnomeEnabled
-        then 0
-        else 20;
+      # Default: Milky / Frosted Glass (Plasma & Hyprland)
+      background-opacity = 0.5;
+      background-blur = 20;
 
       window-padding-x = 16;
       window-padding-y = 10;
@@ -55,7 +63,6 @@ in {
       cursor-style-blink = true;
 
       adjust-cell-height = "20%";
-      # Avoid prompt/autosuggestion repaint glitches in nested SSH zsh sessions.
       shell-integration = "zsh";
     };
   };
