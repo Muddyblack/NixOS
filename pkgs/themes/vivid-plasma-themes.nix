@@ -23,15 +23,11 @@ stdenvNoCC.mkDerivation rec {
     cp -r "Vivid Icons Themes/Vivid-Dark-Icons" $out/share/icons/
     mkdir -p $out/share/plasma/look-and-feel
     cp -r "Vivid Global Themes/Vivid-Dark-Global-6" $out/share/plasma/look-and-feel/
-    # The global theme itself is never applied (see plasma-settings.nix), but its
-    # colour scheme is set by name, so the .colors files have to be on the path.
-    mkdir -p $out/share/color-schemes
-    cp "Vivid Color Schemes"/*.colors $out/share/color-schemes/
     runHook postInstall
   '';
 
   meta = {
-    description = "Vivid Dark Icons, Colour Schemes and Global Theme for KDE Plasma";
+    description = "Vivid Dark Icons and Global Theme for KDE Plasma";
     homepage = "https://github.com/L4ki/Vivid-Plasma-Themes";
     platforms = ["x86_64-linux" "aarch64-linux"];
   };
