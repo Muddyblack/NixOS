@@ -16,6 +16,7 @@
             esac
           '
       '';
+      meta.mainProgram = "ghostty";
     };
 
     settings = {
