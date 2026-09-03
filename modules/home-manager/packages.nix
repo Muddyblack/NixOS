@@ -44,5 +44,6 @@
     deadnix
     sops
     age
+    protonvpn-gui
   ];
 }
