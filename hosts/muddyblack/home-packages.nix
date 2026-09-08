@@ -115,6 +115,7 @@
     claude-code
     codex
     grok-build
+    github-copilot-cli
 
     # Recording & streaming
     obs-studio

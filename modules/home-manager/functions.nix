@@ -332,7 +332,11 @@
     # Clean desktop session exit from non-login shells
     logout() {
       if [[ "''${XDG_CURRENT_DESKTOP:-}" == *KDE* ]]; then
-        busctl --user call org.kde.Shutdown /Shutdown org.kde.Shutdown logout
+        # ksmserver's org.kde.Shutdown logout closes all apps but can then
+        # hang without ever ending the logind session (black screen, never
+        # reaches SDDM). Ending the session directly is reliable, same as
+        # the generic Wayland fallback below.
+        loginctl terminate-session "$XDG_SESSION_ID"
       elif [[ -n "''${HYPRLAND_INSTANCE_SIGNATURE:-}" ]]; then
         hyprctl dispatch exit
       elif [[ "''${XDG_CURRENT_DESKTOP:-}" == *GNOME* ]]; then

@@ -160,6 +160,7 @@
                   caelestia-shell
                   claude-code
                   codex
+                  github-copilot-cli
                   grok-build
                   mistral-vibe
                   tailscale

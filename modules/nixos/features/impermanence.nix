@@ -106,6 +106,7 @@
           ".vibe"
           ".codex"
           ".opencode"
+          ".copilot"
         ];
         files = [
           ".bash_history"
