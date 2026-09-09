@@ -8,7 +8,7 @@
     enable = true;
     # Both from nixpkgs-unstable via the overlay: the module's own defaults
     # build the upstream flake, which recompiles quickshell from git.
-    package = pkgs.caelestia-shell;
+    package = pkgs.callPackage ../../pkgs/caelestia-shell.nix {};
     systemd.enable = true;
     cli.enable = true;
     cli.package = pkgs.caelestia-cli;
