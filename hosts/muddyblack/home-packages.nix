@@ -30,8 +30,29 @@
     gource
     devenv
 
-    # AI & productivity
+    # AI coding agents (CLI) — the GUI counterparts live under Editors & IDEs
+    aider-chat
+    amp-cli
+    auggie
+    claude-code
+    cline
+    codex
+    crush
+    cursor-cli
+    droid
+    github-copilot-cli
+    goose-cli
+    google-antigravity-cli
+    grok-build
+    junie
+    kimi-code
+    kiro-cli
+    mistral-vibe
+    muse
     opencode
+    openhands-cli
+    pi-coding-agent
+    qwen-code
 
     # File management
     czkawka
@@ -108,15 +129,9 @@
     mediainfo
 
     # Editors & IDEs
-    kiro
     google-antigravity
-    google-antigravity-cli
+    kiro
     zed-editor
-    claude-code
-    codex
-    grok-build
-    github-copilot-cli
-    muse
 
     # Recording & streaming
     obs-studio

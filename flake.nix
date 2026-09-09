@@ -156,18 +156,26 @@
                 # public cache carries those derivations.
                 inherit
                   (unstablePkgs)
+                  aider-chat
+                  amp-cli
                   caelestia-cli
                   caelestia-shell
                   claude-code
                   codex
+                  crush
+                  cursor-cli
                   github-copilot-cli
+                  goose-cli
                   grok-build
                   mistral-vibe
+                  pi-coding-agent
+                  qwen-code
                   tailscale
                   typst
                   typstyle
                   tinymist
                   kiro
+                  kiro-cli
                   zed-editor
                   vscode
                   ;

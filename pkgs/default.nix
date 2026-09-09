@@ -52,10 +52,10 @@ in {
     customBackground = ../assets/wallpapers/lockscreen.png;
   };
   whitesur-grub-theme = final.callPackage ./boot/whitesur-grub-theme.nix {
-    customBackground = ../assets/grub-background.jpg;
+    customBackground = ../assets/boot/grub-background.jpg;
   };
   refind-theme-minimal = final.callPackage ./boot/refind-theme.nix {
-    customBackground = ../assets/refind-background.png;
+    customBackground = ../assets/boot/refind-background.png;
   };
 
   # ═══════════════════════════════════════════════════════════════════════════
@@ -68,4 +68,10 @@ in {
   firefly-iii-app = final.callPackage ./apps/firefly-iii-app.nix {};
   paperless-ngx-ui = final.callPackage ./apps/paperless.nix {};
   muse = final.callPackage ./apps/muse.nix {};
+  kimi-code = final.callPackage ./apps/kimi-code.nix {};
+  junie = final.callPackage ./apps/junie.nix {};
+  openhands-cli = final.callPackage ./apps/openhands-cli.nix {};
+  cline = final.callPackage ./apps/cline.nix {};
+  droid = final.callPackage ./apps/droid.nix {};
+  auggie = final.callPackage ./apps/auggie.nix {};
 }

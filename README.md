@@ -1,5 +1,5 @@
 <h1 align="center">
-   <img src="assets/nix_icon_animated.svg" width="100px" alt="NixOS Logo" /> 
+   <img src="assets/readme/nix_icon_animated.svg" width="100px" alt="NixOS Logo" /> 
    <br>
       <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=18&pause=3000&color=A855F7&center=true&vCenter=true&width=500&lines=muddyblack%27s+NixOS+configuration;Hyprland+%2B+KDE+%2B+COSMIC+%2B+GNOME;Btrfs+%2B+LUKS+%2B+Impermanence;Flakes+%2B+Home+Manager+%2B+Disko;Zsh+%2B+Powerlevel10k" alt="Muddyblack's NixOS configuration features: Hyprland, KDE Plasma 6, COSMIC, GNOME, Btrfs, LUKS, Impermanence, Flakes, Home Manager, Disko, Zsh, and Powerlevel10k" />
    <br>

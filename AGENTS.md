@@ -45,7 +45,10 @@ nixos-config/
 ├── deploy.sh                    # Installation & deployment script
 ├── assets/                      # All images/media/sounds here
 │   ├── profile.png
-│   ├── grub-background.png
+│   ├── boot/                    # GRUB & rEFInd backgrounds
+│   ├── icons/                   # App and NixOS logo icons
+│   ├── plymouth/                # Boot splash themes (scanned by deploy.sh)
+│   ├── readme/                  # Docs screenshots & logos
 │   ├── wallpapers/
 │   └── sounds/
 │       ├── success.wav          # Played on successful upnix
@@ -135,6 +138,9 @@ is persisted.
 ### Assets
 - Profile pictures → `assets/profile.png`
 - Wallpapers → `assets/wallpapers/`
+- Bootloader backgrounds → `assets/boot/`
+- App & logo icons → `assets/icons/`
+- Docs screenshots → `assets/readme/`
 - Reference as `../../assets/` from modules
 
 ### Flake

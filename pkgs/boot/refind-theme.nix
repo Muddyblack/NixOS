@@ -110,7 +110,7 @@ stdenvNoCC.mkDerivation {
 
     # NixOS boot entry icon — use our custom nix_icon.png
     # big_icon_size is 128 in refind.conf, so render at 128x128
-    $IMG_CMD ${../../assets/nix_icon.png} \
+    $IMG_CMD ${../../assets/icons/nix_icon.png} \
       -resize 128x128 \
       -background none \
       -gravity Center \

@@ -19,7 +19,7 @@ in {
       settings = {
         title = "homepage";
         description = "Local services, NixOS docs, dev tooling, and app references in one Homepage view.";
-        favicon = "https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/nix_icon.svg";
+        favicon = "https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/icons/nix_icon.svg";
         theme = "dark";
         color = "slate";
         iconStyle = "theme";
