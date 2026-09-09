@@ -152,6 +152,7 @@ In the first few weeks, I managed to like break the system three times a day and
 NixOS/
 ├── flake.nix
 ├── deploy.sh                    # Install & rebuild helper
+├── docs/                        # Showcase site + live USB recovery runbook
 ├── hosts/
 │   ├── common.nix               # Shared system config
 │   ├── disko-config.nix         # Disk layout (LUKS + Btrfs)
@@ -164,6 +165,9 @@ NixOS/
 ├── assets/                      # Wallpapers, sounds, themes, icons
 └── dev-shells/                  # Language dev environment templates
 ```
+
+Locked out of the system? See [`docs/RECOVERY.md`](docs/RECOVERY.md).
+
 
 ---
 
