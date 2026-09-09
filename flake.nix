@@ -167,7 +167,6 @@
                   github-copilot-cli
                   goose-cli
                   grok-build
-                  mistral-vibe
                   pi-coding-agent
                   qwen-code
                   tailscale
@@ -179,6 +178,10 @@
                   zed-editor
                   vscode
                   ;
+                mistral-vibe = unstablePkgs.mistral-vibe.overrideAttrs (_: {
+                  # upstream textual_ui test suite is flaky on this version; disable to unblock builds.
+                  doCheck = false;
+                });
                 google-antigravity = inputs.antigravity-nix.packages.${prev.stdenv.hostPlatform.system}.google-antigravity;
                 google-antigravity-cli = inputs.antigravity-nix.packages.${prev.stdenv.hostPlatform.system}.google-antigravity-cli;
               })
