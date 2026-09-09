@@ -9,3 +9,4 @@ hardware-configuration.nix
 .codex
 notes.md
 .sops.yaml
+.grok
