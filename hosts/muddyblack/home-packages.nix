@@ -116,6 +116,7 @@
     codex
     grok-build
     github-copilot-cli
+    muse
 
     # Recording & streaming
     obs-studio

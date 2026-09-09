@@ -109,11 +109,25 @@
       fi
     }
 
+    _flake_update() {
+      local flake_path="$1"
+      shift
+      local extra_args=()
+      if command -v gh &>/dev/null; then
+        local token
+        token=$(gh auth token 2>/dev/null)
+        if [[ -n "$token" ]]; then
+          extra_args+=(--option access-tokens "github.com=$token")
+        fi
+      fi
+      (cd "$flake_path" && nix flake update "''${extra_args[@]}" "''$@")
+    }
+
     update() {
       local flake_path
       flake_path="$(_resolve_flake_dir)" || flake_path="."
       echo "Updating flake inputs in $flake_path..."
-      (cd "$flake_path" && nix flake update)
+      _flake_update "$flake_path" "''$@"
     }
 
     upall() {
@@ -121,7 +135,7 @@
       flake_path="$(_resolve_flake_dir)" || flake_path="."
 
       echo "Updating flake inputs..."
-      (cd "$flake_path" && nix flake update)
+      _flake_update "$flake_path" || return 1
 
       local old_gen
       old_gen=$(readlink -f /nix/var/nix/profiles/system)

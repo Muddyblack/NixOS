@@ -107,6 +107,7 @@
           ".codex"
           ".opencode"
           ".copilot"
+          ".muse"
         ];
         files = [
           ".bash_history"

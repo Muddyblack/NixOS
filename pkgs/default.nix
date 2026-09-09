@@ -67,4 +67,5 @@ in {
   stirling-pdf-ui = final.callPackage ./apps/stirling-pdf.nix {};
   firefly-iii-app = final.callPackage ./apps/firefly-iii-app.nix {};
   paperless-ngx-ui = final.callPackage ./apps/paperless.nix {};
+  muse = final.callPackage ./apps/muse.nix {};
 }
