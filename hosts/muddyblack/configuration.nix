@@ -55,8 +55,15 @@
   features.keyring.enable = true;
   features.power.enable = true;
 
-  security.wrappers.bandwhich = {
-    source = "${pkgs.bandwhich}/bin/bandwhich";
+  security.wrappers.rustnet = {
+    source = "${pkgs.rustnet}/bin/rustnet";
+    capabilities = "cap_net_raw,cap_bpf,cap_perfmon=eip";
+    owner = "root";
+    group = "root";
+  };
+
+  security.wrappers.netscanner = {
+    source = "${pkgs.netscanner}/bin/netscanner";
     capabilities = "cap_net_raw,cap_net_admin=eip";
     owner = "root";
     group = "root";

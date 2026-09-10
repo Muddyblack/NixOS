@@ -6,7 +6,8 @@
     gnupg
     pinentry-qt
 
-    bandwhich
+    rustnet
+    netscanner
 
     exfatprogs
     dosfstools
