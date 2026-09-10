@@ -232,7 +232,6 @@ These are active shell aliases/overrides. Always use the right-hand side when su
 | `tar`/`unzip`/`7z` | `ouch` | Backs `extract` / `pack`; RAR still goes through `unrar` |
 | `dig` | `doggo` | Aliased: `dig` → `doggo` |
 | `tmux` | `zellij` | No tmux installed |
-| `git` (advanced) | `jj` | jujutsu, git-compatible; the git CLI still works on the same repos |
 | `mkdir foo && cd foo` | `mkcd foo` | Shell function |
 | `sops` | `secrets` | SOPS wrapper with configured keys |
 | `termdown` | `timer` | |

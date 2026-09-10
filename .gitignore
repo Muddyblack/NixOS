@@ -10,3 +10,4 @@ hardware-configuration.nix
 notes.md
 .sops.yaml
 .grok
+.aider*
