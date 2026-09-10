@@ -40,6 +40,8 @@
 
     # Dev tools
     gh
+    gh-dash
+    serie
     gource
     devenv
 
@@ -48,9 +50,11 @@
     metadata-cleaner
     bleachbit
     peazip
+    exiftool
 
     # Communication
     # discord — now installed sandboxed via Flatpak (features/flatpak.nix)
+    vesktop
     google-chrome
     thunderbird
     whatsapp
@@ -70,15 +74,21 @@
     rustscan
     speedtest-cli
     whois
+    termshark
+    bluetui
 
     # Security
     vulnix
+    osv-scanner
 
     # Containers
     distrobox
     boxbuddy
     podman-desktop
     podman-compose
+    podman-tui
+    dive
+    lazydocker
     kubectl
 
     # Backup & monitoring
@@ -90,6 +100,8 @@
 
     # System tools
     lynis
+    systemctl-tui
+    lazyjournal
     ttyper
     dos2unix
 
@@ -98,6 +110,7 @@
     clock-rs
     termdown
     keepassxc
+    bitwarden-desktop
     veracrypt
 
     # Audio & music

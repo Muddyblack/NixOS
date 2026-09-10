@@ -42,7 +42,10 @@
   features.homepage.enable = true;
   features.sops.enable = true;
 
-  programs.wireshark.enable = true;
+  programs.wireshark = {
+    enable = true;
+    package = pkgs.wireshark;
+  };
   features.stirling-pdf.enable = true;
   features.firefly-iii.enable = true;
   features.paperless.enable = true;

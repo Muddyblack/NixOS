@@ -32,6 +32,7 @@
     nix-du
     nix-prefetch-github
     nix-tree
+    nix-search-tv
     alejandra
     pre-commit
     nh
