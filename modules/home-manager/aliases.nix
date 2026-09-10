@@ -13,7 +13,7 @@
     ping = "gping";
     curl = "xh";
     lg = "lazygit";
-    duf = "duf --theme ansi --hide binds";
+    dysk = "dysk -a -f 'mp==/ | disk=SSD | disk=HDD | disk=remov | mp=/run/media'";
     top = "btop";
     du = "dust";
     ps = "procs --tree";

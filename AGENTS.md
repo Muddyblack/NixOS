@@ -211,7 +211,7 @@ These are active shell aliases/overrides. Always use the right-hand side when su
 | `cat <file>.log` | `tspin` (auto via `cat`) | auto-triggered for `.log` files and `/var/log/*` |
 | `find` | `fd` | Aliased: `find` → `fd` |
 | `grep` / `rg` | `rg` | Aliased: `grep` → `rg` |
-| `df` | `duf` | Aliased: `duf --theme ansi --hide binds` |
+| `df` / `duf` | `dysk` | Aliased: root once, `/boot`, removable/`/run/media`; `dysk -a` for everything |
 | `du` | `dust` | Aliased: `du` → `dust` |
 | `ps` | `procs` | Aliased: `ps --tree` |
 | `top` / `htop` | `btop` | Aliased: `top` → `btop` |

@@ -3,7 +3,7 @@
     # Terminal & CLI
     btop
     fastfetch
-    duf
+    dysk
     dust
     procs
     sd
