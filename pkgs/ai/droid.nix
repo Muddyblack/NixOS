@@ -6,26 +6,14 @@
 {
   lib,
   stdenvNoCC,
-  fetchurl,
+  callPackage,
   buildFHSEnv,
 }: let
-  version = "0.215.1";
-  sources = {
-    x86_64-linux = {
-      url = "https://downloads.factory.ai/factory-cli/releases/${version}/linux/x64/droid";
-      hash = "sha256-/QuZWKyAnH1bcK+YQoo87HyoOaM4HHEfJVYXxrjMr5A=";
-    };
-    aarch64-linux = {
-      url = "https://downloads.factory.ai/factory-cli/releases/${version}/linux/arm64/droid";
-      hash = "sha256-AGILns9EjOCH65FUtf7xq/TP7NF34aEtoCu8Rfi2iE0=";
-    };
-  };
+  source = callPackage ./source.nix {} "droid";
 
   unwrapped = stdenvNoCC.mkDerivation {
     pname = "droid-unwrapped";
-    inherit version;
-
-    src = fetchurl (sources.${stdenvNoCC.hostPlatform.system} or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}"));
+    inherit (source) version src;
 
     dontUnpack = true;
     dontBuild = true;
@@ -41,7 +29,7 @@
 in
   buildFHSEnv {
     pname = "droid";
-    inherit version;
+    inherit (source) version;
 
     # ripgrep backs the agent's file search.
     targetPkgs = pkgs: [pkgs.stdenv.cc.cc.lib pkgs.zlib pkgs.openssl pkgs.ripgrep];
@@ -55,7 +43,7 @@ in
       description = "Factory AI's official Droid coding agent CLI";
       homepage = "https://factory.ai";
       license = lib.licenses.unfree;
-      platforms = ["x86_64-linux" "aarch64-linux"];
+      platforms = ["x86_64-linux"];
       mainProgram = "droid";
       sourceProvenance = [lib.sourceTypes.binaryNativeCode];
     };

@@ -1,4 +1,8 @@
-{...}: {
+{
+  pkgs,
+  lib,
+  ...
+}: {
   programs.zsh.initContent = ''
     # `command curl` throughout: curl is aliased to xh, and zsh expands aliases
     # when the function body is *parsed*, so a bare `curl -s` becomes `xh -s`.
@@ -311,6 +315,15 @@
         return 0
       done
       return 1
+    }
+
+    update-ai() {
+      local _flake_path _dir
+      _flake_path="$(_resolve_flake_dir)" || { echo "Could not locate nixos-config."; return 1; }
+      _dir="$_flake_path/pkgs/ai"
+      PATH="${lib.makeBinPath [pkgs.nvfetcher pkgs.curl pkgs.jq pkgs.gnugrep pkgs.coreutils]}:$PATH" \
+        nvfetcher -c "$_dir/nvfetcher.toml" -o "$_dir/_sources" "$@" \
+        && rm -f "$_dir/_sources/generated.nix"
     }
 
     devnew() {

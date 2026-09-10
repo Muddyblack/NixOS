@@ -32,11 +32,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nur = {
-      url = "github:nix-community/NUR";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     # Without the follows, impermanence dragged in its own nixpkgs (locked
     # ~7 months behind ours) *and* a second home-manager, both evaluated for
     # nothing. Its module only needs lib.
@@ -146,7 +141,6 @@
           ({pkgs, ...}: {
             nixpkgs.overlays = [
               (import ./pkgs inputs)
-              inputs.nur.overlays.default
               inputs.nix-cachyos-kernel.overlays.pinned
               (_final: prev: {
                 # caelestia-shell/-cli exist only in unstable, and only there are
@@ -156,28 +150,17 @@
                 # public cache carries those derivations.
                 inherit
                   (unstablePkgs)
-                  aider-chat
-                  amp-cli
                   caelestia-cli
                   caelestia-shell
-                  claude-code
-                  codex
-                  crush
-                  cursor-cli
-                  github-copilot-cli
-                  goose-cli
-                  grok-build
-                  pi-coding-agent
-                  qwen-code
                   tailscale
                   typst
                   typstyle
                   tinymist
                   kiro
-                  kiro-cli
                   zed-editor
                   vscode
                   ;
+                unstable = unstablePkgs;
                 mistral-vibe = unstablePkgs.mistral-vibe.overrideAttrs (_: {
                   # upstream textual_ui test suite (run via installCheckPhase) is flaky on this version; disable to unblock builds.
                   doCheck = false;

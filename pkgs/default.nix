@@ -67,11 +67,15 @@ in {
   stirling-pdf-ui = final.callPackage ./apps/stirling-pdf.nix {};
   firefly-iii-app = final.callPackage ./apps/firefly-iii-app.nix {};
   paperless-ngx-ui = final.callPackage ./apps/paperless.nix {};
-  muse = final.callPackage ./apps/muse.nix {};
-  kimi-code = final.callPackage ./apps/kimi-code.nix {};
-  junie = final.callPackage ./apps/junie.nix {};
-  openhands-cli = final.callPackage ./apps/openhands-cli.nix {};
-  cline = final.callPackage ./apps/cline.nix {};
-  droid = final.callPackage ./apps/droid.nix {};
-  auggie = final.callPackage ./apps/auggie.nix {};
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # AI - Agent CLIs not in nixpkgs, versions from ai/nvfetcher.toml
+  # ═══════════════════════════════════════════════════════════════════════════
+  auggie = final.callPackage ./ai/auggie.nix {};
+  cline = final.callPackage ./ai/cline.nix {};
+  droid = final.callPackage ./ai/droid.nix {};
+  junie = final.callPackage ./ai/junie.nix {};
+  kimi-code = final.callPackage ./ai/kimi-code.nix {};
+  muse = final.callPackage ./ai/muse.nix {};
+  openhands-cli = final.callPackage ./ai/openhands-cli.nix {};
 }

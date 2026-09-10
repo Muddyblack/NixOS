@@ -2,20 +2,15 @@
 {
   lib,
   stdenvNoCC,
-  fetchurl,
+  callPackage,
   makeWrapper,
   nodejs,
 }: let
-  version = "0.36.0";
+  source = callPackage ./source.nix {} "auggie";
 in
   stdenvNoCC.mkDerivation {
     pname = "auggie";
-    inherit version;
-
-    src = fetchurl {
-      url = "https://registry.npmjs.org/@augmentcode/auggie/-/auggie-${version}.tgz";
-      hash = "sha512-jb4kq97pGzG0i5UyISc//LjTVlFzIywwD+VfPemiSIl58KjLfxry3KDgxWYnr1vmV8yUkySVzjLnj4ewUEbT/Q==";
-    };
+    inherit (source) version src;
 
     nativeBuildInputs = [makeWrapper];
 

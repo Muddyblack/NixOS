@@ -1,0 +1,30 @@
+[auggie]
+src.cmd = "curl -fsSL https://registry.npmjs.org/@augmentcode/auggie/latest | jq -r .version"
+fetch.url = "https://registry.npmjs.org/@augmentcode/auggie/-/auggie-$ver.tgz"
+
+[cline]
+src.cmd = "curl -fsSL https://registry.npmjs.org/@cline/cli-linux-x64/latest | jq -r .version"
+fetch.url = "https://registry.npmjs.org/@cline/cli-linux-x64/-/cli-linux-x64-$ver.tgz"
+
+[droid]
+src.cmd = "curl -fsSL https://app.factory.ai/cli | grep -m1 '^VER=' | cut -d'\"' -f2"
+fetch.url = "https://downloads.factory.ai/factory-cli/releases/$ver/linux/x64/droid"
+
+# Newest tag that still ships a junie-release-* asset; everything above is nightly.
+[junie]
+src.manual = "3110.6"
+fetch.url = "https://github.com/JetBrains/junie/releases/download/$ver/junie-release-$ver-linux-amd64.zip"
+
+[kimi-code]
+src.cmd = "curl -fsSL https://registry.npmjs.org/@moonshot-ai/kimi-code/latest | jq -r .version"
+fetch.url = "https://github.com/MoonshotAI/kimi-code/releases/download/%40moonshot-ai/kimi-code%40$ver/kimi-code-linux-x64.tar.gz"
+
+# No version endpoint; bump by hand from https://dev.meta.ai
+[muse]
+src.manual = "1.0.3-R2198.1"
+fetch.url = "https://lookaside.facebook.com/lookaside/muse/download/?channel=muse&version=$ver&file=muse-x86-linux"
+url.name = "muse"
+
+[openhands-cli]
+src.github = "OpenHands/OpenHands-CLI"
+fetch.url = "https://github.com/OpenHands/OpenHands-CLI/releases/download/$ver/openhands-linux-x86_64"

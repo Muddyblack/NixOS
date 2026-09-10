@@ -1,0 +1,107 @@
+{
+    "auggie": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "auggie",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-T+9t29kIPxTkA8HvkybI9agAo4NzFBa2xDigTRfo9as=",
+            "type": "url",
+            "url": "https://registry.npmjs.org/@augmentcode/auggie/-/auggie-0.36.0.tgz"
+        },
+        "version": "0.36.0"
+    },
+    "cline": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "cline",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-4PFWZ6XObZAuYVRmBbQPMsJCrAXz9M6N+OC6yWsJctA=",
+            "type": "url",
+            "url": "https://registry.npmjs.org/@cline/cli-linux-x64/-/cli-linux-x64-3.0.61.tgz"
+        },
+        "version": "3.0.61"
+    },
+    "droid": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "droid",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-F0R3vEjRTbcNM4dCWiBP+G6cOthOrhofMU88uImq4+E=",
+            "type": "url",
+            "url": "https://downloads.factory.ai/factory-cli/releases/0.216.0/linux/x64/droid"
+        },
+        "version": "0.216.0"
+    },
+    "junie": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "junie",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-kjzEdEBbQ4SR+yrGLoyk6sPkRYpfpDjWh8HMPaiF+BM=",
+            "type": "url",
+            "url": "https://github.com/JetBrains/junie/releases/download/3110.6/junie-release-3110.6-linux-amd64.zip"
+        },
+        "version": "3110.6"
+    },
+    "kimi-code": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "kimi-code",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-YSHQvP6zn+JK4qVBl9NB+AeKp8FRcEOiyP1bVFz9l/w=",
+            "type": "url",
+            "url": "https://github.com/MoonshotAI/kimi-code/releases/download/%40moonshot-ai/kimi-code%400.42.0/kimi-code-linux-x64.tar.gz"
+        },
+        "version": "0.42.0"
+    },
+    "muse": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "muse",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": "muse",
+            "sha256": "sha256-daaPmMQ339F9Jkcwxbxy1X5fHhjRBHKp9TJh/8wJE1I=",
+            "type": "url",
+            "url": "https://lookaside.facebook.com/lookaside/muse/download/?channel=muse&version=1.0.3-R2198.1&file=muse-x86-linux"
+        },
+        "version": "1.0.3-R2198.1"
+    },
+    "openhands-cli": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "openhands-cli",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-ywTuLakcaYcz1SAcVcvAjYHczJ1ktmYnWr9opODFkOM=",
+            "type": "url",
+            "url": "https://github.com/OpenHands/OpenHands-CLI/releases/download/1.16.0/openhands-linux-x86_64"
+        },
+        "version": "1.16.0"
+    }
+}

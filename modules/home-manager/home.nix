@@ -157,6 +157,7 @@
       ./cheatsheet.nix
       ./nwg-dock.nix
       ./ai.nix
+      ./ai-agents.nix
       ./caelestia.nix
       ./vscode.nix
       ./vscode-forks.nix

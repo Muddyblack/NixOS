@@ -1,11 +1,8 @@
 # Source: https://github.com/JetBrains/junie
-#
-# Pinned to 3110.6 deliberately: it is the newest tag shipping a
-# `junie-release-*` asset. Everything above it is `junie-nightly-*`.
 {
   lib,
   stdenv,
-  fetchurl,
+  callPackage,
   unzip,
   autoPatchelfHook,
   makeWrapper,
@@ -14,23 +11,11 @@
   freetype,
   zlib,
 }: let
-  version = "3110.6";
-  sources = {
-    x86_64-linux = {
-      url = "https://github.com/JetBrains/junie/releases/download/${version}/junie-release-${version}-linux-amd64.zip";
-      hash = "sha256-kjzEdEBbQ4SR+yrGLoyk6sPkRYpfpDjWh8HMPaiF+BM=";
-    };
-    aarch64-linux = {
-      url = "https://github.com/JetBrains/junie/releases/download/${version}/junie-release-${version}-linux-aarch64.zip";
-      hash = "sha256-jCCr2i9ibFxyB1vI0DGf8Ogi64hobazD8kNhwsNuNvs=";
-    };
-  };
+  source = callPackage ./source.nix {} "junie";
 in
   stdenv.mkDerivation {
     pname = "junie";
-    inherit version;
-
-    src = fetchurl (sources.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}"));
+    inherit (source) version src;
 
     sourceRoot = ".";
 
@@ -68,7 +53,7 @@ in
       description = "JetBrains' official Junie coding agent CLI";
       homepage = "https://junie.jetbrains.com/";
       license = lib.licenses.unfree;
-      platforms = ["x86_64-linux" "aarch64-linux"];
+      platforms = ["x86_64-linux"];
       mainProgram = "junie";
       sourceProvenance = [lib.sourceTypes.binaryNativeCode];
     };

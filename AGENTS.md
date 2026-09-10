@@ -58,6 +58,7 @@ nixos-config/
 ├── modules/home-manager/
 │   ├── home.nix                 # Imports only, minimal logic
 │   ├── packages.nix             # User packages only
+│   ├── ai-agents.nix            # AI agent CLI catalogue; hosts pick with ai.agents
 │   ├── theme.nix                # GTK/Kvantum/icon symlinks
 │   ├── shell.nix                # Zsh/direnv/terminal tools
 │   ├── plasma-settings.nix      # KDE Plasma config
@@ -66,6 +67,7 @@ nixos-config/
 │   └── functions.nix            # Shell functions
 ├── pkgs/                        # Custom packages & overlays
 │   ├── default.nix              # Overlay definition
+│   ├── ai/                      # Agent CLIs not in nixpkgs; versions in nvfetcher.toml (update-ai)
 │   ├── widgets/                 # Custom UI widgets (AGS/QML)
 │   └── <package>.nix            # One file per package
 └── dev-shells/                  # Development environment templates
@@ -92,9 +94,10 @@ option default in `modules/nixos/hardware.nix`. There is no `hardware-configurat
 owns partitioning.
 
 **Two nixpkgs channels.** Everything tracks `nixos-26.05`; an explicit `inherit (unstablePkgs) ...`
-list in the flake overlay pulls specific packages (caelestia-*, claude-code, codex, vscode,
-zed-editor, tailscale, typst toolchain, …) from unstable. When a package just needs to be newer,
-add it to that list rather than adding a flake input. Inputs `follows` nixpkgs/home-manager — the
+list in the flake overlay pulls specific packages (caelestia-*, vscode, zed-editor, tailscale,
+typst toolchain, …) from unstable. When a package just needs to be newer, add it to that list
+rather than adding a flake input. The overlay also exposes the whole set as `pkgs.unstable`,
+which `modules/home-manager/ai-agents.nix` uses for its catalogue. Inputs `follows` nixpkgs/home-manager — the
 comments in `flake.nix` explain each exception, don't "fix" them.
 
 **Overlay.** `pkgs/default.nix` takes `inputs`, grouped widgets / themes / icons-cursors / boot /
@@ -255,7 +258,7 @@ These are active shell aliases/overrides. Always use the right-hand side when su
 - `gcnix <keep>` — clean nix garbage (default: keep 5 generations)
 - `rollback <N>` — switch to generation N (`gen` to list)
 - `cc-gemini`, `cc-kimi`, `cc-openrouter`, `cc-ollama` — Claude Code backends
-- `update-claude` — update the Claude Code derivation to latest version
+- `update-ai` — bump the `pkgs/ai/` agent CLIs via nvfetcher (`pkgs/ai/nvfetcher.toml` → `_sources/generated.json`)
 
 Any function that calls `curl` must write `command curl`: `curl` is aliased to
 `xh`, and zsh expands aliases when the function body is *parsed*.

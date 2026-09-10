@@ -5,28 +5,14 @@
 {
   lib,
   stdenvNoCC,
-  fetchurl,
+  callPackage,
   buildFHSEnv,
 }: let
-  version = "0.42.0";
-  # The tag embeds the scoped npm name, so both "@" have to stay percent-encoded.
-  releaseUrl = file: "https://github.com/MoonshotAI/kimi-code/releases/download/%40moonshot-ai/kimi-code%40${version}/${file}";
-  sources = {
-    x86_64-linux = {
-      url = releaseUrl "kimi-code-linux-x64.tar.gz";
-      hash = "sha256-YSHQvP6zn+JK4qVBl9NB+AeKp8FRcEOiyP1bVFz9l/w=";
-    };
-    aarch64-linux = {
-      url = releaseUrl "kimi-code-linux-arm64.tar.gz";
-      hash = "sha256-d5dmbWjJ5e8+9v+npPQLEyOQwekkwGFkkvaQlSwVc1s=";
-    };
-  };
+  source = callPackage ./source.nix {} "kimi-code";
 
   unwrapped = stdenvNoCC.mkDerivation {
     pname = "kimi-code-unwrapped";
-    inherit version;
-
-    src = fetchurl (sources.${stdenvNoCC.hostPlatform.system} or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}"));
+    inherit (source) version src;
 
     sourceRoot = ".";
 
@@ -45,7 +31,7 @@
 in
   buildFHSEnv {
     pname = "kimi-code";
-    inherit version;
+    inherit (source) version;
 
     # ripgrep and fd back the agent's file search.
     targetPkgs = pkgs: [pkgs.stdenv.cc.cc.lib pkgs.zlib pkgs.ripgrep pkgs.fd];
@@ -59,7 +45,7 @@ in
       description = "Moonshot AI's official Kimi Code CLI";
       homepage = "https://github.com/MoonshotAI/kimi-code";
       license = lib.licenses.mit;
-      platforms = ["x86_64-linux" "aarch64-linux"];
+      platforms = ["x86_64-linux"];
       mainProgram = "kimi";
       sourceProvenance = [lib.sourceTypes.binaryNativeCode];
     };

@@ -1,4 +1,17 @@
 {pkgs, ...}: {
+  ai.agents = [
+    "claude-code"
+    "cline"
+    "codex"
+    "cursor-cli"
+    "github-copilot-cli"
+    "google-antigravity-cli"
+    "grok-build"
+    "kiro-cli"
+    "mistral-vibe"
+    "opencode"
+  ];
+
   home.packages = with pkgs; [
     # Media & Desktop
     freetube
@@ -29,30 +42,6 @@
     gh
     gource
     devenv
-
-    # AI coding agents (CLI) — the GUI counterparts live under Editors & IDEs
-    aider-chat
-    amp-cli
-    auggie
-    claude-code
-    cline
-    codex
-    crush
-    cursor-cli
-    droid
-    github-copilot-cli
-    goose-cli
-    google-antigravity-cli
-    grok-build
-    junie
-    kimi-code
-    kiro-cli
-    mistral-vibe
-    muse
-    opencode
-    openhands-cli
-    pi-coding-agent
-    qwen-code
 
     # File management
     czkawka
