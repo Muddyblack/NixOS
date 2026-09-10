@@ -10,7 +10,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "HimDek";
     repo = "Utterly-Round-Plasma-Style";
-    rev = "master";
+    rev = "7e011c19382f8afa99daac3226828ce82eaf4f13";
     sha256 = "160hyj5wadmvn7bg4nlzfi4i4vw6vhn8pqlm1qybg14dqlmmh4is";
   };
 

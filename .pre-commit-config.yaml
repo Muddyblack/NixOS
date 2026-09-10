@@ -11,3 +11,9 @@ repos:
         entry: deadnix --fail
         language: system
         files: '\.nix$'
+      - id: gitleaks
+        name: gitleaks
+        entry: gitleaks git --pre-commit --staged --redact --no-banner
+        language: system
+        pass_filenames: false
+        always_run: true

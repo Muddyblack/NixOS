@@ -326,6 +326,18 @@
         && rm -f "$_dir/_sources/generated.nix"
     }
 
+    update-pkg() {
+      if [ -z "$1" ]; then
+        echo "Usage: update-pkg <pkg> [nix-update args]"
+        echo "Example: update-pkg sweet-theme --version=branch"
+        return 1
+      fi
+      local _flake_path _pkg="$1"
+      shift
+      _flake_path="$(_resolve_flake_dir)" || { echo "Could not locate nixos-config."; return 1; }
+      (cd "$_flake_path" && nix-update --flake "nixosConfigurations.$(hostname).pkgs.$_pkg" "$@")
+    }
+
     devnew() {
       if [ -z "$1" ]; then
         echo "Usage: devnew <template>"

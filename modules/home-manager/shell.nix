@@ -104,6 +104,15 @@
     enableZshIntegration = true;
   };
 
+  # `f` fixes the last failed command; nix-index keeps command-not-found
+  programs.pay-respects = {
+    enable = true;
+    enableZshIntegration = true;
+    options = ["--alias" "--nocnf"];
+  };
+  # nixpkgs ships the AI fallback module; keep commands off the network
+  home.sessionVariables._PR_AI_DISABLE = "1";
+
   # Replaces the hand-rolled hourly zsh-history-backup timer: atuin keeps every
   # command in a SQLite database at ~/.local/share/atuin (already covered by the
   # .local/share persistence entry) together with its exit code, duration, cwd
@@ -190,7 +199,6 @@
       bindkey "^[[1;5D" backward-word
 
       setopt CORRECT
-      setopt CORRECT_ALL
       export SPROMPT="Correct %F{red}%R%f to %F{green}%r%f? [nyae] "
 
       zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'

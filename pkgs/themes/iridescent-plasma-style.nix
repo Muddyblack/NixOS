@@ -5,12 +5,12 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "iridescent-plasma-style";
-  version = "1.0.0";
+  version = "1.0.0-unstable-2021-11-13";
 
   src = fetchFromGitHub {
     owner = "ddh4r4m";
     repo = "Iridescent";
-    rev = "main";
+    rev = "9dc1b73bb4a6fdf4e80ae0da3ac05617b63853e5";
     sha256 = "0xlpf26j3ib8jvgy31wphb1gqka70zwqvnv4w4cvxbj1jmscz68h";
   };
 

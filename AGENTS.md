@@ -6,13 +6,14 @@ Do not add verbose comments, duplicate packages, or break the established struct
 
 ## Commands
 
-CI (`.github/workflows/check.yml`) runs exactly three gates. Run all three locally before calling
+CI (`.github/workflows/check.yml`) runs exactly four gates. Run all four locally before calling
 a change done — there is no test suite:
 
 ```bash
 nix flake check --no-build --show-trace
 alejandra --check .                      # alejandra . to actually format
 deadnix --fail .
+gitleaks git . --redact --no-banner      # also a pre-commit hook on staged changes
 ```
 
 Everyday commands are shell aliases/functions, not a task runner: `upnix`/`rebuild` (deploy),
@@ -31,7 +32,7 @@ nix build .#nixosConfigurations.muddyblack-lite.config.system.build.vm && ./resu
 (`--offline`, `--remote <host>`, `--nh`, `--profile <host>`), `sops-setup`, `secrets-edit`,
 `secrets-rotate`. `upnix` calls `deploy.sh switch` and plays `assets/sounds/{success,error}.wav`.
 
-`nix develop` gives nix, git, sops, age, alejandra, deadnix.
+`nix develop` gives nix, git, sops, age, alejandra, deadnix, gitleaks.
 
 ## Structure
 

@@ -7,6 +7,7 @@
     dust
     procs
     sd
+    ripgrep-all # rga: ripgrep inside PDFs, office docs, archives
     ncdu
     delta
     ssh-to-age
@@ -31,7 +32,8 @@
     # Nix tools
     nixd
     nix-du
-    nix-prefetch-github
+    nurl
+    nix-update
     nix-tree
     nix-search-tv
     alejandra
@@ -42,6 +44,7 @@
     nvd
     disko
     deadnix
+    gitleaks
     sops
     age
     protonvpn-gui

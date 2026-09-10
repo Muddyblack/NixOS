@@ -217,6 +217,7 @@
             age
             alejandra
             deadnix
+            gitleaks
           ];
           shellHook = ''
             echo "❄️ NixOS Config Dev Shell Loaded"
