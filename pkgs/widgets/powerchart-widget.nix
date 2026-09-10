@@ -17,6 +17,15 @@ stdenvNoCC.mkDerivation rec {
   dontBuild = true;
   dontConfigure = true;
 
+  # The poll script runs every second per widget instance and calls the Python
+  # powerprofilesctl twice (~0.1 s CPU each), which alone kept plasmashell's
+  # cgroup near 50% CPU with two instances. Take its gdbus fallback instead —
+  # same D-Bus properties, same output, ~10x cheaper.
+  postPatch = ''
+    substituteInPlace contents/scripts/battery-poll.sh \
+      --replace-fail 'if command -v powerprofilesctl >/dev/null 2>&1; then' 'if false; then'
+  '';
+
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/plasma/plasmoids/org.kde.plasma.batterymonitor-boero
