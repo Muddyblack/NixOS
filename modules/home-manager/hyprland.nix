@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   osConfig,
   pkgs,
@@ -10,6 +11,15 @@
     pkgs.ai-usage-hyprland
     pkgs.gitpulse-hyprland
   ];
+
+  # Shared by $screenshotEdit and caelestia's swappy shim
+  xdg.configFile."satty/config.toml".text = ''
+    [general]
+    output-filename = "${config.home.homeDirectory}/Pictures/Screenshots/%Y-%m-%d_%H%M%S_satty.png"
+    early-exit = true
+    copy-command = "wl-copy"
+    disable-notifications = true
+  '';
 
   # Klipper equivalent for Hyprland. The two `wl-paste --watch cliphist store`
   # lines in exec-once were already recording every copy, but nothing ever read
@@ -83,9 +93,7 @@
       # Snip into satty editor: annotate/crop, Ctrl+C copies, Ctrl+S saves, Esc discards
       "$screenshotEdit" = toString (pkgs.writeShellScript "screenshot-edit" ''
         mkdir -p "$HOME/Pictures/Screenshots"
-        hyprshot -m "$1" -z --raw | satty --filename - \
-          --output-filename "$HOME/Pictures/Screenshots/%Y-%m-%d_%H%M%S_satty.png" \
-          --early-exit --copy-command wl-copy --disable-notifications
+        hyprshot -m "$1" -z --raw | satty --filename -
       '');
 
       # Scale stays pinned at 1. `auto` derives a scale from the panel's

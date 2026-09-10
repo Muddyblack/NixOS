@@ -109,6 +109,9 @@
     lm_sensors
     ddcutil
     app2unit
-    swappy
+    # caelestia hardcodes `swappy -f <file|->`; satty takes the same flag
+    (writeShellScriptBin "swappy" ''
+      exec ${satty}/bin/satty "$@"
+    '')
   ];
 }
