@@ -12,6 +12,7 @@
     ssh-to-age
     trash-cli
     tty-clock
+    timg
     tealdeer
     jq
     yq-go
