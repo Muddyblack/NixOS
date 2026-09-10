@@ -179,8 +179,9 @@
                   vscode
                   ;
                 mistral-vibe = unstablePkgs.mistral-vibe.overrideAttrs (_: {
-                  # upstream textual_ui test suite is flaky on this version; disable to unblock builds.
+                  # upstream textual_ui test suite (run via installCheckPhase) is flaky on this version; disable to unblock builds.
                   doCheck = false;
+                  doInstallCheck = false;
                 });
                 google-antigravity = inputs.antigravity-nix.packages.${prev.stdenv.hostPlatform.system}.google-antigravity;
                 google-antigravity-cli = inputs.antigravity-nix.packages.${prev.stdenv.hostPlatform.system}.google-antigravity-cli;
