@@ -6,21 +6,17 @@ Do not add verbose comments, duplicate packages, or break the established struct
 
 ## Commands
 
-`justfile` is the entry point for everything CI checks:
+CI (`.github/workflows/check.yml`) runs exactly three gates. Run all three locally before calling
+a change done — there is no test suite:
 
 ```bash
-just fmt        # alejandra .            — formatter
-just check      # nix flake check --show-trace
-just dead       # deadnix .
-just deploy     # ./deploy.sh switch     — rebuild the running system
-just update     # nix flake update
-just gen        # nh os list
-just clean 5    # nh clean all --keep 5
+nix flake check --no-build --show-trace
+alejandra --check .                      # alejandra . to actually format
+deadnix --fail .
 ```
 
-CI (`.github/workflows/check.yml`) runs exactly three gates: `nix flake check --no-build`,
-`alejandra --check .`, `deadnix --fail .`. Run all three locally before calling a change done —
-there is no test suite.
+Everyday commands are shell aliases/functions, not a task runner: `upnix`/`rebuild` (deploy),
+`update` (flake update), `gen` (list generations), `clean`/`gcnix` (garbage collect).
 
 Check a change without switching the running system:
 
@@ -35,7 +31,7 @@ nix build .#nixosConfigurations.muddyblack-lite.config.system.build.vm && ./resu
 (`--offline`, `--remote <host>`, `--nh`, `--profile <host>`), `sops-setup`, `secrets-edit`,
 `secrets-rotate`. `upnix` calls `deploy.sh switch` and plays `assets/sounds/{success,error}.wav`.
 
-`nix develop` gives nix, git, just, sops, age, alejandra, deadnix.
+`nix develop` gives nix, git, sops, age, alejandra, deadnix.
 
 ## Structure
 

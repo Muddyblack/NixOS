@@ -230,7 +230,6 @@
           packages = with pkgs; [
             nix
             git
-            just
             sops
             age
             alejandra

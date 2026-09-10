@@ -15,7 +15,6 @@
     tealdeer
     jq
     yq-go
-    just
     tokei
     hyperfine
     grex
