@@ -50,6 +50,20 @@
   # exist yet: the settings page writes to this same path, and a `home.file`/
   # `xdg.configFile` declaration would overwrite the user's later in-app
   # changes on every `home-manager switch`.
+  # Create the two files hyprland.conf sources, empty, if they are not there
+  # yet. Same reasoning as the widget settings below: the Display page writes
+  # to these paths itself, so a `home.file` declaration would throw away every
+  # layout change on the next `home-manager switch`.
+  home.activation.hyprDisplayFiles = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    for f in monitors workspaces; do
+      cfg="$HOME/.config/hypr/$f.conf"
+      if [ ! -e "$cfg" ]; then
+        $DRY_RUN_CMD mkdir -p "$(dirname "$cfg")"
+        $DRY_RUN_CMD printf '%s\n' "# Written by caelestia Nexus → Display. Sourced from hyprland.conf." > "$cfg"
+      fi
+    done
+  '';
+
   home.activation.aiUsageDefaults = lib.hm.dag.entryAfter ["writeBoundary"] ''
     cfg="$HOME/.config/ai-usage-widget/hyprland-settings.json"
     if [ ! -e "$cfg" ]; then
@@ -62,6 +76,18 @@
     enable = true;
     configType = "hyprlang"; # explicit: suppress 26.05 default→lua warning (stateVersion < 26.05)
     systemd.variables = ["--all"];
+
+    # Imperative escape hatch for the monitor layout, written by the Display
+    # page in caelestia's settings app (and by nwg-displays, which uses the
+    # same two filenames). extraConfig is emitted last, after `settings`, so
+    # whatever these files declare overrides the `monitor` default below —
+    # which is the point: a layout you dragged into place should not be
+    # re-flattened by a rebuild. home.activation.hyprDisplayFiles seeds them,
+    # because Hyprland errors on a `source` that does not resolve.
+    extraConfig = ''
+      source = ~/.config/hypr/monitors.conf
+      source = ~/.config/hypr/workspaces.conf
+    '';
 
     settings = {
       "$mod" = "SUPER";
