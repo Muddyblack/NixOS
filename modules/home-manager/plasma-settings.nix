@@ -564,6 +564,8 @@ in {
 
       # Global settings
       kdeglobals.General.BrowserApplication = "zen.desktop";
+      kdeglobals.General.TerminalApplication = "ghostty";
+      kdeglobals.General.TerminalService = "com.mitchellh.ghostty.desktop";
       kdeglobals.General.soundTheme = "ocean";
       kdeglobals.General.ColorScheme = "BreezeDark";
       kdeglobals.KDE.AnimationDurationFactor = 0.5;

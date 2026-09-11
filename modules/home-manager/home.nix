@@ -47,6 +47,7 @@
       "audio/midi" = ["guitar-pro.desktop"];
       "audio/x-midi" = ["guitar-pro.desktop"];
       "x-scheme-handler/termius" = ["termius-app.desktop"];
+      "x-scheme-handler/terminal" = ["com.mitchellh.ghostty.desktop"];
     };
   };
 
@@ -177,6 +178,7 @@
     ++ lib.optional osConfig.features.desktops.gnome.enable ./gnome.nix;
 
   home.sessionVariables = {
+    TERMINAL = "ghostty";
     EDITOR = lib.mkForce "${lib.getExe pkgs.neovim}";
     GTK_USE_PORTAL = "1";
     SAL_USE_VCLPLUGIN = "qt6";

@@ -166,7 +166,15 @@
                   doCheck = false;
                   doInstallCheck = false;
                 });
-                google-antigravity = inputs.antigravity-nix.packages.${prev.stdenv.hostPlatform.system}.google-antigravity;
+                google-antigravity =
+                  (inputs.antigravity-nix.packages.${prev.stdenv.hostPlatform.system}.google-antigravity).overrideAttrs
+                  (old: {
+                    postFixup =
+                      (old.postFixup or "")
+                      + ''
+                        echo "Keywords=agy;antigravity;" >> $out/share/applications/antigravity.desktop
+                      '';
+                  });
                 google-antigravity-cli = inputs.antigravity-nix.packages.${prev.stdenv.hostPlatform.system}.google-antigravity-cli;
               })
             ];
