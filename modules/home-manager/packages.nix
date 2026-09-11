@@ -47,6 +47,6 @@
     gitleaks
     sops
     age
-    protonvpn-gui
+    proton-vpn
   ];
 }
