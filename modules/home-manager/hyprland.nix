@@ -116,7 +116,10 @@
         "wl-paste --type text --watch cliphist store"
         "wl-paste --type image --watch cliphist store"
         "nwg-dock-hyprland -d -p bottom -l overlay -a center -i 48"
-        "${pkgs.ai-usage-hyprland}/bin/ai-usage-hyprland"
+        # Needs Kirigami's QML module (StatsSection's tooltip) — caelestia's
+        # own systemd service sets this same var; exec-once processes don't
+        # inherit it, so without this the widget fails to load and exits silently.
+        "env NIXPKGS_QT6_QML_IMPORT_PATH=${pkgs.kdePackages.kirigami.unwrapped}/lib/qt-6/qml ${pkgs.ai-usage-hyprland}/bin/ai-usage-hyprland"
         "${pkgs.gitpulse-hyprland}/bin/gitpulse-hyprland"
       ];
 
