@@ -28,7 +28,7 @@
     py = "python";
     rebuild = "upnix";
     gen = "nh os list";
-    clean = "nh clean all";
+    clean = "nh clean all --no-direnv";
     secrets = "SOPS_AGE_KEY_FILE=$HOME/.config/sops/age/keys.txt sops";
     oc = "opencode";
 

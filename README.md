@@ -279,6 +279,37 @@ p10k configure
 
 ## Usage
 
+**Development environments & offline work:**
+
+direnv uses nix-direnv's [manual reload mode](https://github.com/nix-community/nix-direnv#manual-reload-of-the-nix-environment).
+Entering a project reuses its cached environment, even after `flake.nix` or
+`flake.lock` changes. A warning tells you when the cache is stale. Downloads and
+environment rebuilds wait until you explicitly run `nix-direnv-reload`.
+
+```bash
+devnew python        # optional: initialise a project from a local template
+direnv allow         # approve an existing project's .envrc
+nix-direnv-reload    # first setup online, or apply changed shell definitions
+```
+
+Wait for direnv to load after allowing the project so `nix-direnv-reload` becomes
+available. Commit the project's `flake.lock` to pin dependency versions. Reloading
+uses those pins; run `update --flake "$PWD"` from the project root only when you want newer inputs,
+then `nix-direnv-reload` to build the updated environment. `direnv reload` alone
+does not rebuild the Nix cache in manual mode.
+
+After a successful setup, enter the same project normally while offline. Keep
+its `.direnv/` directory: it holds the cached environment and garbage collection
+roots. `clean`, `gcnix`, and scheduled cleanup preserve direnv roots. To reclaim
+an abandoned project's environment, remove that project's `.direnv/` before
+running cleanup. Store projects on persistent storage (such as `/mnt/projects`
+or `~/Documents`) so their caches survive a reboot.
+
+This caches the Nix environment, not network activity in `.envrc`, `shellHook`,
+or tools such as npm, pip, and Cargo. Prepare those dependencies online too.
+An uncached project or a changed shell needing missing store paths still needs
+an online setup; a stale cached shell keeps the previous tools until refreshed.
+
 **Generations & rollback:**
 ```bash
 gen           # list all generations

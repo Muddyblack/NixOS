@@ -182,7 +182,7 @@
       local keep="''${1:-5}"
       echo "Cleaning Nix garbage (keeping $keep generations)..."
       if command -v nh &>/dev/null; then
-        nh clean all --keep "$keep"
+        nh clean all --keep "$keep" --no-direnv
       else
         echo "nh not found, falling back to nix-collect-garbage..."
         sudo nix-collect-garbage --delete-older-than "''${keep}d"
@@ -357,6 +357,7 @@
       fi
       cp -rn "$_src"/. .
       command -v direnv &> /dev/null && direnv allow
+      echo "Run nix-direnv-reload once online to prepare the environment; later visits reuse its cache."
     }
 
     _devnew() {
@@ -371,11 +372,7 @@
     # Clean desktop session exit from non-login shells
     logout() {
       if [[ "''${XDG_CURRENT_DESKTOP:-}" == *KDE* ]]; then
-        # ksmserver's org.kde.Shutdown logout closes all apps but can then
-        # hang without ever ending the logind session (black screen, never
-        # reaches SDDM). Ending the session directly is reliable, same as
-        # the generic Wayland fallback below.
-        loginctl terminate-session "$XDG_SESSION_ID"
+        systemctl --user --no-block stop graphical-session.target
       elif [[ -n "''${HYPRLAND_INSTANCE_SIGNATURE:-}" ]]; then
         hyprctl dispatch exit
       elif [[ "''${XDG_CURRENT_DESKTOP:-}" == *GNOME* ]]; then

@@ -73,6 +73,9 @@
     enable = true;
     enableZshIntegration = true;
     nix-direnv.enable = true;
+    stdlib = ''
+      nix_direnv_manual_reload
+    '';
   };
 
   programs.fzf = {
