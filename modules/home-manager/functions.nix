@@ -372,7 +372,7 @@
     # Clean desktop session exit from non-login shells
     logout() {
       if [[ "''${XDG_CURRENT_DESKTOP:-}" == *KDE* ]]; then
-        systemctl --user --no-block stop graphical-session.target
+        busctl --user call org.kde.Shutdown /Shutdown org.kde.Shutdown logout
       elif [[ -n "''${HYPRLAND_INSTANCE_SIGNATURE:-}" ]]; then
         hyprctl dispatch exit
       elif [[ "''${XDG_CURRENT_DESKTOP:-}" == *GNOME* ]]; then
@@ -393,6 +393,38 @@
       else
         builtin logout "$@"
       fi
+    }
+
+    reboot() {
+      if [[ "''${XDG_CURRENT_DESKTOP:-}" == *KDE* && $# -eq 0 ]]; then
+        busctl --user call org.kde.Shutdown /Shutdown org.kde.Shutdown logoutAndReboot
+      else
+        command reboot "$@"
+      fi
+    }
+
+    poweroff() {
+      if [[ "''${XDG_CURRENT_DESKTOP:-}" == *KDE* && $# -eq 0 ]]; then
+        busctl --user call org.kde.Shutdown /Shutdown org.kde.Shutdown logoutAndShutdown
+      else
+        command poweroff "$@"
+      fi
+    }
+
+    shutdown() {
+      if [[ "''${XDG_CURRENT_DESKTOP:-}" == *KDE* ]]; then
+        case "$*" in
+          ""|now|"-h now"|"-P now")
+            busctl --user call org.kde.Shutdown /Shutdown org.kde.Shutdown logoutAndShutdown
+            return $?
+            ;;
+          "-r now")
+            busctl --user call org.kde.Shutdown /Shutdown org.kde.Shutdown logoutAndReboot
+            return $?
+            ;;
+        esac
+      fi
+      command shutdown "$@"
     }
 
     # Timer and Stopwatch

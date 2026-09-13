@@ -349,6 +349,8 @@ in {
     enable = true;
     immutableByDefault = false;
 
+    session.sessionRestore.restoreOpenApplicationsOnLogin = "onLastLogout";
+
     workspace = {
       clickItemTo = "select";
       # NOTE: deliberately no `lookAndFeel`. plasma-manager applies it with
