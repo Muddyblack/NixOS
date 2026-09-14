@@ -1,4 +1,4 @@
-# Source: https://github.com/Muddyblack/kde-ai-usage
+# Source: https://github.com/Muddyblack/ai-usage-widget
 {
   lib,
   stdenv,
@@ -58,7 +58,7 @@ in
 
     meta = {
       description = "Hyprland/Quickshell frontend of the AI usage widget";
-      homepage = "https://github.com/Muddyblack/kde-ai-usage";
+      homepage = "https://github.com/Muddyblack/ai-usage-widget";
       mainProgram = "ai-usage-hyprland";
       platforms = ["x86_64-linux" "aarch64-linux"];
     };

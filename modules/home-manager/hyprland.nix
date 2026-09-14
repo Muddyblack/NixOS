@@ -299,6 +299,7 @@
         "$mod SHIFT, S, exec, pkill slurp || true; $screenshotEdit region"
         "$mod, T, exec, $terminal"
         "CTRL ALT, T, exec, $terminal"
+        "CTRL ALT, V, exec, dolphin-open-vscode"
         "$mod, H, exec, bash -c 'hyprctl clients | grep -q hypr-cheatsheet && hyprctl dispatch closewindow class:hypr-cheatsheet || ghostty --class=hypr-cheatsheet -e hypr-cheatsheet'"
         "$mod, S, exec, caelestia shell drawers toggle sidebar"
         "$mod, I, exec, bash -c 'hyprctl clients | grep -q intelligence-center && hyprctl dispatch closewindow class:intelligence-center || ghostty --class=intelligence-center -e antigravity'"

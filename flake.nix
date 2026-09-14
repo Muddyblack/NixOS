@@ -66,7 +66,7 @@
     # Nixdatifier widget (which ls-remotes each root input's ref) would report
     # it as "unchanged" forever.
     ai-usage = {
-      url = "github:Muddyblack/kde-ai-usage";
+      url = "github:Muddyblack/ai-usage-widget";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

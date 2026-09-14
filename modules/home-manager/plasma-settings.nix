@@ -463,6 +463,7 @@ in {
       "services/org.kde.krunner.desktop"._launch = ["Meta+Space" "Search" "Meta"];
       "services/org.kde.systemmonitor.desktop"._launch = "none";
       "caelestia-monitor.desktop"."_launch" = "Ctrl+Shift+Esc";
+      "dolphin-open-vscode.desktop"."_launch" = "Ctrl+Alt+V";
       "services/com.mitchellh.ghostty.desktop"._launch = "Ctrl+Alt+T";
       "services/org.kde.konsole.desktop"._launch = "Ctrl+Alt+A";
       "services/systemsettings.desktop"._launch = ["Tools" "Meta+I"];
@@ -586,6 +587,8 @@ in {
       dolphinrc.General.ShowStatusBar = false;
       dolphinrc.General.ShowToolTips = false;
       dolphinrc.General.ShowHiddenFiles = true;
+      dolphinrc.General.ShowFullPathInTitlebar = true;
+      dolphinrc.General.ShowFullPath = true;
       dolphinrc.General.ViewPropsTimestamp = "2024,10,10,17,38,2.483";
       dolphinrc.KMainWindow."MenuBar" = "Disabled";
       dolphinrc.KMainWindow."ToolBars" = "Disabled";
@@ -660,6 +663,77 @@ in {
     Icon=zed
     Exec=zeditor %f
   '';
+
+  xdg.dataFile."applications/dolphin-open-vscode.desktop".text = ''
+    [Desktop Entry]
+    Name=Open Current Dolphin Folder in VS Code
+    Exec=dolphin-open-vscode
+    Type=Application
+    NoDisplay=true
+    Icon=vscode
+  '';
+
+  home.packages = [
+    (pkgs.writeShellScriptBin "dolphin-open-vscode" ''
+      if command -v code >/dev/null 2>&1; then
+        CODE_BIN="code"
+      elif command -v codium >/dev/null 2>&1; then
+        CODE_BIN="codium"
+      elif flatpak info com.visualstudio.code >/dev/null 2>&1; then
+        CODE_BIN="flatpak run com.visualstudio.code"
+      else
+        exit 0
+      fi
+
+      QDBUS="${pkgs.kdePackages.qttools}/bin/qdbus"
+
+      active_instance=""
+      for s in $($QDBUS 2>/dev/null | awk '/org.kde.dolphin-/{print $1}'); do
+        if [ "$($QDBUS "$s" /dolphin/Dolphin_1 org.qtproject.Qt.QWidget.isActiveWindow 2>/dev/null)" = "true" ]; then
+          active_instance="$s"
+          break
+        fi
+      done
+
+      if [ -z "$active_instance" ]; then
+        active_instance=$($QDBUS 2>/dev/null | awk '/org.kde.dolphin-/{print $1; exit}')
+      fi
+
+      target_dir=""
+      if [ -n "$active_instance" ]; then
+        title=$($QDBUS "$active_instance" /dolphin/Dolphin_1 org.qtproject.Qt.QWidget.windowTitle 2>/dev/null || true)
+        for suffix in " — Dolphin" " - Dolphin" " [Administrator]"; do
+          title="''${title%"$suffix"}"
+        done
+        title="''${title/#\~/$HOME}"
+        if [ -d "$title" ]; then
+          target_dir="$title"
+        elif [ -f "$title" ]; then
+          target_dir="$(dirname "$title")"
+        fi
+
+        if [ -z "$target_dir" ] && command -v wl-paste >/dev/null 2>&1; then
+          prev_clip=$(wl-paste 2>/dev/null || true)
+          $QDBUS "$active_instance" /dolphin/Dolphin_1/actions/copy_location trigger 2>/dev/null || true
+          sleep 0.05
+          loc=$(wl-paste 2>/dev/null || true)
+          if [ -n "$prev_clip" ]; then
+            echo -n "$prev_clip" | wl-copy 2>/dev/null || true
+          fi
+          loc="''${loc#file://}"
+          if [ -d "$loc" ]; then
+            target_dir="$loc"
+          elif [ -f "$loc" ]; then
+            target_dir="$(dirname "$loc")"
+          fi
+        fi
+      fi
+
+      if [ -n "$target_dir" ]; then
+        exec $CODE_BIN "$target_dir"
+      fi
+    '')
+  ];
 
   # Hyprland-style "move active window to desktop N and follow it".
   # Bound to Meta+Shift+1..9 and Meta+Shift+0 (= desktop 10).

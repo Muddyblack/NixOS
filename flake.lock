@@ -7,16 +7,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1789325972,
-        "narHash": "sha256-ZlT1Vbtl5JziBGFxw+uBUC9MV7jeitjOX9POv9bn0/0=",
+        "lastModified": 1789393261,
+        "narHash": "sha256-zztNMGv0X8GnGwLuMYlp4wzdmAGBc9QT8+CTJbsc5cc=",
         "owner": "Muddyblack",
-        "repo": "kde-ai-usage",
-        "rev": "328627de2942c8bcee0276dfafe6eb51e2d9805e",
+        "repo": "ai-usage-widget",
+        "rev": "f4eb5d4e75916530cf74d03f193736825580b5a6",
         "type": "github"
       },
       "original": {
         "owner": "Muddyblack",
-        "repo": "kde-ai-usage",
+        "repo": "ai-usage-widget",
         "type": "github"
       }
     },
