@@ -6,6 +6,15 @@
   options.features.virt.enable = lib.mkEnableOption "virtualization (VMware/KVM/Docker/Podman)";
 
   config = lib.mkIf config.features.virt.enable {
+    boot.extraModprobeConfig = ''
+      options kvm ignore_msrs=Y
+      options kvm report_ignored_msrs=N
+    '';
+    boot.kernelParams = [
+      "kvm.ignore_msrs=1"
+      "kvm.report_ignored_msrs=0"
+    ];
+
     virtualisation.vmware.host.enable = true;
     virtualisation.libvirtd.enable = true;
     programs.virt-manager.enable = true;

@@ -10,6 +10,7 @@
   home.packages = [
     pkgs.ai-usage-hyprland
     pkgs.gitpulse-hyprland
+    pkgs.nixdatifier-hyprland
   ];
 
   # Shared by $screenshotEdit and caelestia's swappy shim
@@ -121,6 +122,7 @@
         # inherit it, so without this the widget fails to load and exits silently.
         "env NIXPKGS_QT6_QML_IMPORT_PATH=${pkgs.kdePackages.kirigami.unwrapped}/lib/qt-6/qml ${pkgs.ai-usage-hyprland}/bin/ai-usage-hyprland"
         "${pkgs.gitpulse-hyprland}/bin/gitpulse-hyprland"
+        "env NIXPKGS_QT6_QML_IMPORT_PATH=${pkgs.kdePackages.kirigami.unwrapped}/lib/qt-6/qml ${pkgs.nixdatifier-hyprland}/bin/nixdatifier-hyprland"
       ];
 
       env = [

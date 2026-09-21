@@ -86,7 +86,7 @@
     };
 
     plasma-audio-visualizer = {
-      url = "github:Muddyblack/kde-audio-visualizer";
+      url = "github:Muddyblack/audio-wave-visualizer";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

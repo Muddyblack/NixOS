@@ -8,6 +8,7 @@
 
     rustnet
     netscanner
+    quickemu
 
     exfatprogs
     dosfstools

@@ -218,7 +218,21 @@
       bindkey "$terminfo[kcuu1]" history-substring-search-up
       bindkey "$terminfo[kcud1]" history-substring-search-down
 
-      chpwd() { eza --icons=auto --group-directories-first; }
+      chpwd() {
+        eza --icons=auto --group-directories-first
+        [[ -n "$XDG_RUNTIME_DIR" ]] && echo "$PWD" > "$XDG_RUNTIME_DIR/last-terminal-cwd"
+      }
+      precmd() {
+        [[ -n "$XDG_RUNTIME_DIR" ]] && echo "$PWD" > "$XDG_RUNTIME_DIR/last-terminal-cwd"
+      }
+
+      open-pwd-in-code() {
+        dolphin-open-vscode "$PWD" </dev/null >/dev/null 2>&1 &!
+        zle reset-prompt 2>/dev/null || true
+      }
+      zle -N open-pwd-in-code
+      bindkey '^[^V' open-pwd-in-code
+      bindkey '^[\x16' open-pwd-in-code
 
       [[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
     '';

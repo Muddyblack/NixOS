@@ -45,7 +45,8 @@ in
       desktop_dir="''${XDG_DATA_HOME:-$HOME/.local/share}/applications"
       mkdir -p "$desktop_dir"
       install -m 0644 ${quickshellDesktop}/share/applications/org.quickshell.desktop "$desktop_dir/org.quickshell.desktop"
-      ${placeholder "out"}/bin/gitpulse-tray ${quickshell}/bin/qs "$root/shell.qml" &
+      ${placeholder "out"}/bin/gitpulse-tray ${quickshell}/bin/qs "$root/shell.qml" \
+        "$root/package/contents/icons/org.muddyblack.gitpulse.svg" &
       tray_pid=$!
       trap 'kill "$tray_pid" 2>/dev/null || true' EXIT INT TERM
       ${quickshell}/bin/qs -p "$root/shell.qml"
