@@ -132,7 +132,6 @@
 
     # Editors & IDEs
     google-antigravity
-    kiro
     zed-editor
 
     # Recording & streaming

@@ -483,8 +483,8 @@ Then launch:
 cc-ollama                    # Claude Code → local Gemma 4 4B
 cc-ollama qwen2.5-coder:7b   # Claude Code → a different local model
 oc                           # OpenCode → same local model
-ai-webui                     # Open WebUI (ChatGPT-style browser frontend)
-ai-webui-stop                # Stop the WebUI to free its ~300 MB RAM
+ai-webui                     # Open WebUI (if enabled: features.ai.openWebui.enable = true)
+ai-webui-stop                # Stop the WebUI
 ```
 
 > **Performance note:** CPU-only (no dedicated GPU) runs at ~4-15 tok/s depending on model size and CPU generation. The 4B model is the sweet spot for usability. Use cloud backends for latency-sensitive work.

@@ -227,7 +227,7 @@ in {
         }
         {
           key = "Ctrl+Alt+T";
-          action = spawn "ghostty";
+          action = spawn "dolphin-open-terminal";
         }
         {
           key = "Super+E";

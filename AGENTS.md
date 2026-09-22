@@ -254,7 +254,7 @@ These are active shell aliases/overrides. Always use the right-hand side when su
 - `cht <query>` — interactive cheat sheet (`cht.sh`)
 - `dashboard` — start and open Homepage (localhost:8082)
 - `paperless` / `paperless-stop` — start/stop the on-demand Paperless-ngx stack (localhost:28981)
-- `ai-webui` / `ai-webui-stop` — start/stop the on-demand Open WebUI (localhost:8765)
+- `ai-webui` / `ai-webui-stop` — start/stop Open WebUI (when `features.ai.openWebui.enable = true`, localhost:8765)
 - `gcnix <keep>` — clean nix garbage (default: keep 5 generations)
 - `rollback <N>` — switch to generation N (`gen` to list)
 - `cc-gemini`, `cc-kimi`, `cc-openrouter`, `cc-ollama` — Claude Code backends

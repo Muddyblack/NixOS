@@ -37,6 +37,7 @@
   # it into hosts/deploy-config.nix, so setting it here too would collide.
 
   features.ai.enable = true;
+  features.ai.openWebui.enable = false;
   features.gaming.enable = true;
   features.virt.enable = true;
   features.homepage.enable = true;

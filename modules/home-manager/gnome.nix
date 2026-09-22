@@ -118,7 +118,7 @@ in {
 
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {
       name = "Terminal (alt)";
-      command = "ghostty";
+      command = "dolphin-open-terminal";
       binding = "<Ctrl><Alt>t";
     };
   };

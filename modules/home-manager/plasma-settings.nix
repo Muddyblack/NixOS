@@ -464,7 +464,7 @@ in {
       "services/org.kde.systemmonitor.desktop"._launch = "none";
       "caelestia-monitor.desktop"."_launch" = "Ctrl+Shift+Esc";
       "dolphin-open-vscode.desktop"."_launch" = "Ctrl+Alt+V";
-      "services/com.mitchellh.ghostty.desktop"._launch = "Ctrl+Alt+T";
+      "dolphin-open-terminal.desktop"."_launch" = "Ctrl+Alt+T";
       "services/org.kde.konsole.desktop"._launch = "Ctrl+Alt+A";
       "services/systemsettings.desktop"._launch = ["Tools" "Meta+I"];
       "services/kcm_kscreen.desktop"._launch = "Meta+P";

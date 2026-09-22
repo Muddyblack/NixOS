@@ -150,18 +150,21 @@ in {
           ];
         }
         {
-          "AI Workspace" = [
-            (mkService "Ollama" {
-              icon = "ollama.svg";
-              href = "http://localhost:11434";
-              description = "Local model runtime";
-            })
-            (mkService "Open WebUI" {
-              icon = "open-webui.svg";
-              href = "http://localhost:8765";
-              description = "Local chat UI for Ollama";
-            })
-          ];
+          "AI Workspace" =
+            [
+              (mkService "Ollama" {
+                icon = "ollama.svg";
+                href = "http://localhost:11434";
+                description = "Local model runtime";
+              })
+            ]
+            ++ lib.optionals (config.features.ai.openWebui.enable or false) [
+              (mkService "Open WebUI" {
+                icon = "open-webui.svg";
+                href = "http://localhost:8765";
+                description = "Local chat UI for Ollama";
+              })
+            ];
         }
         {
           "Web Apps" = [

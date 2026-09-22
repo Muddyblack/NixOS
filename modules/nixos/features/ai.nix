@@ -3,7 +3,10 @@
   config,
   ...
 }: {
-  options.features.ai.enable = lib.mkEnableOption "AI services (Ollama)";
+  options.features.ai = {
+    enable = lib.mkEnableOption "AI services (Ollama)";
+    openWebui.enable = lib.mkEnableOption "Open WebUI frontend";
+  };
 
   config = lib.mkIf config.features.ai.enable {
     services.ollama = {
@@ -16,7 +19,7 @@
       };
     };
 
-    services.open-webui = {
+    services.open-webui = lib.mkIf config.features.ai.openWebui.enable {
       enable = true;
       host = "127.0.0.1";
       port = 8765;
@@ -30,7 +33,7 @@
 
     # On demand: neither the model server nor its UI belongs in multi-user.target.
     systemd.services.ollama.wantedBy = lib.mkForce [];
-    systemd.services.open-webui = {
+    systemd.services.open-webui = lib.mkIf config.features.ai.openWebui.enable {
       wantedBy = lib.mkForce [];
       wants = ["ollama.service"];
       after = ["ollama.service"];

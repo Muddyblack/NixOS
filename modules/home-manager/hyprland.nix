@@ -300,7 +300,7 @@
         "CTRL, Print, exec, pkill slurp || true; hyprshot -m output -o ~/Pictures/Screenshots"
         "$mod SHIFT, S, exec, pkill slurp || true; $screenshotEdit region"
         "$mod, T, exec, $terminal"
-        "CTRL ALT, T, exec, $terminal"
+        "CTRL ALT, T, exec, dolphin-open-terminal"
         "CTRL ALT, V, exec, dolphin-open-vscode"
         "$mod, H, exec, bash -c 'hyprctl clients | grep -q hypr-cheatsheet && hyprctl dispatch closewindow class:hypr-cheatsheet || ghostty --class=hypr-cheatsheet -e hypr-cheatsheet'"
         "$mod, S, exec, caelestia shell drawers toggle sidebar"
