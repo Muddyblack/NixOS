@@ -1,4 +1,5 @@
 {
+  config,
   pkgs,
   lib,
   osConfig,
@@ -24,7 +25,8 @@
         enabled = true;
         wallpaperEnabled = true;
         desktopClock = {
-          enabled = true;
+          # modern-clock-hyprland (hyprland.nix) replaces it when enabled.
+          enabled = !config.desktop.widgets.modernClock.enable;
           position = "middle-center";
         };
       };

@@ -189,6 +189,7 @@
                 plasma-manager.homeModules.plasma-manager
                 inputs.cosmic-manager.homeManagerModules.default
                 inputs.caelestia-shell.homeManagerModules.default
+                inputs.glassy-system-monitor.homeManagerModules.default
               ];
             };
           })

@@ -11,7 +11,7 @@
   <meta property="og:description"
     content="Hyprland + KDE Plasma 6 + COSMIC + GNOME · Btrfs + LUKS + Impermanence · Flakes + Home Manager + Disko" />
   <meta property="og:image"
-    content="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/readme/kde-desktop.png" />
+    content="https://raw.githubusercontent.com/Muddyblack/NixOS/master/docs/readme/kde-desktop.png" />
   <meta property="og:type" content="website" />
   <link rel="icon" type="image/svg+xml"
     href="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/icons/nix_icon.svg" />
@@ -155,7 +155,7 @@
       position: absolute;
       inset: -20px;
       z-index: 0;
-      background-image: url('https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/readme/kde-desktop.png');
+      background-image: url('readme/kde-desktop.png');
       background-size: cover;
       background-position: center;
       opacity: 0.18;
@@ -748,7 +748,7 @@
     <div class="hero-inner">
       <div class="hero-badge">
         <img class="hero-icon"
-          src="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/readme/nix_icon_animated.svg" alt="NixOS" />
+          src="readme/nix_icon_animated.svg" alt="NixOS" />
         <span id="nixos-ver">NixOS</span> · Flakes · Home Manager · Disko
       </div>
       <h1>A reproducible<br /><span class="grad-text">NixOS rice</span><br />built to last.</h1>
@@ -860,30 +860,42 @@
         <div class="kicker">// screenshots</div>
         <h2>Four desktops, one config</h2>
         <p>Hyprland, KDE Plasma 6, COSMIC and GNOME are all independently toggleable and switchable at the login
-          screen, themed from the same source of truth. Screenshots below: the two in daily use.</p>
+          screen, themed from the same source of truth. Screenshots below show all four sessions.</p>
       </div>
       <div class="shots">
         <div class="shot glass reveal">
           <img loading="lazy"
-            src="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/readme/kde-desktop.png"
+            src="readme/kde-desktop.png"
             alt="KDE Plasma 6 desktop" />
           <div class="cap"><i class="dot"></i>KDE Plasma 6 <span>— Sweet Dark · custom widgets · Iridescent theme</span>
           </div>
         </div>
         <div class="shot glass reveal">
           <img loading="lazy"
-            src="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/readme/hyprland-desktop.png"
+            src="readme/hyprland-desktop.png"
             alt="Hyprland desktop" />
           <div class="cap"><i class="dot"></i>Hyprland <span>— Caelestia Shell bar · awww wallpapers</span></div>
         </div>
+        <div class="shot glass reveal">
+          <img loading="lazy"
+            src="readme/cosmic-desktop.png"
+            alt="COSMIC desktop" />
+          <div class="cap"><i class="dot"></i>COSMIC</div>
+        </div>
+        <div class="shot glass reveal">
+          <img loading="lazy"
+            src="readme/gnome-desktop.png"
+            alt="GNOME desktop" />
+          <div class="cap"><i class="dot"></i>GNOME</div>
+        </div>
         <div class="bootloader-row" style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
           <div class="shot glass reveal">
-            <img loading="lazy" src="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/readme/grub.png"
+            <img loading="lazy" src="readme/grub.png"
               alt="Custom GRUB2 theme" />
             <div class="cap"><i class="dot"></i>GRUB2 <span>— themed bootloader</span></div>
           </div>
           <div class="shot glass reveal">
-            <img loading="lazy" src="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/readme/refind.png"
+            <img loading="lazy" src="readme/refind.png"
               alt="Custom rEFInd theme" />
             <div class="cap"><i class="dot"></i>rEFInd <span>— alternate bootloader</span></div>
           </div>
@@ -962,19 +974,19 @@
           SVGs — several animate in-browser.</p>
       </div>
       <div class="gallery">
-        <div class="widget glass reveal">
-          <div class="frame tall"><img loading="lazy"
-              src="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/readme/glassy_monitor.svg"
-              alt="Glassy System Monitor" /></div>
+        <div class="widget glass span2 reveal">
+          <div class="frame"><img loading="lazy"
+              src="readme/glassy_dashboard.png"
+              alt="Glassy System Monitor dashboard" /></div>
           <div class="meta">
-            <h3>Glassy System Monitor <span class="tag">animated</span></h3>
+            <h3>Glassy System Monitor <span class="tag">dashboard</span></h3>
             <p>Glass-style CPU, RAM &amp; network panels with a live scrolling readout.</p>
           </div>
         </div>
-        <div class="widget glass span2 reveal">
+        <div class="widget glass reveal">
           <div class="frame"><img loading="lazy"
-              src="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/readme/nixdatifier.svg"
-              alt="Nixdatifier" /></div>
+              src="readme/nixdatifier_timeline.svg"
+              alt="Nixdatifier generations timeline" /></div>
           <div class="meta">
             <h3>Nixdatifier <span class="tag">animated</span></h3>
             <p>NixOS generations, updates, package diffs &amp; secrets at a glance.</p>
@@ -982,7 +994,7 @@
         </div>
         <div class="widget glass span2 reveal">
           <div class="frame"><img loading="lazy"
-              src="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/readme/audio_visualizer.svg"
+              src="readme/audio_visualizer.svg"
               alt="Plasma Audio Visualizer" /></div>
           <div class="meta">
             <h3>Plasma Audio Visualizer <span class="tag">animated</span></h3>
@@ -990,6 +1002,9 @@
           </div>
         </div>
         <div class="widget glass reveal">
+          <div class="frame"><img loading="lazy"
+              src="readme/gitpulse_inbox.svg"
+              alt="GitPulse inbox" /></div>
           <div class="meta">
             <h3>GitPulse <span class="tag">GitHub</span></h3>
             <p>GitHub activity, notifications, profile stats &amp; Copilot usage on your desktop.</p>
@@ -997,7 +1012,7 @@
         </div>
         <div class="widget glass reveal">
           <div class="frame"><img loading="lazy"
-              src="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/readme/ai_usage.svg"
+              src="readme/ai_usage.svg"
               alt="AI Usage widget" /></div>
           <div class="meta">
             <h3>AI Usage <span class="tag">Claude Code</span></h3>
@@ -1006,7 +1021,7 @@
         </div>
         <div class="widget glass reveal">
           <div class="frame tall"><img loading="lazy"
-              src="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/readme/ai_usage_chart.svg"
+              src="readme/ai_usage_chart.svg"
               alt="AI Usage chart" /></div>
           <div class="meta">
             <h3>AI Usage — Chart</h3>
@@ -1015,7 +1030,7 @@
         </div>
         <div class="widget glass reveal">
           <div class="frame tall"><img loading="lazy"
-              src="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/readme/tagesschau.svg"
+              src="readme/tagesschau.svg"
               alt="Tagesschau" /></div>
           <div class="meta">
             <h3>Tagesschau <span class="tag">animated</span></h3>
@@ -1024,7 +1039,7 @@
         </div>
         <div class="widget glass reveal">
           <div class="frame"><img loading="lazy"
-              src="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/readme/weather_widget.png"
+              src="readme/weather_widget.png"
               alt="Advanced Weather" /></div>
           <div class="meta">
             <h3>Advanced Weather</h3>
@@ -1033,7 +1048,7 @@
         </div>
         <div class="widget glass reveal">
           <div class="frame"><img loading="lazy"
-              src="https://raw.githubusercontent.com/Muddyblack/NixOS/master/assets/readme/battery_widget.png"
+              src="readme/battery_widget.png"
               alt="Powerchart" /></div>
           <div class="meta">
             <h3>Powerchart</h3>

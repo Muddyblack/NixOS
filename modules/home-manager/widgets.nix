@@ -9,6 +9,10 @@ in {
   options.desktop.widgets = {
     powerchart.enable = lib.mkEnableOption "Powerchart battery monitor widget" // {default = true;};
     modernClock.enable = lib.mkEnableOption "Modern Clock widget" // {default = true;};
+    # Plasma keeps the plasmoid's plain white either way.
+    modernClock.wallpaperColors =
+      lib.mkEnableOption "Caelestia's wallpaper colours on the Hyprland Modern Clock"
+      // {default = true;};
     plasmaAudioVisualizer.enable = lib.mkEnableOption "Plasma Audio Visualizer widget" // {default = true;};
     glassySystemMonitor.enable = lib.mkEnableOption "Glassy System Monitor widgets" // {default = true;};
     kscreen.enable = lib.mkEnableOption "KScreen widget" // {default = true;};
@@ -21,9 +25,15 @@ in {
   };
 
   config = {
+    # Upstream module: installs the widget plus the db-ip Lite databases the
+    # 2.0 network window uses for countries and owners.
+    programs.glassy-system-monitor = lib.mkIf cfg.glassySystemMonitor.enable {
+      enable = true;
+      geoip = true;
+    };
+
     home.packages =
       (lib.optional cfg.powerchart.enable pkgs.kde-powerchart)
-      ++ (lib.optional cfg.glassySystemMonitor.enable pkgs.glassy-system-monitor)
       ++ (lib.optional cfg.modernClock.enable pkgs.kde-modern-clock)
       ++ (lib.optional cfg.overview.enable pkgs.kde-overview-widget)
       ++ (lib.optional cfg.plasmaAudioVisualizer.enable pkgs.plasma-audio-visualizer)

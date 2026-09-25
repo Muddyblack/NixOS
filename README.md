@@ -1,9 +1,9 @@
 <h1 align="center">
-   <img src="assets/readme/nix_icon_animated.svg" width="100px" alt="NixOS Logo" /> 
+   <img src="docs/readme/nix_icon_animated.svg" width="100px" alt="NixOS Logo" />
    <br>
       <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=18&pause=3000&color=A855F7&center=true&vCenter=true&width=500&lines=muddyblack%27s+NixOS+configuration;Hyprland+%2B+KDE+%2B+COSMIC+%2B+GNOME;Btrfs+%2B+LUKS+%2B+Impermanence;Flakes+%2B+Home+Manager+%2B+Disko;Zsh+%2B+Powerlevel10k" alt="Muddyblack's NixOS configuration features: Hyprland, KDE Plasma 6, COSMIC, GNOME, Btrfs, LUKS, Impermanence, Flakes, Home Manager, Disko, Zsh, and Powerlevel10k" />
    <br>
-      <img src="assets/readme/gradient.svg" width="100%" alt="Decorative gradient separator" /><br>
+      <img src="docs/readme/gradient.svg" width="100%" alt="Decorative gradient separator" /><br>
    <div align="center">
 
 
@@ -48,44 +48,63 @@ In the first few weeks, I managed to like break the system three times a day and
 ## Screenshots
 
 **KDE**
-<img src="assets/readme/kde-desktop.png" width="100%" alt="KDE Plasma 6 Desktop Screenshot" />
+<img src="docs/readme/kde-desktop.png" width="100%" alt="KDE Plasma 6 Desktop Screenshot" />
 
 **Hyprland**
-<img src="assets/readme/hyprland-desktop.png" width="100%" alt="Hyprland Desktop Screenshot" />
+<img src="docs/readme/hyprland-desktop.png" width="100%" alt="Hyprland Desktop Screenshot" />
+
+**COSMIC**
+<img src="docs/readme/cosmic-desktop.png" width="100%" alt="COSMIC Desktop Screenshot" />
+
+**GNOME**
+<img src="docs/readme/gnome-desktop.png" width="100%" alt="GNOME Desktop Screenshot" />
 
 <details>
 <summary><b>Widgets</b></summary>
 <br>
 
 **Glassy System Monitor**
-<img src="assets/readme/glassy_monitor.svg" width="100%" alt="Glassy System Monitor" />
+<img src="docs/readme/glassy_dashboard.png" width="100%" alt="Glassy System Monitor dashboard" />
 
 **Nixdatifier**
-<img src="assets/readme/nixdatifier.svg" width="100%" alt="Nixdatifier Widget" />
+<p align="center">
+  <img src="docs/readme/nixdatifier_panel.svg" alt="Nixdatifier panel" width="210" valign="middle"/>
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="docs/readme/nixdatifier_timeline.svg" alt="Nixdatifier generations timeline" width="440" valign="middle"/>
+</p>
 
 **Plasma Audio Visualizer**
-<img src="assets/readme/audio_visualizer.svg" width="100%" alt="Plasma Audio Visualizer" />
+<img src="docs/readme/audio_visualizer.svg" width="100%" alt="Plasma Audio Visualizer" />
 
 **AI API Usage**
 <p align="center">
-  <img src="assets/readme/ai_usage_panel.svg" alt="AI Usage panel" width="128" valign="middle"/>
+  <img src="docs/readme/ai_usage_panel.svg" alt="AI Usage panel" width="124" valign="middle"/>
   &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="assets/readme/ai_usage.svg" alt="AI Usage popup" width="312" valign="middle"/>
+  <img src="docs/readme/ai_usage.svg" alt="AI Usage popup" width="400" valign="middle"/>
 </p>
-<img src="assets/readme/ai_usage_chart.svg" width="100%" alt="AI Usage chart" />
+<p align="center">
+  <img src="docs/readme/ai_usage_chart.svg" alt="AI Usage history chart" width="400" />
+</p>
+
+**GitPulse**
+<p align="center">
+  <img src="docs/readme/gitpulse_panel.svg" alt="GitPulse panel" width="132" valign="middle"/>
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="docs/readme/gitpulse_inbox.svg" alt="GitPulse inbox" width="440" valign="middle"/>
+</p>
 
 **Tagesschau**
 <p align="center">
-  <img src="assets/readme/tagesschau_panel.svg" alt="Tagesschau panel" width="128" valign="middle"/>
+  <img src="docs/readme/tagesschau_panel.svg" alt="Tagesschau panel" width="128" valign="middle"/>
   &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="assets/readme/tagesschau.svg" alt="Tagesschau widget" width="360" valign="middle"/>
+  <img src="docs/readme/tagesschau.svg" alt="Tagesschau widget" width="360" valign="middle"/>
 </p>
 
 **Advanced Weather**
-<img src="assets/readme/weather_widget.png" width="100%" alt="Advanced Weather Widget" />
+<img src="docs/readme/weather_widget.png" width="100%" alt="Advanced Weather Widget" />
 
 **Battery & Power Consumption Graph**
-<img src="assets/readme/battery_widget.png" width="100%" alt="Battery Widget Screenshot" />
+<img src="docs/readme/battery_widget.png" width="100%" alt="Battery Widget Screenshot" />
 
 </details>
 
@@ -112,12 +131,12 @@ In the first few weeks, I managed to like break the system three times a day and
 ## Bootloaders
 
 **GRUB2**
-<img src="assets/readme/grub.png" width="100%" alt="Custom GRUB2 Bootloader Theme" />
+<img src="docs/readme/grub.png" width="100%" alt="Custom GRUB2 Bootloader Theme" />
 
 <br>
 
 **rEFInd**
-<img src="assets/readme/refind.png" width="100%" alt="Custom rEFInd Bootloader Theme" />
+<img src="docs/readme/refind.png" width="100%" alt="Custom rEFInd Bootloader Theme" />
 
 ---
 
@@ -131,7 +150,7 @@ In the first few weeks, I managed to like break the system three times a day and
 | **Shell** | Zsh · Powerlevel10k |
 | **Terminal** | Ghostty |
 | **Bar** | Caelestia Shell |
-| **Widgets** | Glassy System Monitor · AI Usage · Nixdatifier · Plasma Audio Visualizer · Advanced Weather · Powerchart |
+| **Widgets** | Glassy System Monitor · AI Usage · Nixdatifier · GitPulse · Tagesschau · Plasma Audio Visualizer · Advanced Weather · Powerchart |
 | **Browser** | Zen Browser |
 | **Editor** | Neovim (LazyVim) · Antigravity · Zed |
 | **File Manager** | Yazi · Dolphin |
@@ -447,6 +466,7 @@ Our environment features a suite of highly-polished custom and third-party widge
 - **[AI Usage Widget](https://github.com/Muddyblack/ai-usage-widget)** — Track your Claude Code session and weekly API token usage directly on the panel.
 - **[Nixdatifier](https://github.com/Muddyblack/kde-nixdatifier)** — Interactive widget for managing NixOS generations, displaying package diffs, performing updates, and configuring secrets.
 - **[GitPulse](https://github.com/Muddyblack/kde-gitpulse)** — GitHub activity, notifications, profile stats & Copilot usage monitoring widget for KDE Plasma.
+- **[Tagesschau](https://github.com/Muddyblack/kde-tagesschau-rss-widget)** — News and finance feeds in a panel widget.
 - **[Plasma Audio Visualizer](https://github.com/Muddyblack/audio-wave-visualizer)** — Smooth, GPU-friendly visualizer powered by `cava` to show audio waveform feedback.
 - **[Advanced Weather Widget](https://github.com/pnedyalkov91/advanced-weather-widget)** — Advanced weather forecast widget with radar and detailed popup tracking.
 - **[Powerchart Widget](https://github.com/jboero/kde-plasmoid-powerchart)** — Real-time power consumption and battery statistics graphing.

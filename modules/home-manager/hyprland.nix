@@ -4,7 +4,18 @@
   osConfig,
   pkgs,
   ...
-}: {
+}: let
+  # Mirrors the Plasma visualizer's config in plasma-settings.nix, on every
+  # monitor and just below the clock. Only defaults: changes made in the
+  # widget's own settings are stored separately and win.
+  audioVisualizerDefaults = pkgs.writeText "audio-wave-defaults.json" (builtins.toJSON {
+    monitor = "all";
+    verticalPosition = 0.5;
+    framerate = 60;
+    progressBarStyle = 4;
+    numBars = 32;
+  });
+in {
   # Hyprland frontend of the AI usage widget; ships the org.quickshell desktop
   # entry the portal daemon needs to resolve the shell's windows.
   home.packages = [
@@ -103,27 +114,37 @@
       # checking `hyprctl monitors` for what it actually chose.
       monitor = [",preferred,auto,1"];
 
-      exec-once = [
-        "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_MENU_PREFIX"
-        # Rebuild KService cache with this session's env so KDE app lists are populated
-        "${pkgs.kdePackages.kservice}/bin/kbuildsycoca6"
-        "${pkgs.hyprpolkitagent}/libexec/hyprpolkitagent"
-        "${pkgs.networkmanagerapplet}/bin/nm-applet --indicator"
-        # Wayland has no clipboard manager in the compositor: the *source*
-        # client owns the data, so closing the app you copied from empties the
-        # clipboard. wl-clip-persist takes ownership of the selection so the
-        # content outlives the process that produced it.
-        "${pkgs.wl-clip-persist}/bin/wl-clip-persist --clipboard regular"
-        "wl-paste --type text --watch cliphist store"
-        "wl-paste --type image --watch cliphist store"
-        "nwg-dock-hyprland -d -p bottom -l overlay -a center -i 48"
-        # Needs Kirigami's QML module (StatsSection's tooltip) — caelestia's
-        # own systemd service sets this same var; exec-once processes don't
-        # inherit it, so without this the widget fails to load and exits silently.
-        "env NIXPKGS_QT6_QML_IMPORT_PATH=${pkgs.kdePackages.kirigami.unwrapped}/lib/qt-6/qml ${pkgs.ai-usage-hyprland}/bin/ai-usage-hyprland"
-        "${pkgs.gitpulse-hyprland}/bin/gitpulse-hyprland"
-        "env NIXPKGS_QT6_QML_IMPORT_PATH=${pkgs.kdePackages.kirigami.unwrapped}/lib/qt-6/qml ${pkgs.nixdatifier-hyprland}/bin/nixdatifier-hyprland"
-      ];
+      exec-once =
+        [
+          "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_MENU_PREFIX"
+          # Rebuild KService cache with this session's env so KDE app lists are populated
+          "${pkgs.kdePackages.kservice}/bin/kbuildsycoca6"
+          "${pkgs.hyprpolkitagent}/libexec/hyprpolkitagent"
+          "${pkgs.networkmanagerapplet}/bin/nm-applet --indicator"
+          # Wayland has no clipboard manager in the compositor: the *source*
+          # client owns the data, so closing the app you copied from empties the
+          # clipboard. wl-clip-persist takes ownership of the selection so the
+          # content outlives the process that produced it.
+          "${pkgs.wl-clip-persist}/bin/wl-clip-persist --clipboard regular"
+          "wl-paste --type text --watch cliphist store"
+          "wl-paste --type image --watch cliphist store"
+          "nwg-dock-hyprland -d -p bottom -l overlay -a center -i 48"
+          # Needs Kirigami's QML module (StatsSection's tooltip) — caelestia's
+          # own systemd service sets this same var; exec-once processes don't
+          # inherit it, so without this the widget fails to load and exits silently.
+          "env NIXPKGS_QT6_QML_IMPORT_PATH=${pkgs.kdePackages.kirigami.unwrapped}/lib/qt-6/qml ${pkgs.ai-usage-hyprland}/bin/ai-usage-hyprland"
+          "${pkgs.gitpulse-hyprland}/bin/gitpulse-hyprland"
+          "env NIXPKGS_QT6_QML_IMPORT_PATH=${pkgs.kdePackages.kirigami.unwrapped}/lib/qt-6/qml ${pkgs.nixdatifier-hyprland}/bin/nixdatifier-hyprland"
+        ]
+        # Same desktop widgets as the Plasma session (plasma-settings.nix).
+        # Caelestia's own desktop clock is switched off in caelestia.nix while
+        # this one runs.
+        ++ lib.optional config.desktop.widgets.modernClock.enable
+        "${pkgs.modern-clock-hyprland.override {
+          inherit (config.desktop.widgets.modernClock) wallpaperColors;
+        }}/bin/modern-clock-hyprland"
+        ++ lib.optional config.desktop.widgets.plasmaAudioVisualizer.enable
+        "env AUDIO_WAVE_DEFAULTS=${audioVisualizerDefaults} ${pkgs.audio-visualizer-hyprland}/bin/audio-visualizer-hyprland";
 
       env = [
         "XCURSOR_SIZE,24"

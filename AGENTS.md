@@ -40,16 +40,18 @@ nix build .#nixosConfigurations.muddyblack-lite.config.system.build.vm && ./resu
 nixos-config/
 ├── flake.nix                    # Main flake - keep minimal
 ├── deploy.sh                    # Installation & deployment script
-├── assets/                      # All images/media/sounds here
+├── assets/                      # System images/media/sounds here
 │   ├── profile.png
 │   ├── boot/                    # GRUB & rEFInd backgrounds
 │   ├── icons/                   # App and NixOS logo icons
 │   ├── plymouth/                # Boot splash themes (scanned by deploy.sh)
-│   ├── readme/                  # Docs screenshots & logos
 │   ├── wallpapers/
 │   └── sounds/
 │       ├── success.wav          # Played on successful upnix
 │       └── error.wav            # Played on failed upnix
+├── docs/
+│   ├── index.html               # Showcase site
+│   └── readme/                  # Docs screenshots & logos
 ├── hosts/
 │   ├── <hostname>/
 │   │   ├── configuration.nix    # System config only
@@ -140,7 +142,7 @@ is persisted.
 - Wallpapers → `assets/wallpapers/`
 - Bootloader backgrounds → `assets/boot/`
 - App & logo icons → `assets/icons/`
-- Docs screenshots → `assets/readme/`
+- Docs screenshots → `docs/readme/`
 - Reference as `../../assets/` from modules
 
 ### Flake

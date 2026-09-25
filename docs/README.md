@@ -1,9 +1,8 @@
 # Showcase site
 
-A static landing page for this NixOS config — single self-contained
-[`index.html`](index.html), no build step. Screenshots are pulled from
-`assets/readme/` on `master` via raw GitHub URLs, so they render on the live
-site without duplicating the (large) image files here.
+A static landing page for this NixOS config — single
+[`index.html`](index.html), no build step. Screenshots and widget images live
+in [`readme/`](readme/) and load locally on the live site.
 
 ## Hosting on GitHub Pages
 
@@ -24,5 +23,5 @@ site without duplicating the (large) image files here.
 python3 -m http.server -d docs 8000   # then open http://localhost:8000
 ```
 
-Screenshots only appear once the referenced assets exist on `master`; until
-then the layout shows with empty image slots.
+The Open Graph preview image uses a raw GitHub URL and appears after the
+changes reach `master`.

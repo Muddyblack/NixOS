@@ -10,6 +10,7 @@ in {
   # WIDGETS - KDE Plasma widgets
   # ═══════════════════════════════════════════════════════════════════════════
   kde-modern-clock = final.callPackage ./widgets/modern-clock.nix {};
+  modern-clock-hyprland = final.callPackage ./widgets/modern-clock-hyprland {};
   kde-overview-widget = final.callPackage ./widgets/overview-widget.nix {};
   ai-usage-widget = upstreamWidget inputs.ai-usage;
   # Upstream only exports the tray helper, so the full Quickshell frontend is
@@ -25,6 +26,9 @@ in {
   glassy-system-monitor = upstreamWidget inputs.glassy-system-monitor;
   tagesschau-widget = upstreamWidget inputs.tagesschau-widget;
   plasma-audio-visualizer = upstreamWidget inputs.plasma-audio-visualizer;
+  audio-visualizer-hyprland = final.callPackage ./widgets/audio-visualizer-hyprland.nix {
+    audioVisualizerSrc = inputs.plasma-audio-visualizer;
+  };
   kde-gitpulse = upstreamWidget inputs.gitpulse;
   gitpulse-hyprland = final.callPackage ./widgets/gitpulse-hyprland.nix {
     gitpulseSrc = inputs.gitpulse;

@@ -52,13 +52,12 @@
       {
         name = "org.muddyblack.glassySystemMonitor";
         config.General = {
-          activeSection = "2";
+          sections = "cpu";
           showCpuCores = "true";
           cpuTitle = "CPU Cores";
           glowLine = "true";
           gpuBloom = "false";
           targetFps = "24";
-          showBg = "true";
           bgColor = "#800d0f1a";
         };
         position = {
@@ -73,59 +72,56 @@
       {
         name = "org.muddyblack.glassySystemMonitor";
         config.General = {
-          activeSection = "2";
+          sections = "cpu";
           showCpuCores = "false";
           cpuTitle = "CPU Total";
           glowLine = "true";
           gpuBloom = "true";
           targetFps = "24";
-          showBg = "true";
           bgColor = "#800d0f1a";
         };
         position = {
           horizontal = 16;
-          vertical = 512;
+          vertical = 528;
         };
         size = {
-          width = 240;
+          width = 232;
           height = 192;
         };
       }
       {
         name = "org.muddyblack.glassySystemMonitor";
         config.General = {
-          activeSection = "3";
+          sections = "memory";
           memoryTitle = "Memory";
           glowLine = "true";
           gpuBloom = "true";
           targetFps = "24";
-          showBg = "true";
           bgColor = "#800d0f1a";
         };
         position = {
-          horizontal = 256;
-          vertical = 512;
+          horizontal = 264;
+          vertical = 528;
         };
         size = {
-          width = 240;
+          width = 232;
           height = 192;
         };
       }
       {
         name = "org.muddyblack.glassySystemMonitor";
         config.General = {
-          activeSection = "1";
+          sections = "network";
           networkTitle = "Network Speed";
           networkInterface = "auto";
           glowLine = "true";
           gpuBloom = "true";
           targetFps = "24";
-          showBg = "true";
           bgColor = "#800d0f1a";
         };
         position = {
           horizontal = 16;
-          vertical = 704;
+          vertical = 736;
         };
         size = {
           width = 480;
@@ -221,12 +217,12 @@
       ++ (lib.optional cfg.glassySystemMonitor.enable {
         name = "org.muddyblack.glassySystemMonitor";
         config.General = {
-          activeSection = "1";
+          sections = "network";
+          panelSections = "network";
           panelMode = "true";
           networkInterface = "auto";
           panelPlainText = "true";
           panelShowBg = "false";
-          showBg = "false";
           glowLine = "true";
           gpuBloom = "true";
           targetFps = "15";
@@ -403,6 +399,8 @@ in {
         "Window Close" = ["Meta+Q" "Alt+F4"];
         "Window Maximize" = "Meta+PgUp";
         "Window Minimize" = "Meta+PgDown";
+        # Hyprland-style fullscreen toggle: covers the panels, unlike Maximize.
+        "Window Fullscreen" = "Meta+F";
         "Window Quick Tile Left" = "Meta+Left";
         "Window Quick Tile Right" = "Meta+Right";
         "Window Quick Tile Top" = "Meta+Up";
