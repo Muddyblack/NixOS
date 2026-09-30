@@ -256,7 +256,7 @@ through `deploy.sh`.
 (de, us, gb, fr, es, it, ch) plus an *other* entry that takes any xkb layout name — or skip the
 prompt with `--keyboard us`. Like the desktop flags it lands in `hosts/deploy-config.nix`
 (`keyboardLayout = "…";`, default German), and from there one value feeds the console keymap,
-xkb/greeter, Hyprland's `kb_layout`, Plasma's `kxkbrc` and fcitx5's input-method group. Change it
+xkb/greeter, Hyprland's `kb_layout` and Plasma's `kxkbrc`. Change it
 later by editing that line and rebuilding — nothing else needs touching.
 
 ```bash

@@ -157,6 +157,8 @@
                   typstyle
                   tinymist
                   kiro
+                  opencode
+                  rapidraw
                   zed-editor
                   vscode
                   ;

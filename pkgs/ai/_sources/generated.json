@@ -74,6 +74,21 @@
         },
         "version": "0.42.0"
     },
+    "mimo-code": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "mimo-code",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-a6zy4Th49UhOmykAO6zwgsAdLU5IbG9TdQtkYgwNmp0=",
+            "type": "url",
+            "url": "https://registry.npmjs.org/@mimo-ai/mimocode-linux-x64/-/mimocode-linux-x64-0.1.15.tgz"
+        },
+        "version": "0.1.15"
+    },
     "muse": {
         "cargoLock": null,
         "date": null,

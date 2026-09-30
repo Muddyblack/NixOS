@@ -28,6 +28,7 @@
       google-antigravity-cli
       junie
       kimi-code
+      mimo-code
       mistral-vibe
       muse
       opencode

@@ -143,8 +143,7 @@
     ckan
 
     # Photography & RAW
-    rawtherapee
-    digikam
+    rapidraw
 
     # Design & creative
     # krita

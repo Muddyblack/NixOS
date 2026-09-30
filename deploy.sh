@@ -349,7 +349,7 @@ prompt_interactive_setup() {
   fi
 
   # Keyboard layout — one xkb layout name for console, greeter, Hyprland,
-  # Plasma and fcitx5 alike (keyboardLayout in hosts/deploy-config.nix).
+  # and Plasma (keyboardLayout in hosts/deploy-config.nix).
   if [[ -z "$_kb_layout" ]]; then
     echo ""
     echo "Keyboard layout:"

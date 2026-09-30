@@ -82,6 +82,7 @@ in {
   droid = final.callPackage ./ai/droid.nix {};
   junie = final.callPackage ./ai/junie.nix {};
   kimi-code = final.callPackage ./ai/kimi-code.nix {};
+  mimo-code = final.callPackage ./ai/mimo-code.nix {};
   muse = final.callPackage ./ai/muse.nix {};
   openhands-cli = final.callPackage ./ai/openhands-cli.nix {};
 }

@@ -20,6 +20,7 @@
         "keyboard.dispatch" = "keyCode";
         "workbench.colorTheme" = "Midnight Marina";
         "workbench.iconTheme" = "material-icon-theme";
+        "qt-core.showWelcomePageOnActivation" = false;
         "editor.fontFamily" = "'Fira Code', monospace";
         "editor.fontSize" = 14;
         "terminal.integrated.fontFamily" = "'MesloLGS NF', monospace";

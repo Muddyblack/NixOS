@@ -19,6 +19,10 @@ fetch.url = "https://github.com/JetBrains/junie/releases/download/$ver/junie-rel
 src.cmd = "curl -fsSL https://registry.npmjs.org/@moonshot-ai/kimi-code/latest | jq -r .version"
 fetch.url = "https://github.com/MoonshotAI/kimi-code/releases/download/%40moonshot-ai/kimi-code%40$ver/kimi-code-linux-x64.tar.gz"
 
+[mimo-code]
+src.cmd = "curl -fsSL https://registry.npmjs.org/@mimo-ai/mimocode-linux-x64/latest | jq -r .version"
+fetch.url = "https://registry.npmjs.org/@mimo-ai/mimocode-linux-x64/-/mimocode-linux-x64-$ver.tgz"
+
 # No version endpoint; bump by hand from https://dev.meta.ai
 [muse]
 src.manual = "1.0.3-R2198.1"

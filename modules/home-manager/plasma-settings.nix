@@ -474,10 +474,7 @@ in {
         CurrentMonitorScreenShot = "none";
         _launch = "none";
       };
-      # Plasma's own emoji picker only ever copies to the clipboard. Free
-      # Meta+. for fcitx5's unicode/emoji input, which commits through the IME
-      # and types straight into the focused field (see desktop.nix).
-      "org.kde.plasma.emojier.desktop"._launch = "none";
+      "org.kde.plasma.emojier.desktop"._launch = "Meta+.";
       kmix = {
         mute = "Volume Mute";
         decrease_volume = "Volume Down";
@@ -508,12 +505,7 @@ in {
       kscreenlockerrc."Greeter/Wallpaper/org.kde.image/General".PreviewImage = "${config.home.homeDirectory}/.local/share/wallpapers/lockscreen.png";
       kscreenlockerrc.Daemon.Timeout = 10;
 
-      # Let KWin launch fcitx5 itself (System Settings -> Virtual Keyboard);
-      # without this the Wayland IM frontend never gets a socket under Plasma.
-      kwinrc.Wayland.InputMethod = {
-        value = "/run/current-system/sw/share/applications/fcitx5-wayland-launcher.desktop";
-        shellExpand = true;
-      };
+      kwinrc.Wayland.InputMethod = "";
 
       ksplashrc.KSplash.Theme = "Illusion";
       plasmarc.Theme.name = "Iridescent-round";

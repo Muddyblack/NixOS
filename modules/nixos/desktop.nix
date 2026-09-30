@@ -83,40 +83,6 @@ in {
     variant = "";
   };
 
-  # Fcitx5's built-in Unicode/emoji typing goes through the actual IME input
-  # channel (not clipboard+paste), so selecting an emoji types it directly
-  # into whatever field has focus — in any toolkit, on any desktop session.
-  i18n.inputMethod = {
-    enable = true;
-    type = "fcitx5";
-    # Wayland input-method frontend (text-input-v3) instead of the
-    # GTK_IM_MODULE/QT_IM_MODULE shims — every session here is Wayland, and
-    # KWin only feeds fcitx5 through the Wayland frontend.
-    fcitx5.waylandFrontend = true;
-    fcitx5.addons = with pkgs; [fcitx5-gtk kdePackages.fcitx5-qt kdePackages.fcitx5-configtool];
-    # fcitx5 applies its own group layout on top of the compositor's. Its
-    # out-of-the-box group is keyboard-us, so leaving this unset forces US
-    # in every session it attaches to.
-    fcitx5.settings.inputMethod = {
-      "Groups/0" = {
-        Name = "Default";
-        "Default Layout" = config.keyboardLayout;
-        DefaultIM = "keyboard-${config.keyboardLayout}";
-      };
-      "Groups/0/Items/0".Name = "keyboard-${config.keyboardLayout}";
-      "GroupOrder"."0" = "Default";
-    };
-    # Meta+. — the key Plasma's clipboard-only emojier used to own
-    # (plasma-settings.nix unbinds it) — opens fcitx5's unicode/emoji search,
-    # which commits the character into the focused field.
-    # (KeyList option — fcitx5 serializes it as a numbered section, not a
-    # plain key=value.)
-    fcitx5.settings.addons.unicode = {
-      globalSection = {};
-      sections.TriggerKey."0" = "Super+period";
-    };
-  };
-
   # Touchpad
   services.libinput = {
     enable = true;

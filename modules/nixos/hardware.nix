@@ -14,8 +14,8 @@
 
   # Single source of truth for the keyboard layout: an xkb layout name, asked
   # for by deploy.sh and written to hosts/deploy-config.nix. Feeds the console
-  # keymap, xkb/greeter, Hyprland's kb_layout, Plasma's kxkbrc and fcitx5's
-  # input-method group — home-manager modules read it through osConfig.
+  # keymap, xkb/greeter, Hyprland's kb_layout and Plasma's kxkbrc.
+  # Home-manager modules read it through osConfig.
   options.keyboardLayout = lib.mkOption {
     type = lib.types.str;
     example = "us";
