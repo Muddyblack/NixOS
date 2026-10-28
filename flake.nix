@@ -65,8 +65,8 @@
     # input never moves, so `nix flake update` is a no-op on it and the
     # Nixdatifier widget (which ls-remotes each root input's ref) would report
     # it as "unchanged" forever.
-    ai-usage = {
-      url = "github:Muddyblack/ai-usage-widget";
+    tidesi = {
+      url = "github:Muddyblack/tidesi";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

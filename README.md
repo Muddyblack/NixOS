@@ -500,7 +500,7 @@ systemctl --user start plasma-layout-rebuild
 Our environment features a suite of highly-polished custom and third-party widgets integrated into the panel and desktop:
 
 - **[Glassy System Monitor](https://github.com/Muddyblack/kde-glassy-system-monitor)** — Real-time CPU, RAM, and network traffic monitor with clean glass visual aesthetics and an interface selector popup.
-- **[AI Usage Widget](https://github.com/Muddyblack/ai-usage-widget)** — Track your Claude Code session and weekly API token usage directly on the panel.
+- **[Tidesi](https://github.com/Muddyblack/tidesi)** — Track your Claude Code session and weekly API token usage directly on the panel.
 - **[Nixdatifier](https://github.com/Muddyblack/nixdatifier)** — Tray app (also a Plasma widget and Quickshell panel) for NixOS generations, package diffs, flake updates and dev environments.
 - **[GitPulse](https://github.com/Muddyblack/kde-gitpulse)** — GitHub activity, notifications, profile stats & Copilot usage monitoring widget for KDE Plasma.
 - **[Tagesschau](https://github.com/Muddyblack/kde-tagesschau-rss-widget)** — News and finance feeds in a panel widget.
@@ -620,7 +620,7 @@ Adding a new secret:
 | [Overview Widget](https://github.com/HimDek/Overview-Widget-for-Plasma) | HimDek |
 | [Modern Clock Widget](https://github.com/prayag2/kde_modernclock) | prayag2 |
 | [Glassy System Monitor](https://github.com/Muddyblack/kde-glassy-system-monitor) | muddyblack |
-| [AI Usage Widget](https://github.com/Muddyblack/ai-usage-widget) | muddyblack |
+| [Tidesi](https://github.com/Muddyblack/tidesi) | muddyblack |
 | [Nixdatifier](https://github.com/Muddyblack/nixdatifier) | muddyblack |
 | [Advanced Weather Widget](https://github.com/pnedyalkov91/advanced-weather-widget) | pnedyalkov91 |
 | [Powerchart Widget](https://github.com/jboero/kde-plasmoid-powerchart) | jboero |

@@ -34,8 +34,8 @@ in
       mkdir -p "$out/share/gitpulse"
       cp -r ../hyprland ../package ../shell.qml "$out/share/gitpulse/"
 
-      install -Dm644 ${quickshellDesktop}/share/applications/org.quickshell.desktop \
-        "$out/share/applications/org.quickshell.desktop"
+      # org.quickshell.desktop comes from tidesi-hyprland; shipping it here
+      # too makes the home-manager-path buildEnv collide.
 
       cat > "$out/bin/gitpulse-hyprland" <<'EOF'
       #!${bash}/bin/bash

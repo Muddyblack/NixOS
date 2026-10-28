@@ -46,6 +46,7 @@
 
     # Dev tools
     gh
+    glab
     gh-dash
     serie
     gource
@@ -60,7 +61,6 @@
 
     # Communication
     # discord — now installed sandboxed via Flatpak (features/flatpak.nix)
-    vesktop
     google-chrome
     thunderbird
     bulwark-mail

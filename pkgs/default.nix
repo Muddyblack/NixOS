@@ -1,7 +1,7 @@
 inputs: final: prev: let
   # Own widgets ship their own flake. Take the package from there instead of
   # re-deriving the install phase here: upstream's is where NixOS-specific
-  # fixes land (ai-usage pins the Python interpreter, without which
+  # fixes land (tidesi pins the Python interpreter, without which
   # plasmashell — whose PATH carries no python3 — renders "python3 missing"),
   # and a local copy silently misses them.
   upstreamWidget = input: input.packages.${final.stdenv.hostPlatform.system}.default;
@@ -12,12 +12,9 @@ in {
   kde-modern-clock = final.callPackage ./widgets/modern-clock.nix {};
   modern-clock-hyprland = final.callPackage ./widgets/modern-clock-hyprland {};
   kde-overview-widget = final.callPackage ./widgets/overview-widget.nix {};
-  ai-usage-widget = upstreamWidget inputs.ai-usage;
-  # Upstream only exports the tray helper, so the full Quickshell frontend is
-  # still assembled here — from the same input, so the two cannot drift.
-  ai-usage-hyprland = final.callPackage ./widgets/ai-usage-hyprland.nix {
-    aiUsageSrc = inputs.ai-usage;
-  };
+  tidesi = upstreamWidget inputs.tidesi;
+  # Upstream also exports the Quickshell panel with its tray helper.
+  tidesi-hyprland = inputs.tidesi.packages.${final.stdenv.hostPlatform.system}.hyprland;
   kde-powerchart = final.callPackage ./widgets/powerchart-widget.nix {};
   advanced-weather-widget = final.callPackage ./widgets/advanced-weather-widget.nix {};
   nixdatifier = upstreamWidget inputs.nixdatifier;

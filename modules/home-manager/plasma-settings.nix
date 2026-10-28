@@ -201,8 +201,8 @@
           notificationSpaceWeatherEnabled = "false";
         };
       })
-      ++ (lib.optional cfg.aiUsage.enable {
-        name = "org.muddyblack.aiUsageWidget";
+      ++ (lib.optional cfg.tidesi.enable {
+        name = "org.muddyblack.tidesi";
         config.General = {
           claudeEnabled = "true";
           antigravityEnabled = "true";

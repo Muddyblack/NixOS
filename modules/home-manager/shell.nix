@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  lib,
+  ...
+}: {
   imports = [
     ./aliases.nix
     ./functions.nix
@@ -63,11 +67,15 @@
     shellWrapperName = "y";
   };
 
+  # The zsh integration is wired by hand at the very end of initContent (see below):
+  # zoxide wants its init to run last, and Home Manager would place it before our initContent.
   programs.zoxide = {
     enable = true;
-    enableZshIntegration = true;
-    options = ["--cmd cd"];
+    enableZshIntegration = false;
   };
+  # Non-interactive shells that only source a snapshot of this config (e.g. tool shells)
+  # lack zoxide's chpwd hook, and its doctor would print a warning into every command there.
+  home.sessionVariables._ZO_DOCTOR = "0";
 
   programs.direnv = {
     enable = true;
@@ -186,63 +194,79 @@
       }
     ];
 
-    initContent = ''
-      for candidate in "$HOME/nixos-config" "/mnt/projects/nixos-config" "/etc/nixos"; do
-        if [[ -d "$candidate/dev-shells" ]]; then
-          export FLAKE_DIR="$candidate"
-          break
-        fi
-      done
+    initContent = lib.mkMerge [
+      ''
+        for candidate in "$HOME/nixos-config" "/mnt/projects/nixos-config" "/etc/nixos"; do
+          if [[ -d "$candidate/dev-shells" ]]; then
+            export FLAKE_DIR="$candidate"
+            break
+          fi
+        done
 
-      [[ $SHLVL -gt 1 ]] && typeset -gi _ghostty_state=1
+        [[ $SHLVL -gt 1 ]] && typeset -gi _ghostty_state=1
 
-      [[ ! -f ${./p10k.zsh} ]] || source ${./p10k.zsh}
+        [[ ! -f ${./p10k.zsh} ]] || source ${./p10k.zsh}
 
-      bindkey "^[[1;5C" forward-word
-      bindkey "^[[1;5D" backward-word
+        bindkey "^[[1;5C" forward-word
+        bindkey "^[[1;5D" backward-word
 
-      setopt CORRECT
-      export SPROMPT="Correct %F{red}%R%f to %F{green}%r%f? [nyae] "
+        setopt CORRECT
+        export SPROMPT="Correct %F{red}%R%f to %F{green}%r%f? [nyae] "
 
-      zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
-      zstyle ':completion:*' menu select
-      zstyle ':completion:*' list-colors "''${(s.:.)LS_COLORS}"
+        zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+        zstyle ':completion:*' menu select
+        zstyle ':completion:*' list-colors "''${(s.:.)LS_COLORS}"
 
-      # fzf-tab styling
-      source ${./fzf-tab.zsh}
+        # fzf-tab styling
+        source ${./fzf-tab.zsh}
 
 
 
-      bindkey '^[[A' history-substring-search-up
-      bindkey '^[[B' history-substring-search-down
-      bindkey "$terminfo[kcuu1]" history-substring-search-up
-      bindkey "$terminfo[kcud1]" history-substring-search-down
+        bindkey '^[[A' history-substring-search-up
+        bindkey '^[[B' history-substring-search-down
+        bindkey "$terminfo[kcuu1]" history-substring-search-up
+        bindkey "$terminfo[kcud1]" history-substring-search-down
 
-      chpwd() {
-        eza --icons=auto --group-directories-first
-        [[ -n "$XDG_RUNTIME_DIR" ]] && echo "$PWD" > "$XDG_RUNTIME_DIR/last-terminal-cwd"
-      }
-      precmd() {
-        [[ -n "$XDG_RUNTIME_DIR" ]] && echo "$PWD" > "$XDG_RUNTIME_DIR/last-terminal-cwd"
-      }
+        autoload -Uz add-zsh-hook
+        # After cd: show at most 10 entries (directories first), and only in an interactive
+        # terminal, so scripts and `zsh -c` never run eza or get a listing in their output.
+        _ls_after_cd() {
+          [[ -o interactive && -t 1 ]] || return 0
+          local -a entries=( *(N/) *(N^/) )
+          (( ''${#entries} )) || return 0
+          eza --icons=auto --group-directories-first -d -- "''${(@)entries[1,10]}"
+          (( ''${#entries} > 10 )) && print -P "%F{8}… und $(( ''${#entries} - 10 )) weitere (ls)%f"
+          return 0
+        }
+        _save_cwd() {
+          [[ -n "$XDG_RUNTIME_DIR" ]] && print -r -- "$PWD" > "$XDG_RUNTIME_DIR/last-terminal-cwd"
+          return 0
+        }
+        add-zsh-hook chpwd _ls_after_cd
+        add-zsh-hook precmd _save_cwd
 
-      open-pwd-in-code() {
-        dolphin-open-vscode "$PWD" </dev/null >/dev/null 2>&1 &!
-        zle reset-prompt 2>/dev/null || true
-      }
-      zle -N open-pwd-in-code
-      bindkey '^[^V' open-pwd-in-code
-      bindkey '^[\x16' open-pwd-in-code
+        open-pwd-in-code() {
+          dolphin-open-vscode "$PWD" </dev/null >/dev/null 2>&1 &!
+          zle reset-prompt 2>/dev/null || true
+        }
+        zle -N open-pwd-in-code
+        bindkey '^[^V' open-pwd-in-code
+        bindkey '^[\x16' open-pwd-in-code
 
-      open-pwd-in-antigravity() {
-        dolphin-open-antigravity "$PWD" </dev/null >/dev/null 2>&1 &!
-        zle reset-prompt 2>/dev/null || true
-      }
-      zle -N open-pwd-in-antigravity
-      bindkey '^[^G' open-pwd-in-antigravity
-      bindkey '^[\x07' open-pwd-in-antigravity
+        open-pwd-in-antigravity() {
+          dolphin-open-antigravity "$PWD" </dev/null >/dev/null 2>&1 &!
+          zle reset-prompt 2>/dev/null || true
+        }
+        zle -N open-pwd-in-antigravity
+        bindkey '^[^G' open-pwd-in-antigravity
+        bindkey '^[\x07' open-pwd-in-antigravity
 
-      [[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
-    '';
+        [[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
+      ''
+      # zoxide must initialise last; mkOrder 2000 places it after every other initContent block
+      (lib.mkOrder 2000 ''
+        eval "$(${lib.getExe pkgs.zoxide} init zsh --cmd cd)"
+      '')
+    ];
   };
 }

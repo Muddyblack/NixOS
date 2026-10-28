@@ -18,7 +18,7 @@ in {
     kscreen.enable = lib.mkEnableOption "KScreen widget" // {default = true;};
     overview.enable = lib.mkEnableOption "KDE Overview widget" // {default = true;};
     weather.enable = lib.mkEnableOption "Advanced Weather widget" // {default = true;};
-    aiUsage.enable = lib.mkEnableOption "AI Usage monitor widget" // {default = true;};
+    tidesi.enable = lib.mkEnableOption "Tidesi AI usage monitor widget" // {default = true;};
     tagesschau.enable = lib.mkEnableOption "Tagesschau news widget" // {default = true;};
     nixosGenerationExplorer.enable = lib.mkEnableOption "NixOS Generation Explorer widget" // {default = true;};
     gitpulse.enable = lib.mkEnableOption "GitPulse GitHub activity widget" // {default = true;};
@@ -38,7 +38,7 @@ in {
       ++ (lib.optional cfg.overview.enable pkgs.kde-overview-widget)
       ++ (lib.optional cfg.plasmaAudioVisualizer.enable pkgs.plasma-audio-visualizer)
       ++ (lib.optional cfg.tagesschau.enable pkgs.tagesschau-widget)
-      ++ (lib.optional cfg.aiUsage.enable pkgs.ai-usage-widget)
+      ++ (lib.optional cfg.tidesi.enable pkgs.tidesi)
       ++ (lib.optional cfg.weather.enable pkgs.advanced-weather-widget)
       ++ (lib.optional cfg.nixosGenerationExplorer.enable pkgs.nixdatifier)
       ++ (lib.optional cfg.gitpulse.enable pkgs.kde-gitpulse);
@@ -74,9 +74,9 @@ in {
           force = true;
         };
       })
-      // (lib.optionalAttrs cfg.aiUsage.enable {
-        "plasma/plasmoids/org.muddyblack.aiUsageWidget" = {
-          source = "${pkgs.ai-usage-widget}/share/plasma/plasmoids/org.muddyblack.aiUsageWidget";
+      // (lib.optionalAttrs cfg.tidesi.enable {
+        "plasma/plasmoids/org.muddyblack.tidesi" = {
+          source = "${pkgs.tidesi}/share/plasma/plasmoids/org.muddyblack.tidesi";
           force = true;
         };
       })

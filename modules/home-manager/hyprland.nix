@@ -6,16 +6,6 @@
   ...
 }: let
   ibusEnabled = osConfig.i18n.inputMethod.enable && osConfig.i18n.inputMethod.type == "ibus";
-  # Mirrors the Plasma visualizer's config in plasma-settings.nix, on every
-  # monitor and just below the clock. Only defaults: changes made in the
-  # widget's own settings are stored separately and win.
-  audioVisualizerDefaults = pkgs.writeText "audio-wave-defaults.json" (builtins.toJSON {
-    monitor = "all";
-    verticalPosition = 0.5;
-    framerate = 60;
-    progressBarStyle = 4;
-    numBars = 32;
-  });
 in {
   xdg.configFile."autostart/ibus-daemon.desktop" = lib.mkIf ibusEnabled {
     text = ''
@@ -27,10 +17,10 @@ in {
     '';
   };
 
-  # Hyprland frontend of the AI usage widget; ships the org.quickshell desktop
+  # Hyprland frontend of Tidesi; ships the org.quickshell desktop
   # entry the portal daemon needs to resolve the shell's windows.
   home.packages = [
-    pkgs.ai-usage-hyprland
+    pkgs.tidesi-hyprland
     pkgs.gitpulse-hyprland
     pkgs.nixdatifier-hyprland
   ];
@@ -77,10 +67,12 @@ in {
   # pill on every monitor, revealed on hover. Only when the file does not
   # exist yet: the settings page writes to this same path, and a `home.file`/
   # `xdg.configFile` declaration would overwrite the user's later in-app
-  # changes on every `home-manager switch`.
-  home.activation.aiUsageDefaults = lib.hm.dag.entryAfter ["writeBoundary"] ''
-    cfg="$HOME/.config/ai-usage-widget/hyprland-settings.json"
-    if [ ! -e "$cfg" ]; then
+  # changes on every `home-manager switch`. The folder was ai-usage-widget
+  # before the rename and Tidesi moves it over on first run, so seeding the
+  # new path while the old one still exists would shadow those settings.
+  home.activation.tidesiDefaults = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    cfg="$HOME/.config/tidesi/hyprland-settings.json"
+    if [ ! -e "$cfg" ] && [ ! -e "$HOME/.config/ai-usage-widget/hyprland-settings.json" ]; then
       $DRY_RUN_CMD mkdir -p "$(dirname "$cfg")"
       $DRY_RUN_CMD printf '%s' '{"providers":{"mistral":false,"openrouter":false},"keys":{},"pollSec":300,"showChart":true,"pillMode":"hover","position":"top-right","monitor":"all","pythonPath":""}' > "$cfg"
     fi
@@ -119,7 +111,7 @@ in {
           # Needs Kirigami's QML module (StatsSection's tooltip) — caelestia's
           # own systemd service sets this same var; exec-once processes don't
           # inherit it, so without this the widget fails to load and exits silently.
-          "env NIXPKGS_QT6_QML_IMPORT_PATH=${pkgs.kdePackages.kirigami.unwrapped}/lib/qt-6/qml ${pkgs.ai-usage-hyprland}/bin/ai-usage-hyprland"
+          "env NIXPKGS_QT6_QML_IMPORT_PATH=${pkgs.kdePackages.kirigami.unwrapped}/lib/qt-6/qml ${pkgs.tidesi-hyprland}/bin/tidesi-hyprland"
           "${pkgs.gitpulse-hyprland}/bin/gitpulse-hyprland"
           "env NIXPKGS_QT6_QML_IMPORT_PATH=${pkgs.kdePackages.kirigami.unwrapped}/lib/qt-6/qml ${pkgs.nixdatifier-hyprland}/bin/nixdatifier-hyprland"
         ]
@@ -130,9 +122,7 @@ in {
         ++ lib.optional config.desktop.widgets.modernClock.enable
         "${pkgs.modern-clock-hyprland.override {
           inherit (config.desktop.widgets.modernClock) wallpaperColors;
-        }}/bin/modern-clock-hyprland"
-        ++ lib.optional config.desktop.widgets.plasmaAudioVisualizer.enable
-        "env AUDIO_WAVE_DEFAULTS=${audioVisualizerDefaults} ${pkgs.audio-visualizer-hyprland}/bin/audio-visualizer-hyprland";
+        }}/bin/modern-clock-hyprland";
 
       env = [
         "XCURSOR_SIZE,24"
