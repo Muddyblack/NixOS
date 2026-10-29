@@ -18,7 +18,6 @@
       ../modules/nixos/gnome.nix
       ../modules/nixos/features/impermanence.nix
       ../modules/nixos/features/sops.nix
-      ../modules/nixos/features/snapshots.nix
       ../modules/nixos/features/power.nix
       ../modules/nixos/features/kernel.nix
       ../modules/nixos/features/hibernate.nix
@@ -115,6 +114,23 @@
   # hashed every newly built path inline, taxing every switch. The timer does
   # the same dedup weekly instead.
   nix.optimise.automatic = true;
+
+  # Heavy store jobs must never run "to catch up" on wake. With Persistent=true
+  # an overdue timer fires the instant the laptop resumes, so a GC deleting
+  # ~1000 store paths (nh-clean) and the dedup pass (nix-optimise) landed on
+  # LUKS+btrfs while Plasma was restarting — plasmashell then survived SIGKILL
+  # (stuck on I/O) and the session never came back. Missed runs just wait for
+  # the next slot; idle I/O class keeps them from starving the desktop.
+  systemd.timers.nh-clean.timerConfig.Persistent = lib.mkForce false;
+  systemd.timers.nix-optimise.timerConfig.Persistent = lib.mkForce false;
+  systemd.services.nh-clean.serviceConfig = {
+    IOSchedulingClass = "idle";
+    CPUSchedulingPolicy = "idle";
+  };
+  systemd.services.nix-optimise.serviceConfig = {
+    IOSchedulingClass = "idle";
+    CPUSchedulingPolicy = "idle";
+  };
 
   # Keep the laptop responsive during rebuilds: bounded parallelism (above) plus
   # build jobs that yield CPU/IO to interactive processes.

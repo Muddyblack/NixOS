@@ -22,7 +22,7 @@
         "/var/lib/nixos"
         "/var/lib/systemd/coredump"
         # systemd stamps the last-run time of Persistent=true timers here.
-        # Without it every persistent timer (btrbk, fstrim, fwupd-refresh)
+        # Without it every persistent timer (fstrim, fwupd-refresh)
         # believes it has never run and fires once on every boot.
         "/var/lib/systemd/timers"
         "/etc/NetworkManager/system-connections"
@@ -56,8 +56,6 @@
         "/var/lib/power-profiles-daemon"
         # Ban database — a reboot otherwise clears every active ban.
         "/var/lib/fail2ban"
-        # btrbk's transaction log; keeps its view of snapshot lineage consistent.
-        "/var/lib/btrbk"
         {
           directory = "/var/lib/colord";
           user = "colord";

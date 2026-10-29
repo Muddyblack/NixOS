@@ -614,6 +614,8 @@ in {
       dolphinrc.PlacesPanel.IconSize = 22;
 
       dolphinrc.ContextMenu.ContextMenuTerminal = false;
+      # "Copy Location" (full path of selection/current folder) without the context menu.
+      kdeglobals.Shortcuts.edit_copy_location = "Ctrl+Shift+C";
 
       "plasmashellrc".Tmux."date-format" = "ddd. d MMM.";
 

@@ -55,7 +55,6 @@
   features.paperless.enable = true;
   features.portmaster.enable = true;
   features.tailscale.enable = true;
-  features.snapshots.enable = true;
   features.keyring.enable = true;
   features.localsend.enable = true;
   features.power.enable = true;

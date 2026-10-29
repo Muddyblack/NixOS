@@ -35,10 +35,8 @@
   # Firmware updates
   services.fwupd.enable = true;
 
-  # Disk health. btrbk snapshots live on the same LUKS device as the data they
-  # snapshot, so they protect against mistakes, not against the drive dying —
-  # this is the part that gives warning before that happens. autodetect covers
-  # every SMART-capable device without naming disks that differ per host.
+  # Disk health: warns before the drive dies. autodetect covers every
+  # SMART-capable device without naming disks that differ per host.
   services.smartd = {
     enable = true;
     autodetect = true;
