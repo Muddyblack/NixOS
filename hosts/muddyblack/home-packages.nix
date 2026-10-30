@@ -12,7 +12,7 @@
     # "grok-bot"
     "junie"
     "kiro-cli"
-    "mistral-vibe"
+    # "mistral-vibe" # vibe-rs test build segfaults rustc
     "opencode"
   ];
 
@@ -158,6 +158,8 @@
 
     # Gaming & Simulation
     ckan
+    scrcpy
+    android-tools
 
     # Photography & RAW
     rapidraw

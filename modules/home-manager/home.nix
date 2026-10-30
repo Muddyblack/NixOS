@@ -21,6 +21,9 @@
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {
+      # GNOME pulls in Nautilus; without this it wins for mounted drives/folders.
+      "inode/directory" = ["org.kde.dolphin.desktop"];
+      "x-scheme-handler/file" = ["org.kde.dolphin.desktop"];
       "image/png" = ["org.kde.gwenview.desktop"];
       "image/jpeg" = ["org.kde.gwenview.desktop"];
       "image/gif" = ["org.kde.gwenview.desktop"];

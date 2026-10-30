@@ -27,6 +27,9 @@
 
   networking.networkmanager = {
     enable = true;
+    # RTL8822CE (rtw88) shares its antenna with Bluetooth; Wi-Fi power save adds
+    # latency spikes and airtime contention that show up as Bluetooth stutter.
+    wifi.powersave = false;
     settings.connectivity = {
       uri = "http://nmcheck.gnome.org/check_network_status.txt";
       response = "NetworkManager is online";
@@ -134,9 +137,8 @@
 
   # Keep the laptop responsive during rebuilds: bounded parallelism (above) plus
   # build jobs that yield CPU/IO to interactive processes.
-  nix.daemonCPUSchedPolicy = "batch";
-  nix.daemonIOSchedClass = "best-effort";
-  nix.daemonIOSchedPriority = 7;
+  nix.daemonCPUSchedPolicy = "idle";
+  nix.daemonIOSchedClass = "idle";
 
   programs.nh = {
     enable = true;
@@ -204,6 +206,9 @@
     algorithm = "zstd";
     memoryPercent = 50;
   };
+  # zram swap is compressed RAM, far cheaper to page into than dropping file
+  # cache, so bias reclaim toward it (kernel docs allow up to 200 for this).
+  boot.kernel.sysctl."vm.swappiness" = 180;
 
   # zswap is a compressed cache in front of a swap *device*. With zram as the
   # only swap device that device is already compressed RAM, so a page gets

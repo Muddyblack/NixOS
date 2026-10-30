@@ -41,7 +41,7 @@
     enable = true;
     autodetect = true;
     notifications.wall.enable = true;
-    defaults.autodetected = "-a -o on -S on -s (S/../.././02|L/../../6/03) -W 4,45,55";
+    defaults.autodetected = "-a -o on -S on -s (S/../.././02|L/../../6/03) -W 4,85,95";
   };
 
   # Network Discovery
@@ -64,6 +64,22 @@
     # default sink (e.g. to Bluetooth buds) leaves those apps on old outputs.
     wireplumber.extraConfig."51-no-restore-target"."wireplumber.settings" = {
       "node.stream.restore-target" = false;
+    };
+    # Larger minimum buffer: an app requesting a tiny quantum (32 samples) forces
+    # the whole graph onto a ~1ms deadline, which a busy CPU misses -> crackling
+    # on Bluetooth. 256 samples = ~5ms is still low latency for desktop use.
+    extraConfig.pipewire."51-min-quantum"."context.properties" = {
+      "default.clock.min-quantum" = 256;
+    };
+    # Bluetooth audio quality: best codec each device offers (LDAC/aptX-HD/AAC,
+    # SBC-XQ as the floor instead of plain SBC), HFP with wideband codecs, and
+    # hardware volume so the headset's own volume stays in sync.
+    wireplumber.extraConfig."52-bluez-quality"."monitor.bluez.properties" = {
+      "bluez5.enable-sbc-xq" = true;
+      "bluez5.enable-msbc" = true;
+      "bluez5.enable-hw-volume" = true;
+      "bluez5.codecs" = ["ldac" "aptx_hd" "aptx" "aac" "sbc_xq" "sbc"];
+      "bluez5.hfphsp-backend" = "native";
     };
   };
 

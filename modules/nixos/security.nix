@@ -88,8 +88,8 @@
   # /etc/clamav/*.conf that the daemons would need.
   #
   # Why: the scheduled home scan kept a core saturated for hours (a single
-  # run once went 19h) and cost roughly 10 °C of thermal headroom on this
-  # laptop's already-degraded cooler, while the desktop threat model is
+  # run once went 19h) and cost roughly 10 °C of thermal headroom, while the
+  # desktop threat model is
   # covered far better by the Flatpak sandboxing in the desktop module.
   # On-demand scanning of a specific download is the actual use case, and
   # that is a GUI action.

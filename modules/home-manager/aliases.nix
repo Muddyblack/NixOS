@@ -31,6 +31,8 @@
     clean = "nh clean all --no-direnv";
     secrets = "SOPS_AGE_KEY_FILE=$HOME/.config/sops/age/keys.txt sops";
     oc = "opencode";
+    # Phone on the PC: virtual 1080p display, real kbd/mouse (MOD+f toggles fullscreen)
+    droid = "scrcpy --keyboard=uhid --mouse=uhid --new-display=1920x1080/280 -b 20M --max-fps=60 -f";
 
     gs = "git status";
     ga = "git add";

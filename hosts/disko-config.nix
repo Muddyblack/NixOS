@@ -51,6 +51,9 @@ in {
                   type = "luks";
                   name = "crypted";
                   passwordFile = "/tmp/luks.key";
+                  # ~4s / 1 GiB Argon2id per unlock attempt, up from the ~2s default:
+                  # an extra two seconds at boot makes passphrase brute-forcing far costlier.
+                  extraFormatArgs = ["--pbkdf" "argon2id" "--iter-time" "4000" "--pbkdf-memory" "1048576"];
                   settings = {
                     allowDiscards = true;
                     # Everything on this machine lives behind this container, and
