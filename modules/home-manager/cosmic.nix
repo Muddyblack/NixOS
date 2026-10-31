@@ -275,6 +275,18 @@ in {
           action = spawn "dolphin-open-terminal";
         }
         {
+          key = "Ctrl+Alt+V";
+          action = spawn "dolphin-open-vscode";
+        }
+        {
+          key = "Ctrl+Alt+G";
+          action = spawn "dolphin-open-antigravity";
+        }
+        {
+          key = "Super+T";
+          action = spawn "ghostty";
+        }
+        {
           key = "Super+E";
           action = spawn "dolphin";
         }

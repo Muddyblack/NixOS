@@ -148,6 +148,10 @@
 
   environment.sessionVariables = {
     NIX_CONFIG = "experimental-features = nix-command flakes";
+    # cargo defaults to one job per core; debug builds of big crates then
+    # saturate the LUKS+btrfs root. Half the cores leaves the desktop room.
+    # An explicit `-j N` on the command line still overrides this.
+    CARGO_BUILD_JOBS = "6";
   };
 
   users.users.${username} = {

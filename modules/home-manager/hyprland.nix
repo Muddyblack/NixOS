@@ -98,7 +98,18 @@ in {
       # physical size and picks 1.5x on this laptop's eDP-1, which blows up
       # every client. Try `auto` again only behind a per-output line, after
       # checking `hyprctl monitors` for what it actually chose.
-      monitor = [",preferred,auto,1"];
+      #
+      # Positions are pinned because `auto` places outputs in connect order,
+      # which put the laptop panel leftmost. Physical order, left to right:
+      # DP-7, AOC, DP-6, laptop. Both Samsungs share one description, so they
+      # are matched by port; if the dock renumbers its ports, fix them here.
+      monitor = [
+        "DP-7,preferred,0x0,1"
+        "desc:AOC AG251FWG2 0x0000031E,preferred,1920x0,1"
+        "DP-6,preferred,3840x0,1"
+        "eDP-1,preferred,5760x0,1"
+        ",preferred,auto,1"
+      ];
 
       exec-once =
         [

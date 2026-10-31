@@ -54,7 +54,6 @@
       "application/x-gpx" = ["guitar-pro.desktop"];
       "audio/midi" = ["guitar-pro.desktop"];
       "audio/x-midi" = ["guitar-pro.desktop"];
-      "x-scheme-handler/termius" = ["termius-app.desktop"];
       "x-scheme-handler/terminal" = ["com.mitchellh.ghostty.desktop"];
     };
     associations.added."application/pdf" = ["zen.desktop" "google-chrome.desktop"];
@@ -64,20 +63,6 @@
     name = "Google Chrome";
     noDisplay = true;
     settings.Hidden = "true";
-  };
-
-  # The termius-app.desktop shipped by nixpkgs has neither %U nor a MimeType,
-  # so nothing claims the termius:// scheme and the SSO callback
-  # (termius://app/continue-sso?...) lands in KIO as "Could not read file".
-  # ~/.local/share/applications wins over the profile entry, so this shadows it.
-  xdg.desktopEntries."termius-app" = {
-    name = "Termius";
-    genericName = "Cross-platform SSH client";
-    comment = "The SSH client that works on Desktop and Mobile";
-    exec = "termius-app %U";
-    icon = "termius-app";
-    categories = ["Network"];
-    mimeType = ["x-scheme-handler/termius"];
   };
 
   xdg.desktopEntries."pdfcraft-twopaged" = {

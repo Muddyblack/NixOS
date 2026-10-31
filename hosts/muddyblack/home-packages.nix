@@ -65,14 +65,14 @@
     thunderbird
     bulwark-mail
     whatsapp
-    termius
+    muxus
 
     # Documents
     onlyoffice-desktopeditors
     obsidian
     portfolio
     firefly-iii-app
-    paperless-ngx-ui
+    # paperless-ngx-ui
     # stirling-pdf-ui # sunsetting
     craftApps.pdfcraft
     craftApps.photocraft
@@ -150,6 +150,9 @@
     google-antigravity
     google-antigravity-ide
     zed-editor
+    (writeShellScriptBin "zed" ''
+      exec ${zed-editor}/bin/zeditor "$@"
+    '')
 
     # Recording & streaming
     obs-studio
