@@ -50,6 +50,7 @@
     enable = true;
     package = pkgs.wireshark;
   };
+  users.users.${username}.extraGroups = ["wireshark"];
   # features.stirling-pdf.enable = true;
   features.firefly-iii.enable = true;
   # features.paperless.enable = true;

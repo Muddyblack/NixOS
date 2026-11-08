@@ -5,6 +5,7 @@
   callPackage,
   autoPatchelfHook,
   makeWrapper,
+  bubblewrap,
   gcc-unwrapped,
   wayland,
   libxkbcommon,
@@ -48,8 +49,12 @@ in
       runHook preInstall
       mkdir -p $out
       cp -r bin share $out/
+      mkdir -p $out/libexec
       for f in $out/bin/*; do
         wrapProgram $f --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath libs}:/run/opengl-driver/lib
+        mv $f $out/libexec/$(basename $f)
+        makeWrapper ${bubblewrap}/bin/bwrap $f \
+          --add-flags "--bind / / --dev-bind /dev /dev --unshare-net --die-with-parent $out/libexec/$(basename $f)"
       done
       runHook postInstall
     '';

@@ -70,6 +70,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    muxus = {
+      url = "github:FloSch62/muxus";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     glassy-system-monitor = {
       url = "github:Muddyblack/kde-glassy-system-monitor";
       inputs.nixpkgs.follows = "nixpkgs";

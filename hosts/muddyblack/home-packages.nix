@@ -88,6 +88,12 @@
     # Networking
     motrix
     rustscan
+    nmap
+    aircrack-ng
+    tcpdump
+    bettercap
+    hashcat
+    kismet
     speedtest-cli
     whois
     termshark
@@ -100,7 +106,7 @@
     # Containers
     distrobox
     boxbuddy
-    podman-desktop
+    unstable.podman-desktop # stable pins EOL electron_42
     podman-compose
     podman-tui
     dive

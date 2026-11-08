@@ -200,6 +200,9 @@ in {
         background = enumVariant "ThemeDefault";
         border_radius = 24;
         expand_to_edges = false;
+        # Bottom puts the dock beneath every window, so it was only visible on
+        # an empty desktop. Top lets the autohide reveal draw over windows.
+        layer = enumVariant "Top";
         margin = 8;
         opacity = 0.85;
         padding = 4;

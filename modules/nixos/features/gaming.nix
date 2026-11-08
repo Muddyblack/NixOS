@@ -26,6 +26,7 @@
     environment.systemPackages = with pkgs; [
       mangohud
       gperftools
+      heroic
     ];
 
     boot.kernel.sysctl = {
