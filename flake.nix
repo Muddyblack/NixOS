@@ -70,10 +70,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    muxus = {
-      url = "github:FloSch62/muxus";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # No nixpkgs.follows: upstream pins its pnpm deps hash against its own nixpkgs.
+    muxus.url = "github:FloSch62/muxus";
 
     glassy-system-monitor = {
       url = "github:Muddyblack/kde-glassy-system-monitor";
