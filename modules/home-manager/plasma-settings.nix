@@ -598,6 +598,8 @@ in {
       dolphinrc.General.ShowStatusBar = false;
       dolphinrc.General.ShowToolTips = false;
       dolphinrc.General.ShowHiddenFiles = true;
+      # Double-click on zip/tar/etc. browses inside it in Dolphin instead of launching another app.
+      dolphinrc.General.BrowseThroughArchives = true;
       dolphinrc.General.ShowFullPathInTitlebar = true;
       dolphinrc.General.ShowFullPath = true;
       dolphinrc.General.ViewPropsTimestamp = "2024,10,10,17,38,2.483";
@@ -644,8 +646,8 @@ in {
       kwinrc.MouseBindings.CommandAll3 = "Resize";
 
       # Touchpad
-      touchpadrc.Libinput.NaturalScrolling = false;
-      touchpadrc.Libinput.ClickMethod = 1; # 1 = Areas, 2 = Clickfinger
+      touchpadrc.Libinput.NaturalScrolling = true;
+      touchpadrc.Libinput.ClickMethod = 2; # 1 = Areas, 2 = Clickfinger
       touchpadrc.Libinput.TapToClick = true;
     };
   };

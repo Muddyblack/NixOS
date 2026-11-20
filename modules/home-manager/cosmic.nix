@@ -46,6 +46,13 @@
       action = directionAction variant dir;
     }) ["Left" "Right" "Up" "Down"];
 in {
+  home.packages = with pkgs; [
+    cosmic-ext-applet-caffeine
+    cosmic-ext-applet-external-monitor-brightness
+    cosmic-ext-applet-privacy-indicator
+    cosmic-ext-tweaks
+  ];
+
   wayland.desktopManager.cosmic = {
     enable = true;
 
@@ -81,6 +88,12 @@ in {
     # services.libinput, same as Hyprland/Plasma each duplicating touchpad
     # config) and defaults touchpad scrolling to Edge, not TwoFinger.
     compositor.input_touchpad = {
+      # Two-finger click = right click (matches GNOME's "fingers"); the
+      # default button-areas needs a click in the exact bottom-right corner.
+      click_method = {
+        __type = "optional";
+        value = enumVariant "Clickfinger";
+      };
       disable_while_typing = {
         __type = "optional";
         value = true;
@@ -109,7 +122,7 @@ in {
           };
           natural_scroll = {
             __type = "optional";
-            value = false;
+            value = true;
           };
           scroll_button = {
             __type = "optional";
@@ -167,9 +180,13 @@ in {
                 "com.system76.CosmicAppletWorkspaces"
               ]
               [
+                "dev.DBrox.CosmicPrivacyIndicator"
+                "com.system76.CosmicAppletStatusArea"
+                "net.tropicbliss.CosmicExtAppletCaffeine"
                 "com.system76.CosmicAppletTiling"
                 "com.system76.CosmicAppletInputSources"
                 "com.system76.CosmicAppletAudio"
+                "io.github.cosmic_utils.cosmic-ext-applet-external-monitor-brightness"
                 "com.system76.CosmicAppletNetwork"
                 "com.system76.CosmicAppletBattery"
                 "com.system76.CosmicAppletNotifications"

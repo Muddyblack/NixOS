@@ -49,6 +49,7 @@ in {
   environment.plasma6.excludePackages = with pkgs.kdePackages; [
     kwin-x11
     discover
+    kmenuedit # Menu Editor — desktop entries are managed by Nix
   ];
   environment.systemPackages = lib.optional cfg.plasma.enable (
     pkgs.writeShellScriptBin "kde-plasma" ''
@@ -94,7 +95,7 @@ in {
       tapping = true;
       naturalScrolling = true;
       disableWhileTyping = true;
-      clickMethod = "buttonareas";
+      clickMethod = "clickfinger";
     };
     mouse = {
       naturalScrolling = true;

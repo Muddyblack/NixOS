@@ -6,6 +6,7 @@
 }:
 lib.mkIf config.features.desktops.gnome.enable {
   services.desktopManager.gnome.enable = true;
+  services.gnome.rygel.enable = false; # UPnP/DLNA media server, unused
 
   environment.gnome.excludePackages = with pkgs; [
     decibels
@@ -24,7 +25,10 @@ lib.mkIf config.features.desktops.gnome.enable {
     # gnome-font-viewer
     # gnome-logs
     gnome-system-monitor
+    gnome-software # no use on NixOS; packages are declarative
+    gnome-text-editor # Kate is the editor
     gnome-tour
+    nautilus # Files (Dolphin is used instead)
     gnome-user-docs
     simple-scan
     yelp

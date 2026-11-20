@@ -18,7 +18,7 @@
 
   home.packages = with pkgs; [
     # Media & Desktop
-    freetube
+    # freetube
     localsend
     kdePackages.kdenlive
 
@@ -27,7 +27,6 @@
 
     # Wine/compatibility
     (pkgs.bottles.override {removeWarningPopup = true;})
-    pkgs.guitar-pro
 
     # File sync
     syncthing
@@ -63,7 +62,6 @@
     # discord — now installed sandboxed via Flatpak (features/flatpak.nix)
     google-chrome
     thunderbird
-    bulwark-mail
     whatsapp
     muxus
 

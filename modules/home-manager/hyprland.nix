@@ -238,6 +238,7 @@ in {
         touchpad = {
           natural_scroll = true;
           tap-to-click = true;
+          clickfinger_behavior = true; # two-finger click = right click
           disable_while_typing = true;
         };
       };

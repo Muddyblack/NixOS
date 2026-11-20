@@ -31,7 +31,7 @@
       "image/bmp" = ["org.kde.gwenview.desktop"];
       "image/tiff" = ["org.kde.gwenview.desktop"];
       "image/svg+xml" = ["org.kde.gwenview.desktop"];
-      "application/pdf" = ["pdfcraft-twopaged.desktop" "ai.storyteller.pdfcraft.desktop"];
+      "application/pdf" = ["ai.storyteller.pdfcraft.desktop"];
       "image/vnd.adobe.photoshop" = ["ai.storyteller.photocraft.desktop"];
       "image/x-psd" = ["ai.storyteller.photocraft.desktop"];
       "image/x-psb" = ["ai.storyteller.photocraft.desktop"];
@@ -50,10 +50,6 @@
       "x-scheme-handler/https" = ["zen.desktop"];
       "x-scheme-handler/about" = ["zen.desktop"];
       "x-scheme-handler/unknown" = ["zen.desktop"];
-      "application/x-guitar-pro" = ["guitar-pro.desktop"];
-      "application/x-gpx" = ["guitar-pro.desktop"];
-      "audio/midi" = ["guitar-pro.desktop"];
-      "audio/x-midi" = ["guitar-pro.desktop"];
       "x-scheme-handler/terminal" = ["com.mitchellh.ghostty.desktop"];
     };
     associations.added."application/pdf" = ["zen.desktop" "google-chrome.desktop"];
@@ -64,32 +60,6 @@
     noDisplay = true;
     settings.Hidden = "true";
   };
-
-  xdg.desktopEntries."pdfcraft-twopaged" = {
-    name = "PDF Craft (Two-Page)";
-    genericName = "PDF Viewer";
-    comment = "View PDF documents with two-page layout";
-    exec = "pdfcraft %U";
-    icon = "pdfcraft";
-    categories = ["Utility" "Viewer"];
-    mimeType = ["application/pdf"];
-    terminal = false;
-  };
-
-  xdg.dataFile."mime/packages/guitar-pro.xml".text = ''
-    <?xml version="1.0" encoding="UTF-8"?>
-    <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
-      <mime-type type="application/x-guitar-pro">
-        <comment>Guitar Pro file</comment>
-        <icon name="guitar-pro"/>
-        <glob pattern="*.gpx"/>
-        <glob pattern="*.gp5"/>
-        <glob pattern="*.gp4"/>
-        <glob pattern="*.gp3"/>
-        <glob pattern="*.gp"/>
-      </mime-type>
-    </mime-info>
-  '';
 
   xdg.userDirs = {
     enable = true;

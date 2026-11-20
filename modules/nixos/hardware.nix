@@ -51,7 +51,7 @@
       enable = true;
       # ESP is 2G and rEFInd copies each generation's kernel+initrd onto it;
       # keep this capped so a kernel bump can't fill the partition mid-install.
-      maxGenerations = 8;
+      maxGenerations = 5;
       # scanfor manual: show only our themed NixOS entries (keeps the systemd-boot
       # backup from showing up as a duplicate); graphics mode + theme assets follow.
       extraConfig = ''
