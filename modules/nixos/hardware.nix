@@ -49,7 +49,7 @@
     # rEFInd (UEFI only, opt-in via bootloader = "refind")
     boot.loader.refind = lib.mkIf useRefind {
       enable = true;
-      # ESP is 1G and rEFInd copies each generation's kernel+initrd onto it;
+      # ESP is 2G and rEFInd copies each generation's kernel+initrd onto it;
       # keep this capped so a kernel bump can't fill the partition mid-install.
       maxGenerations = 8;
       # scanfor manual: show only our themed NixOS entries (keeps the systemd-boot

@@ -416,6 +416,9 @@ in {
 
   services.hypridle = {
     enable = true;
+    # Default is graphical-session.target, which also started it under Plasma,
+    # GNOME and COSMIC: its backlight dim raced PowerDevil's and left the panel dark.
+    systemdTarget = "hyprland-session.target";
     settings = {
       general = {
         # Use the shell's own lock screen for idleness

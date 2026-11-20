@@ -111,26 +111,22 @@
     # Nothing changed: leave appletsrc and the running widgets alone.
     [ "$changed" = 1 ] || exit 0
 
-    # Best-effort live reload — run in background so the service exits quickly.
-    # Writing is already done above via kwriteconfig6, so if the reload fails
-    # the config will be picked up on next plasmashell restart.
-    (
-      for i in $(seq 1 120); do
-        ${qdbus} org.kde.plasmashell /PlasmaShell >/dev/null 2>&1 && break
-        sleep 0.5
-      done
-      ${qdbus} org.kde.plasmashell /PlasmaShell \
-        org.kde.PlasmaShell.evaluateScript '
-          panels().concat(desktops()).forEach(function(c) {
-            c.widgets().forEach(function(w) {
-              if (w.type && w.type.indexOf("advanced-weather-widget") !== -1)
-                w.reloadConfig();
-            });
+    # Best-effort live reload, in the foreground: systemd kills whatever a
+    # finished oneshot leaves running, so a backgrounded reload never ran.
+    for i in $(seq 1 120); do
+      ${qdbus} org.kde.plasmashell /PlasmaShell >/dev/null 2>&1 && break
+      sleep 0.5
+    done
+    ${qdbus} org.kde.plasmashell /PlasmaShell \
+      org.kde.PlasmaShell.evaluateScript '
+        panels().concat(desktops()).forEach(function(c) {
+          c.widgets().forEach(function(w) {
+            if (w.type && w.type.indexOf("advanced-weather-widget") !== -1)
+              w.reloadConfig();
           });
-          print("reloaded");
-        ' 2>/dev/null && echo "weather-patch: reloaded widgets" || true
-    ) &
-    disown
+        });
+        print("reloaded");
+      ' 2>/dev/null && echo "weather-patch: reloaded widgets" || true
   '';
   networkWatchScript = pkgs.writeShellScript "weather-network-watch" ''
     # Already online — main service handles it
