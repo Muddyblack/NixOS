@@ -56,9 +56,7 @@ in {
                   extraFormatArgs = ["--pbkdf" "argon2id" "--iter-time" "4000" "--pbkdf-memory" "1048576"];
                   settings = {
                     allowDiscards = true;
-                    # Everything on this machine lives behind this container, and
-                    # dm-crypt pushes every read and write through an internal workqueue
-                    # line reverts it on the next boot. Needs Linux 5.9+.
+                    # Skip dm-crypt's read/write workqueues (lower NVMe latency). Needs Linux 5.9+.
                     bypassWorkqueues = true;
                   };
                   content = {

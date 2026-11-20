@@ -149,9 +149,7 @@
       show_preview = true;
       enter_accept = false;
       # Never record secrets typed on a command line.
-      secrets_filter =
-        # television's binary is already `tv`; no alias needed for it.
-        true;
+      secrets_filter = true;
       history_filter = [
         "^ "
         "^curl .*(api[_-]?key|token|password)"
