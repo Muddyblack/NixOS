@@ -652,6 +652,19 @@ in {
     };
   };
 
+  # Keep PowerDevil away from DDC/CI. Its libddcutil watcher holds the external
+  # monitors' /dev/i2c-N open. When a DP-MST (dock) monitor drops out, e.g. the
+  # monitor going to standby after resume, the kernel's MST worker blocks
+  # forever in i2c_del_adapter() waiting on that open handle. That deadlocks
+  # i915 modesetting: screen frozen, VT switch dead, hard reset needed (boot of
+  # 2026-11-21: "kworker blocked ... drm_dp_mst_up_req_work -> i2c_del_adapter").
+  # Cost: no external-monitor brightness slider in Plasma. The `agon-fix` ddcutil
+  # function in functions.nix still works because it opens the bus only briefly.
+  xdg.configFile."systemd/user/plasma-powerdevil.service.d/no-ddcutil.conf".text = ''
+    [Service]
+    Environment=POWERDEVIL_NO_DDCUTIL=1
+  '';
+
   xdg.dataFile."kio/servicemenus/com.mitchellh.ghostty.desktop".text = ''
     [Desktop Entry]
     Type=Service

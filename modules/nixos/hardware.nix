@@ -221,6 +221,16 @@
       };
     };
 
+    # RTL8822CE (rtw88): keep the PCIe link out of ASPM low-power states. After
+    # a resume on 2026-11-20 the firmware stopped answering ("failed to send h2c
+    # command" x1757 over 18 min) until the next suspend; ASPM link wake-up is
+    # the known trigger on this chip. Costs a fraction of a watt.
+    # Not a fix for the "reason=4 locally_generated" drops: those are the phone
+    # hotspot going idle overnight. LPS deep stays at the driver default.
+    boot.extraModprobeConfig = ''
+      options rtw88_pci disable_aspm=y
+    '';
+
     # systemd-rfkill restores a saved "blocked" state after the udev rule below ran, so
     # the radio kept coming back soft-blocked. Unblock again once the restore is done
     # and after resume.

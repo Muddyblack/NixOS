@@ -3,8 +3,21 @@
   pkgs,
   ...
 }: let
-  zen = inputs.zen-browser.packages."${pkgs.stdenv.hostPlatform.system}".default.override {
+  zenBase = inputs.zen-browser.packages."${pkgs.stdenv.hostPlatform.system}".default.override {
     waylandSupport = true;
+  };
+
+  # Drop any inherited LD_LIBRARY_PATH before Zen's own wrapper adds its libs.
+  # The nixpkgs-unstable claude-code wrapper exports an alsa-lib built against
+  # glibc 2.44; Zen opened from it (login links, xdg-open) loaded that and died
+  # with "GLIBC_2.43 not found ... Couldn't load XPCOM" (seen 2026-11-20/21).
+  zen = pkgs.symlinkJoin {
+    name = "zen-browser-clean-env";
+    paths = [zenBase];
+    nativeBuildInputs = [pkgs.makeWrapper];
+    postBuild = ''
+      wrapProgram $out/bin/zen --unset LD_LIBRARY_PATH
+    '';
   };
 
   performancePrefs = ''

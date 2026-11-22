@@ -3,6 +3,10 @@
 When working with this NixOS configuration, follow these rules strictly.
 Do not add verbose comments, duplicate packages, or break the established structure.
 
+If a `GAPS.md` exists in the repo root, read it before starting. It's a local, untracked list of
+open issues on this machine: fixes still being verified, bugs to report upstream, and issues left
+alone on purpose. Update it when you settle or find one. Never commit it.
+
 
 ## Commands
 
