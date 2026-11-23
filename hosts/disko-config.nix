@@ -62,34 +62,38 @@ in {
                   content = {
                     type = "btrfs";
                     extraArgs = ["-f"];
+                    # nodiscard: btrfs auto-enables discard=async on SSDs (kernel >= 6.2).
+                    # On the DRAM-less AGI NVMe each discard takes ~5 ms and stalls other
+                    # I/O; after a big cargo build the queue held 161k extents (~13 min
+                    # of trimming). TRIM is left to the weekly fstrim.timer instead.
                     subvolumes = {
                       "/@root" = {
                         mountpoint = "/";
-                        mountOptions = ["compress=zstd:1" "noatime"];
+                        mountOptions = ["compress=zstd:1" "noatime" "nodiscard"];
                       };
                       "/@persist" = {
                         mountpoint = "/persist";
-                        mountOptions = ["compress=zstd:1" "noatime"];
+                        mountOptions = ["compress=zstd:1" "noatime" "nodiscard"];
                       };
                       "/@home" = {
                         mountpoint = "/home";
-                        mountOptions = ["compress=zstd:1" "noatime"];
+                        mountOptions = ["compress=zstd:1" "noatime" "nodiscard"];
                       };
                       "/@nix" = {
                         mountpoint = "/nix";
-                        mountOptions = ["compress=zstd:1" "noatime"];
+                        mountOptions = ["compress=zstd:1" "noatime" "nodiscard"];
                       };
                       "/@log" = {
                         mountpoint = "/var/log";
-                        mountOptions = ["compress=zstd:1" "noatime"];
+                        mountOptions = ["compress=zstd:1" "noatime" "nodiscard"];
                       };
                       "/@data" = {
                         mountpoint = "/mnt/data";
-                        mountOptions = ["compress=zstd:1" "noatime" "noauto" "nofail"];
+                        mountOptions = ["compress=zstd:1" "noatime" "nodiscard" "noauto" "nofail"];
                       };
                       "/@projects" = {
                         mountpoint = "/mnt/projects";
-                        mountOptions = ["compress=zstd:1" "noatime" "nofail"];
+                        mountOptions = ["compress=zstd:1" "noatime" "nodiscard" "nofail"];
                       };
                     };
                   };
