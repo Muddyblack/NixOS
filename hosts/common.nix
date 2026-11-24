@@ -41,7 +41,11 @@
     enable = true;
     settings = {
       Resolve = {
-        DNSSEC = "allow-downgrade";
+        # Not "allow-downgrade": on public/captive Wi-Fi the network's DNS strips
+        # or forges signatures, resolved marks answers Bogus and returns SERVFAIL
+        # (EAI_AGAIN) — the portal hostname never resolves, so the login page
+        # never opens. Cloudflare/Quad9 already validate upstream.
+        DNSSEC = "false";
         DNSOverTLS = "opportunistic";
         DNS = "1.1.1.3#cloudflare-dns.com 9.9.9.9#dns.quad9.net";
         FallbackDNS = "8.8.8.8#dns.google";

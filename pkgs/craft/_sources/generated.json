@@ -23,11 +23,11 @@
     "pinned": false,
     "src": {
       "name": null,
-      "sha256": "sha256-XOA5NpAUQif6kYboIwitY4pu9tn5dsmW5tA7W1G2Wns=",
+      "sha256": "sha256-byn/fgNZkJ/h2/b9PP2EMKA2I0m2EsXrLPyP7nueJ2A=",
       "type": "url",
-      "url": "https://github.com/storytold/effectcraft/releases/download/v0.24.1/effectcraft-0.24.1-linux-x86_64.tar.gz"
+      "url": "https://github.com/storytold/effectcraft/releases/download/v0.25.1/effectcraft-0.25.1-linux-x86_64.tar.gz"
     },
-    "version": "0.24.1"
+    "version": "0.25.1"
   },
   "filmcraft": {
     "cargoLock": null,
@@ -83,11 +83,11 @@
     "pinned": false,
     "src": {
       "name": null,
-      "sha256": "sha256-wpGekETv/eMY5mgHrSohu7dKlVWzwLmfmtDEDPYc4l4=",
+      "sha256": "sha256-qJk/nuluh6zOz5CvQib/YKhLnheHrp/Y+kj/4Tlrw14=",
       "type": "url",
-      "url": "https://github.com/storytold/pdfcraft/releases/download/v0.21.1/pdfcraft-0.21.1-linux-x86_64.tar.gz"
+      "url": "https://github.com/storytold/pdfcraft/releases/download/v0.22.0/pdfcraft-0.22.0-linux-x86_64.tar.gz"
     },
-    "version": "0.21.1"
+    "version": "0.22.0"
   },
   "photocraft": {
     "cargoLock": null,
