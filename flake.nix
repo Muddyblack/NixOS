@@ -103,7 +103,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
+    # Commented out while features.kernel.cachyos is off (cache compromise,
+    # 2026-10-15): an unused input still gets fetched on every lock/update.
+    # To re-enable: uncomment this and the overlay in mkHost, run
+    # `nix flake lock`, then set features.kernel.cachyos.enable = true.
+    # nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
   };
 
   # Service ports reference:
@@ -143,7 +147,7 @@
           ({pkgs, ...}: {
             nixpkgs.overlays = [
               (import ./pkgs inputs)
-              inputs.nix-cachyos-kernel.overlays.pinned
+              # inputs.nix-cachyos-kernel.overlays.pinned  # see nix-cachyos-kernel input
               (_final: prev: {
                 # caelestia-shell/-cli exist only in unstable, and only there are
                 # they - plus their quickshell dependency - prebuilt on cache.nixos.org.

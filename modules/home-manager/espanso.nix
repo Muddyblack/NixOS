@@ -113,4 +113,13 @@
       };
     };
   };
+
+  # Default WantedBy=default.target starts it before the compositor: panics with NoCompositor once per login.
+  systemd.user.services.espanso = {
+    Unit = {
+      After = ["graphical-session.target"];
+      PartOf = ["graphical-session.target"];
+    };
+    Install.WantedBy = lib.mkForce ["graphical-session.target"];
+  };
 }

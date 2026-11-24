@@ -36,7 +36,9 @@
     useSystemdBoot = config.bootloader == "systemd-boot";
   in {
     hardware.i2c.enable = true;
-    services.hardware.openrgb.enable = true;
+    # Off: the root OpenRGB server keeps /dev/i2c-* open, so a dock (DP-MST) monitor dropping out
+    # hangs forever in i2c_del_adapter (2026-11-23, during the dock firmware update).
+    services.hardware.openrgb.enable = false;
     boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
     boot.initrd.availableKernelModules = ["ata_piix" "mptspi" "uhci_hcd" "ehci_pci" "ahci" "sd_mod" "sr_mod" "i915" "i2c_designware_platform" "i2c_designware_core" "i2c_hid_acpi" "hid_multitouch"];
     boot.kernelModules = ["kvm-intel" "elan_i2c" "i2c-hid-acpi"];
@@ -268,7 +270,9 @@
       ];
     };
 
-    services.thermald.enable = lib.mkDefault true;
+    # Off: in --adaptive mode the Lenovo DPTF tables cut PL1 to 4 W and the TCC offset to 30 °C after
+    # a hot spell and never let go (CPU stuck at 400 MHz while at 68 °C). Hardware TCC still protects.
+    services.thermald.enable = lib.mkDefault false;
     services.fstrim.enable = lib.mkDefault true;
   };
 }

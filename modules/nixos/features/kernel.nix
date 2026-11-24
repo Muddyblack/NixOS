@@ -32,6 +32,9 @@
 in {
   options.features.kernel = {
     cachyos = {
+      # Needs the nix-cachyos-kernel input + overlay, both commented out in
+      # flake.nix while this is off. Uncomment them first, or pkgs.cachyosKernels
+      # is missing.
       enable = lib.mkEnableOption "CachyOS kernel from xddxdd/nix-cachyos-kernel";
 
       variant = lib.mkOption {
